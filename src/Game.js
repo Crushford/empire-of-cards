@@ -41,10 +41,6 @@ for (let i = 0; i < 4; i++) {
 }
 startingDeck.push(...deck.cities)
 
-const startingHand = startingDeck.slice(0, 5)
-debugger
-const startingEmpire = startingDeck.slice(37, 41)
-
 export const TicTacToe = {
   setup: () => ({
     cards: {
@@ -53,14 +49,14 @@ export const TicTacToe = {
         {
           color: 'blue',
           position: 'top',
-          hand: startingHand,
-          empire: startingEmpire
+          hand: [],
+          empire: []
         },
         {
           color: 'red',
           position: 'bottom',
-          hand: startingHand,
-          empire: startingEmpire
+          hand: [],
+          empire: []
         }
       ],
       battle: { attack: {}, defend: {} },
