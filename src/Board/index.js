@@ -35,7 +35,14 @@ export const Board = props => {
   }
 
   const players = props.G.players.map((player, index) => {
-    return <PlayerSpace key={index} playerNumber={index} player={player} />
+    return (
+      <PlayerSpace
+        key={index}
+        playerNumber={index}
+        player={player}
+        currentPlayer={props.ctx.playOrderPos === index}
+      />
+    )
   })
 
   return (

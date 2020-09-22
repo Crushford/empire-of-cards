@@ -43,12 +43,15 @@ const Cards = ({ cards, faceUp }) => {
   )
 }
 
-export const PlayerSpace = ({ player: { color, hand, empire, position } }) => {
+export const PlayerSpace = ({
+  currentPlayer,
+  player: { color, hand, empire, position }
+}) => {
   return (
     <Container position={position}>
       <Banner color={color} />
       <AllCards>
-        <Cards cards={hand} faceUp={true} />
+        <Cards cards={hand} faceUp={currentPlayer} />
         <PlayerEmpire cards={empire} faceUp={true} />
       </AllCards>
     </Container>
