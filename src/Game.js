@@ -46,6 +46,14 @@ const startRound = (G, ctx) => {
   }
 }
 
+const defendCity = (G, ctx, card) => {
+  G.battle.defend = card
+}
+
+const pass = (G, ctx, card) => {
+  G.timesPassed += 1
+}
+
 function drawCard(G, ctx) {
   G.players[ctx.currentPlayer].hand.push(G.deck.pop())
 }
@@ -80,7 +88,12 @@ export const EmpireOfCards = {
   }),
 
   turn: {
-    moveLimit: 1
+    moveLimit: 1,
+    stages: {
+      defend: {
+        moves: { defendCity }
+      }
+    }
   },
 
   phases: {
@@ -98,7 +111,20 @@ export const EmpireOfCards = {
           G.cells[id] = ctx.currentPlayer
         },
         drawCard,
-        playCard
+        playCard,
+        pass
+      },
+      endIf: (G, ctx) => {
+        const noCardLeftInHand =
+          G.players.filter(player => player.hand.length === 0).length ===
+          ctx.numPlayers
+        const everyPlayerPasses = G.timesPassed >= ctx.numPlayers
+
+        return noCardLeftInHand || everyPlayerPasses
+      },
+      next: 'newRound',
+      onEnd: (G, ctx) => {
+        G.timesPassed = 0
       }
     }
   }

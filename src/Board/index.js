@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { PlayerSpace } from './PlayerSpace'
 import { BattleBoard } from './BattleBoard'
 import { Deck } from './Deck'
+import { Pass } from './Pass'
 
 const BoardContainer = styled.div`
   display: flex;
@@ -31,7 +32,10 @@ export const Board = props => {
   //     )
   // }
   const handleDeckClick = () => {
-    props.moves.drawCard()
+    props.moves.startRound()
+  }
+  const handlePassClick = () => {
+    props.moves.pass()
   }
 
   const players = props.G.players.map((player, index) => {
@@ -50,6 +54,7 @@ export const Board = props => {
       {players}
       <ActionSpace>
         <Deck onClick={handleDeckClick} />
+        <Pass onClick={handlePassClick} />
         <BattleBoard cards={props.G.battle} />
       </ActionSpace>
     </BoardContainer>
