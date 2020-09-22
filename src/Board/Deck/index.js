@@ -26,9 +26,9 @@ const CardEdge = styled.div`
   overflow: hidden;
   margin-right: -97px;
 `
-export const Deck = () => {
+export const Deck = ({ onClick }) => {
   return (
-    <Container>
+    <Container onClick={onClick}>
       <Label>Deck</Label>
       <Cards>
         <CardEdge />

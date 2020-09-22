@@ -21,10 +21,6 @@ const ActionSpace = styled.div`
 `
 
 export const Board = props => {
-  // const onClick = id => {
-  //   props.moves.clickCell(id)
-  // }
-
   // let winner = ''
   // if (props.ctx.gameover) {
   //   winner =
@@ -34,8 +30,11 @@ export const Board = props => {
   //       <div id="winner">Draw!</div>
   //     )
   // }
+  const handleDeckClick = () => {
+    props.moves.drawCard()
+  }
 
-  const players = props.G.cards.players.map((player, index) => {
+  const players = props.G.players.map((player, index) => {
     return <PlayerSpace key={index} playerNumber={index} player={player} />
   })
 
@@ -43,8 +42,8 @@ export const Board = props => {
     <BoardContainer>
       {players}
       <ActionSpace>
-        <Deck cards={props.G.cards.deck} />
-        <BattleBoard cards={props.G.cards.battle} />
+        <Deck onClick={handleDeckClick} />
+        <BattleBoard cards={props.G.battle} />
       </ActionSpace>
     </BoardContainer>
   )

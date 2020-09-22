@@ -1,5 +1,5 @@
 import { INVALID_MOVE } from 'boardgame.io/core'
-import { deck, CITY_COLORS } from './constants'
+import { deck } from './constants'
 import { shuffleArray } from './utils'
 
 // Return true if `cells` is in a winning configuration.
@@ -30,30 +30,76 @@ import { shuffleArray } from './utils'
 
 let startingDeck = [...deck.armies, ...deck.cities]
 
+const startRound = (G, ctx) => {
+  const currentPlayer = G.players[ctx.currentPlayer]
+
+  let additionalHandAllowance = 0
+  currentPlayer.empire
+    .filter(card => card.benefit === 'handCapacity')
+    .forEach(({ benefit }) => (additionalHandAllowance += benefit))
+
+  while (
+    currentPlayer.hand.length <
+    currentPlayer.handSizeAllowance + additionalHandAllowance
+  ) {
+    currentPlayer.hand.push(G.deck.pop())
+  }
+}
+
+function drawCard(G, ctx) {
+  G.players[ctx.currentPlayer].hand.push(G.deck.pop())
+}
+
+function playCard(G, ctx) {
+  G.deck++
+  G.hand[ctx.currentPlayer]--
+}
+
 export const EmpireOfCards = {
   setup: () => ({
-    cards: {
-      deck: shuffleArray(startingDeck),
-      players: [
-        {
-          color: 'blue',
-          position: 'top',
-          hand: [],
-          empire: []
-        },
-        {
-          color: 'red',
-          position: 'bottom',
-          hand: [],
-          empire: []
-        }
-      ],
-      battle: { attack: {}, defend: {} },
-      target: {}
-    }
+    deck: shuffleArray(startingDeck),
+    players: [
+      {
+        color: 'blue',
+        position: 'top',
+        hand: [],
+        empire: [],
+        handSizeAllowance: 5
+      },
+      {
+        color: 'red',
+        position: 'bottom',
+        hand: [],
+        empire: [],
+        handSizeAllowance: 5
+      }
+    ],
+    battle: { attack: {}, defend: {} },
+    target: {},
+    timesPassed: 0
   }),
 
   turn: {
     moveLimit: 1
+  },
+
+  phases: {
+    newRound: {
+      moves: { startRound },
+      endIf: (G, ctx) =>
+        G.players.filter(player => player.hand.length === 5).length ===
+        ctx.numPlayers,
+      next: 'play',
+      start: true
+    },
+    play: {
+      moves: {
+        clickCard: (G, ctx, id) => {
+          G.cells[id] = ctx.currentPlayer
+        },
+        drawCard,
+        playCard
+      }
+    }
   }
 }
