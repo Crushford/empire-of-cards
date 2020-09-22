@@ -28,20 +28,9 @@ import { shuffleArray } from './utils'
 //   return cells.filter(c => c === null).length === 0
 // }
 
-let startingDeck = []
-// todo fix colors
-for (let i = 0; i < 4; i++) {
-  startingDeck.push(
-    ...deck.armies.map(item => {
-      item['color'] = CITY_COLORS[i]
+let startingDeck = [...deck.armies, ...deck.cities]
 
-      return item
-    })
-  )
-}
-startingDeck.push(...deck.cities)
-
-export const TicTacToe = {
+export const EmpireOfCards = {
   setup: () => ({
     cards: {
       deck: shuffleArray(startingDeck),
