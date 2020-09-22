@@ -126,19 +126,19 @@ export const deck = {
       title: 'Town Hall',
       benefit: 'handCapacity',
       bonus: 1,
-      color: CITY_COLORS[4]
+      color: CITY_COLORS[3]
     },
     {
       title: 'Armory',
       benefit: 'colorAttack',
       bonus: 1,
-      color: CITY_COLORS[4]
+      color: CITY_COLORS[3]
     },
     {
       title: 'Forge',
       benefit: 'colorDefence',
       bonus: 1,
-      color: CITY_COLORS[4]
+      color: CITY_COLORS[3]
     }
   ],
   monuments: [],
