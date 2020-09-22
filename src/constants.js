@@ -1,3 +1,5 @@
+export const CITY_COLORS = ['red', 'lightblue', 'orange', 'pink']
+
 export const deck = {
   armies: [
     {
@@ -16,13 +18,83 @@ export const deck = {
     { title: 'Mounted knight', attack: 9, defence: 6 }
   ],
   cities: [
-    { title: 'Wall', benefit: 'defence', bonus: 1 },
-    { title: 'Town Hall', benefit: 'handCapacity', bonus: 1 },
-    { title: 'Monument Space', benefit: 'monumentCapacity', bonus: 1 },
-    { title: 'University', benefit: 'specialismCapacity', bonus: 1 }
+    { title: 'City Wall', benefit: 'defence', bonus: 1, color: CITY_COLORS[0] },
+    {
+      title: 'Town Hall',
+      benefit: 'handCapacity',
+      bonus: 1,
+      color: CITY_COLORS[0]
+    },
+    {
+      title: 'Armory',
+      benefit: 'colorAttack',
+      bonus: 1,
+      color: CITY_COLORS[0]
+    },
+    {
+      title: 'Forge',
+      benefit: 'colorDefence',
+      bonus: 1,
+      color: CITY_COLORS[0]
+    },
+    { title: 'City Wall', benefit: 'defence', bonus: 1, color: CITY_COLORS[1] },
+    {
+      title: 'Town Hall',
+      benefit: 'handCapacity',
+      bonus: 1,
+      color: CITY_COLORS[1]
+    },
+    {
+      title: 'Armory',
+      benefit: 'colorAttack',
+      bonus: 1,
+      color: CITY_COLORS[1]
+    },
+    {
+      title: 'Forge',
+      benefit: 'colorDefence',
+      bonus: 1,
+      color: CITY_COLORS[1]
+    },
+    { title: 'City Wall', benefit: 'defence', bonus: 1, color: CITY_COLORS[2] },
+    {
+      title: 'Town Hall',
+      benefit: 'handCapacity',
+      bonus: 1,
+      color: CITY_COLORS[2]
+    },
+    {
+      title: 'Armory',
+      benefit: 'colorAttack',
+      bonus: 1,
+      color: CITY_COLORS[2]
+    },
+    {
+      title: 'Forge',
+      benefit: 'colorDefence',
+      bonus: 1,
+      color: CITY_COLORS[2]
+    },
+    { title: 'City Wall', benefit: 'defence', bonus: 1, color: CITY_COLORS[3] },
+    {
+      title: 'Town Hall',
+      benefit: 'handCapacity',
+      bonus: 1,
+      color: CITY_COLORS[4]
+    },
+    {
+      title: 'Armory',
+      benefit: 'colorAttack',
+      bonus: 1,
+      color: CITY_COLORS[4]
+    },
+    {
+      title: 'Forge',
+      benefit: 'colorDefence',
+      bonus: 1,
+      color: CITY_COLORS[4]
+    }
   ],
   monuments: [],
   specialisms: []
 }
-
-export const cityColor = ['red', 'blue', 'orange', 'pink']

@@ -34,9 +34,9 @@ const CardHalf = ({ top, card: { title, attack, defence, color } }) => (
   </CardHalfContainer>
 )
 
-export const Card = ({ faceUp, value }) => {
+export const Card = ({ faceUp, value, overlapIndex }) => {
   return (
-    <Container faceUp={faceUp}>
+    <Container faceUp={faceUp} overlapIndex={overlapIndex}>
       {faceUp && (
         <>
           <CardHalf top={true} card={value} />

@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Card } from '../Card'
+import { PlayerEmpire } from './PlayerEmpire'
 
 const Banner = styled.div`
   height: 20px;
@@ -48,7 +49,7 @@ export const PlayerSpace = ({ player: { color, hand, empire, position } }) => {
       <Banner color={color} />
       <AllCards>
         <Cards cards={hand} faceUp={true} />
-        <Cards cards={empire} faceUp={true} />
+        <PlayerEmpire cards={empire} faceUp={true} />
       </AllCards>
     </Container>
   )

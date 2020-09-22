@@ -1,5 +1,5 @@
 import { INVALID_MOVE } from 'boardgame.io/core'
-import { deck, cityColor } from './constants'
+import { deck, CITY_COLORS } from './constants'
 import { shuffleArray } from './utils'
 
 // Return true if `cells` is in a winning configuration.
@@ -33,25 +33,17 @@ let startingDeck = []
 for (let i = 0; i < 4; i++) {
   startingDeck.push(
     ...deck.armies.map(item => {
-      item['color'] = cityColor[i]
+      item['color'] = CITY_COLORS[i]
 
       return item
     })
   )
 }
-for (let i = 0; i < 4; i++) {
-  startingDeck.push(
-    ...deck.cities.map(item => {
-      item['color'] = cityColor[i]
-      debugger
-      return item
-    })
-  )
-}
+startingDeck.push(...deck.cities)
 
 const startingHand = startingDeck.slice(0, 5)
 debugger
-const startingEmpire = startingDeck.slice(38, 42)
+const startingEmpire = startingDeck.slice(37, 41)
 
 export const TicTacToe = {
   setup: () => ({
