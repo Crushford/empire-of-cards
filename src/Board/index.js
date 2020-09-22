@@ -40,6 +40,9 @@ export const Board = props => {
   const handleCardClick = cardId => {
     props.moves.selectCard(cardId)
   }
+  const handleEmpireClick = () => {
+    props.moves.moveToEmpire()
+  }
 
   const players = props.G.players.map((player, index) => {
     return (
@@ -50,6 +53,7 @@ export const Board = props => {
         currentPlayer={props.ctx.playOrderPos === index}
         selectCard={handleCardClick}
         selectedCard={props.G.selectedCard}
+        handleEmpireClick={handleEmpireClick}
       />
     )
   })

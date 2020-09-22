@@ -48,7 +48,7 @@ const startRound = (G, ctx) => {
 const selectCard = (G, ctx, cardId) => {
   G.selectedCard = cardId
   ctx.events.setActivePlayers({
-    currentPlayer: 'stage-name',
+    currentPlayer: 'action',
     // Calls endStage automatically after the player
     // has made the specified number of moves.
     moveLimit: 1,
@@ -62,7 +62,26 @@ const selectCard = (G, ctx, cardId) => {
   })
 }
 
-const moveToEmpire = (G, ctx, card) => {}
+const moveToEmpire = (G, ctx) => {
+  const currentPlayer = G.players[ctx.currentPlayer]
+  const cardMoving = G.selectedCard
+
+  if (cardMoving.indexOf('c') < 0) {
+    return INVALID_MOVE
+  }
+
+  //remove selected card from hand
+  currentPlayer.hand = currentPlayer.hand.filter(card => {
+    if (card.id === cardMoving) {
+      //add selected card to empire
+      currentPlayer.empire.push(card)
+      G.selectedCard = ''
+      return false
+    } else return true
+  })
+
+  ctx.events.endTurn()
+}
 
 const attackCity = (G, ctx, city, army) => {
   G.battle.attack = army
@@ -135,9 +154,6 @@ export const EmpireOfCards = {
 
   turn: {
     stages: {
-      selectActionCard: {
-        moves: { selectCard }
-      },
       action: {
         moves: { selectCard, pass, attackCity, moveToEmpire }
       },

@@ -31,6 +31,7 @@ export const PlayerSpace = ({
   currentPlayer,
   selectCard,
   selectedCard,
+  handleEmpireClick,
   player: { color, hand, empire, position }
 }) => {
   return (
@@ -43,7 +44,11 @@ export const PlayerSpace = ({
           selectCard={selectCard}
           selectedCard={selectedCard}
         />
-        <PlayerEmpire cards={empire} faceUp={true} />
+        <PlayerEmpire
+          cards={empire}
+          faceUp={true}
+          handleEmpireClick={handleEmpireClick}
+        />
       </AllCards>
     </Container>
   )
