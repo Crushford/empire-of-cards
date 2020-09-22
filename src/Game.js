@@ -29,19 +29,29 @@ import { shuffleArray } from './utils'
 // }
 
 let startingDeck = []
-
+// todo fix colors
 for (let i = 0; i < 4; i++) {
-  startingDeck.push(...deck.armies)
+  startingDeck.push(
+    ...deck.armies.map(item => {
+      item['color'] = cityColor[i]
+
+      return item
+    })
+  )
 }
 for (let i = 0; i < 4; i++) {
-  deck.cities.forEach(card => {
-    card['color'] = cityColor[i]
-    startingDeck.push(card)
-  })
+  startingDeck.push(
+    ...deck.cities.map(item => {
+      item['color'] = cityColor[i]
+      debugger
+      return item
+    })
+  )
 }
 
 const startingHand = startingDeck.slice(0, 5)
-const startingEmpire = startingDeck.slice(0, 4)
+debugger
+const startingEmpire = startingDeck.slice(38, 42)
 
 export const TicTacToe = {
   setup: () => ({

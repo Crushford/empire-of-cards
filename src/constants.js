@@ -1,6 +1,12 @@
 export const deck = {
   armies: [
-    { title: 'Catapult', attack: 9, defence: 1 },
+    {
+      title: 'Catapult',
+      attack: 9,
+      defence: 1,
+      imageUrl:
+        'https://cdn.britannica.com/34/83934-050-4787BA22/Roman-torsion-arm-stone-bundle-cords-force.jpg'
+    },
     { title: 'Armored Knight', attack: 5, defence: 9 },
     { title: 'Archer', attack: 8, defence: 4 },
     { title: 'Warrior', attack: 4, defence: 4 },
@@ -19,4 +25,4 @@ export const deck = {
   specialisms: []
 }
 
-export const cityColor = ['red', 'blue', 'orange', 'purple']
+export const cityColor = ['red', 'blue', 'orange', 'pink']
