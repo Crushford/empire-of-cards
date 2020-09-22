@@ -32,6 +32,7 @@ export const PlayerSpace = ({
   selectCard,
   selectedCard,
   handleEmpireClick,
+  handleCityClick,
   player: { color, hand, empire, position }
 }) => {
   return (
@@ -48,6 +49,7 @@ export const PlayerSpace = ({
           cards={empire}
           faceUp={true}
           handleEmpireClick={handleEmpireClick}
+          handleCityClick={handleCityClick}
         />
       </AllCards>
     </Container>

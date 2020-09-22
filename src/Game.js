@@ -46,6 +46,12 @@ const startRound = (G, ctx) => {
 }
 
 const selectCard = (G, ctx, cardId) => {
+  if (
+    G.players[ctx.currentPlayer].empire.filter(card => card.id === cardId) > 0
+  ) {
+    return INVALID_MOVE
+  }
+
   G.selectedCard = cardId
   ctx.events.setActivePlayers({
     currentPlayer: 'action',
@@ -83,16 +89,47 @@ const moveToEmpire = (G, ctx) => {
   ctx.events.endTurn()
 }
 
-const attackCity = (G, ctx, city, army) => {
-  G.battle.attack = army
+const attackCity = (G, ctx, attackedCityId) => {
+  if (G.selectedCard.indexOf('a') < 0) {
+    return INVALID_MOVE
+  }
 
-  const attackedPlayer = ctx.currentPlayer === '0' ? '1' : '0'
+  const findAttackedPlayer = () => {
+    let attackedPlayer = ''
+    G.players.forEach((player, playerIndex) =>
+      player.empire.forEach(cityCard => {
+        if (cityCard.id === attackedCityId) {
+          attackedPlayer = playerIndex
+        }
+      })
+    )
+    return attackedPlayer
+  }
+
+  const attackedPlayerIndex = findAttackedPlayer()
+  const currentPlayerIndex = +ctx.currentPlayer
+
+  if (attackedPlayerIndex === currentPlayerIndex) {
+    return INVALID_MOVE
+  }
+
+  const currentPlayer = G.players[ctx.currentPlayer]
+
+  //remove selected card from hand
+  currentPlayer.hand = currentPlayer.hand.filter(card => {
+    if (card.id === G.selectedCard) {
+      //add selected card to attack board
+      G.battle.attack = card
+      G.selectedCard = ''
+      return false
+    } else return true
+  })
 
   ctx.events.setActivePlayers({
     // Enumerate the set of players and the stages that they
     // are in.
     value: {
-      [attackedPlayer]: 'defend'
+      [attackedPlayerIndex]: 'defend'
     },
 
     // Calls endStage automatically after the player

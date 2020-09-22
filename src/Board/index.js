@@ -44,6 +44,10 @@ export const Board = props => {
     props.moves.moveToEmpire()
   }
 
+  const handleCityClick = cityId => {
+    props.moves.attackCity(cityId)
+  }
+
   const players = props.G.players.map((player, index) => {
     return (
       <PlayerSpace
@@ -54,6 +58,7 @@ export const Board = props => {
         selectCard={handleCardClick}
         selectedCard={props.G.selectedCard}
         handleEmpireClick={handleEmpireClick}
+        handleCityClick={handleCityClick}
       />
     )
   })

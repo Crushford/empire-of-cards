@@ -23,13 +23,19 @@ const Empire = styled.div`
   border: solid 1px black;
 `
 
-export const PlayerEmpire = ({ cards, handleEmpireClick }) => {
+export const PlayerEmpire = ({ cards, handleEmpireClick, handleCityClick }) => {
   const cities = CITY_COLORS.map((color, index) => (
     <City key={index}>
       {cards
         .filter(card => card.color === color)
         .map((card, index) => (
-          <Card key={index} value={card} faceUp={true} overlapIndex={index} />
+          <Card
+            key={index}
+            value={card}
+            faceUp={true}
+            overlapIndex={index}
+            handleCityClick={handleCityClick}
+          />
         ))}
     </City>
   ))

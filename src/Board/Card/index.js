@@ -39,10 +39,12 @@ export const Card = ({
   value,
   overlapIndex,
   selectCard,
-  selectedCard
+  selectedCard,
+  handleCityClick
 }) => {
   const handleClick = () => {
-    faceUp && value?.id && selectCard(value.id)
+    faceUp && value?.id && handleCityClick && handleCityClick(value.id)
+    faceUp && value?.id && selectCard && selectCard(value.id)
   }
 
   return (

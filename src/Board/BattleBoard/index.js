@@ -23,16 +23,16 @@ const CardWithLabel = styled.div`
   border: black solid 1px;
 `
 
-export const BattleBoard = ({ attack, defend }) => {
+export const BattleBoard = ({ cards: { attack, defend } }) => {
   return (
     <Container>
       <CardWithLabel>
         <Label>Attack</Label>
-        {attack && <Card value={attack} faceUp={false} />}
+        {attack.id && <Card value={attack} faceUp={false} />}
       </CardWithLabel>
       <CardWithLabel>
         <Label>Defend</Label>
-        {defend && <Card value={defend} />}
+        {defend.id && <Card value={defend} />}
       </CardWithLabel>
     </Container>
   )
