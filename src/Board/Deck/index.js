@@ -13,12 +13,28 @@ const Container = styled.div`
   flex-direction: column;
   border: black solid 1px;
 `
-
+const Cards = styled.div`
+  display: flex;
+  flex-direction: row;
+`
+const CardEdge = styled.div`
+  border: black solid 1px;
+  z-index: -1;
+  height: 140px;
+  width: 100px;
+  border-radius: 10%;
+  overflow: hidden;
+  margin-right: -97px;
+`
 export const Deck = () => {
   return (
     <Container>
       <Label>Deck</Label>
-      <Card faceUp={false} />
+      <Cards>
+        <CardEdge />
+        <CardEdge />
+        <Card faceUp={false} />
+      </Cards>
     </Container>
   )
 }

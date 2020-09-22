@@ -5,7 +5,6 @@ export const Container = styled.div`
   width: 100px;
   border-radius: 10%;
   overflow: hidden;
-
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -15,7 +14,7 @@ export const Container = styled.div`
   background: ${({ faceUp }) =>
     faceUp
       ? 'white'
-      : "no-repeat center/100% url('https://filletfamilyblog.files.wordpress.com/2013/02/d0490860-0-large.jpg')"};
+      : "white no-repeat center/100% url('https://filletfamilyblog.files.wordpress.com/2013/02/d0490860-0-large.jpg')"};
   z-index: ${({ overlapIndex }) => (overlapIndex ? -overlapIndex + 1 : 1)};
   ${({ overlapIndex }) => overlapIndex > 0 && 'margin-top:-100px'}
 `
