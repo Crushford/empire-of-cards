@@ -18,7 +18,7 @@ const CardWithLabel = styled.div`
   width: 120px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   flex-direction: column;
   border: black solid 1px;
 `
@@ -28,11 +28,11 @@ export const BattleBoard = ({ attack, defend }) => {
     <Container>
       <CardWithLabel>
         <Label>Attack</Label>
-        <Card value={attack} faceUp={false} />
+        {attack && <Card value={attack} faceUp={false} />}
       </CardWithLabel>
       <CardWithLabel>
         <Label>Defend</Label>
-        <Card value={defend} />
+        {defend && <Card value={defend} />}
       </CardWithLabel>
     </Container>
   )
