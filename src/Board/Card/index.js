@@ -34,9 +34,25 @@ const CardHalf = ({ top, card: { title, attack, defence, color } }) => (
   </CardHalfContainer>
 )
 
-export const Card = ({ faceUp, value, overlapIndex }) => {
+export const Card = ({
+  faceUp,
+  value,
+  overlapIndex,
+  selectCard,
+  selectedCard
+}) => {
+  const handleClick = () => {
+    faceUp && value?.id && selectCard(value.id)
+  }
+
   return (
-    <Container faceUp={faceUp} overlapIndex={overlapIndex}>
+    <Container
+      faceUp={faceUp}
+      overlapIndex={overlapIndex}
+      onClick={handleClick}
+      selectCard={selectCard}
+      selectedCard={faceUp && selectedCard === value?.id}
+    >
       {faceUp && (
         <>
           <CardHalf top={true} card={value} />

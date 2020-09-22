@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { PlayerSpace } from './PlayerSpace'
 import { BattleBoard } from './BattleBoard'
@@ -37,6 +37,9 @@ export const Board = props => {
   const handlePassClick = () => {
     props.moves.pass()
   }
+  const handleCardClick = cardId => {
+    props.moves.selectCard(cardId)
+  }
 
   const players = props.G.players.map((player, index) => {
     return (
@@ -45,6 +48,8 @@ export const Board = props => {
         playerNumber={index}
         player={player}
         currentPlayer={props.ctx.playOrderPos === index}
+        selectCard={handleCardClick}
+        selectedCard={props.G.selectedCard}
       />
     )
   })

@@ -1,6 +1,6 @@
 export const CITY_COLORS = ['red', 'lightblue', 'orange', 'pink']
 
-export const deck = {
+const cards = {
   armies: [
     {
       title: 'Catapult',
@@ -140,7 +140,16 @@ export const deck = {
       bonus: 1,
       color: CITY_COLORS[3]
     }
-  ],
-  monuments: [],
-  specialisms: []
+  ]
 }
+
+export const deck = [
+  ...cards.armies.map((card, index) => {
+    card.id = 'a' + index
+    return card
+  }),
+  ...cards.cities.map((card, index) => {
+    card.id = 'c' + index
+    return card
+  })
+]

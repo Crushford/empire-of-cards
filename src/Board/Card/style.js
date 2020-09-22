@@ -17,6 +17,7 @@ export const Container = styled.div`
       : "white no-repeat center/100% url('https://filletfamilyblog.files.wordpress.com/2013/02/d0490860-0-large.jpg')"};
   z-index: ${({ overlapIndex }) => (overlapIndex ? -overlapIndex + 1 : 1)};
   ${({ overlapIndex }) => overlapIndex > 0 && 'margin-top:-100px'}
+  ${({ selectedCard }) => selectedCard && 'box-shadow: 1px 1px 1px 5px yellow'}
 `
 
 export const TopBanner = styled.div`

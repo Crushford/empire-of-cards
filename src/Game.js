@@ -28,8 +28,6 @@ import { shuffleArray } from './utils'
 //   return cells.filter(c => c === null).length === 0
 // }
 
-let startingDeck = [...deck.armies, ...deck.cities]
-
 const startRound = (G, ctx) => {
   const currentPlayer = G.players[ctx.currentPlayer]
 
@@ -44,28 +42,75 @@ const startRound = (G, ctx) => {
   ) {
     currentPlayer.hand.push(G.deck.pop())
   }
+  ctx.events.endTurn()
 }
 
-const defendCity = (G, ctx, card) => {
-  G.battle.defend = card
+const selectCard = (G, ctx, cardId) => {
+  G.selectedCard = cardId
+  ctx.events.setActivePlayers({
+    currentPlayer: 'stage-name',
+    // Calls endStage automatically after the player
+    // has made the specified number of moves.
+    moveLimit: 1,
+
+    // This takes the stage configuration to the
+    // value prior to this setActivePlayers call
+    // once the set of active players becomes empty
+    // (due to players either calling endStage or
+    // a moveLimit ending the stage for them).
+    revert: false
+  })
 }
 
-const pass = (G, ctx, card) => {
+const moveToEmpire = (G, ctx, card) => {}
+
+const attackCity = (G, ctx, city, army) => {
+  G.battle.attack = army
+
+  const attackedPlayer = ctx.currentPlayer === '0' ? '1' : '0'
+
+  ctx.events.setActivePlayers({
+    // Enumerate the set of players and the stages that they
+    // are in.
+    value: {
+      [attackedPlayer]: 'defend'
+    },
+
+    // Calls endStage automatically after the player
+    // has made the specified number of moves.
+    moveLimit: 1,
+
+    // This takes the stage configuration to the
+    // value prior to this setActivePlayers call
+    // once the set of active players becomes empty
+    // (due to players either calling endStage or
+    // a moveLimit ending the stage for them).
+    revert: true
+  })
+
+  ctx.events.endTurn()
+}
+
+const defendCity = (G, ctx, army) => {
+  G.battle.defend = army
+  ctx.events.endStage()
+  ctx.events.endTurn()
+}
+
+const doNotDefend = (G, ctx) => {
+  G.battle.defend = false
+  ctx.events.endStage()
+  ctx.events.endTurn()
+}
+
+const pass = (G, ctx) => {
   G.timesPassed += 1
-}
-
-function drawCard(G, ctx) {
-  G.players[ctx.currentPlayer].hand.push(G.deck.pop())
-}
-
-function playCard(G, ctx) {
-  G.deck++
-  G.hand[ctx.currentPlayer]--
+  ctx.events.endTurn()
 }
 
 export const EmpireOfCards = {
   setup: () => ({
-    deck: shuffleArray(startingDeck),
+    deck: shuffleArray(deck),
     players: [
       {
         color: 'blue',
@@ -84,14 +129,20 @@ export const EmpireOfCards = {
     ],
     battle: { attack: {}, defend: {} },
     target: {},
-    timesPassed: 0
+    timesPassed: 0,
+    selectedCard: ''
   }),
 
   turn: {
-    moveLimit: 1,
     stages: {
+      selectActionCard: {
+        moves: { selectCard }
+      },
+      action: {
+        moves: { selectCard, pass, attackCity, moveToEmpire }
+      },
       defend: {
-        moves: { defendCity }
+        moves: { defendCity, doNotDefend }
       }
     }
   },
@@ -107,11 +158,7 @@ export const EmpireOfCards = {
     },
     play: {
       moves: {
-        clickCard: (G, ctx, id) => {
-          G.cells[id] = ctx.currentPlayer
-        },
-        drawCard,
-        playCard,
+        selectCard,
         pass
       },
       endIf: (G, ctx) => {

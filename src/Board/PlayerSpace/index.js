@@ -32,12 +32,18 @@ const AllCards = styled.div`
   width: 100%;
 `
 
-const Cards = ({ cards, faceUp }) => {
+const Cards = ({ cards, faceUp, selectCard, selectedCard }) => {
   return (
     <CardsContainer>
       {cards &&
         cards.map((card, index) => (
-          <Card key={index} value={card} faceUp={faceUp} />
+          <Card
+            key={index}
+            value={card}
+            faceUp={faceUp}
+            selectCard={selectCard}
+            selectedCard={selectedCard}
+          />
         ))}
     </CardsContainer>
   )
@@ -45,13 +51,20 @@ const Cards = ({ cards, faceUp }) => {
 
 export const PlayerSpace = ({
   currentPlayer,
+  selectCard,
+  selectedCard,
   player: { color, hand, empire, position }
 }) => {
   return (
     <Container position={position}>
       <Banner color={color} />
       <AllCards>
-        <Cards cards={hand} faceUp={currentPlayer} />
+        <Cards
+          cards={hand}
+          faceUp={currentPlayer}
+          selectCard={selectCard}
+          selectedCard={selectedCard}
+        />
         <PlayerEmpire cards={empire} faceUp={true} />
       </AllCards>
     </Container>
