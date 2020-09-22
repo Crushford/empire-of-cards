@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Card } from '../Card'
 import { PlayerEmpire } from './PlayerEmpire'
+import { PlayerHand } from './PlayerHand'
 
 const Banner = styled.div`
   height: 20px;
@@ -19,11 +19,6 @@ const Container = styled.div`
   ${({ position }) => position}:0;
 `
 
-const CardsContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-`
 const AllCards = styled.div`
   display: flex;
   flex-direction: row-reverse;
@@ -31,23 +26,6 @@ const AllCards = styled.div`
   margin-top: -15px;
   width: 100%;
 `
-
-const Cards = ({ cards, faceUp, selectCard, selectedCard }) => {
-  return (
-    <CardsContainer>
-      {cards &&
-        cards.map((card, index) => (
-          <Card
-            key={index}
-            value={card}
-            faceUp={faceUp}
-            selectCard={selectCard}
-            selectedCard={selectedCard}
-          />
-        ))}
-    </CardsContainer>
-  )
-}
 
 export const PlayerSpace = ({
   currentPlayer,
@@ -59,7 +37,7 @@ export const PlayerSpace = ({
     <Container position={position}>
       <Banner color={color} />
       <AllCards>
-        <Cards
+        <PlayerHand
           cards={hand}
           faceUp={currentPlayer}
           selectCard={selectCard}
