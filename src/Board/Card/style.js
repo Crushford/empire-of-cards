@@ -18,6 +18,7 @@ export const Container = styled.div`
   z-index: ${({ overlapIndex }) => (overlapIndex ? -overlapIndex + 1 : 1)};
   ${({ overlapIndex }) => overlapIndex > 0 && 'margin-top:-100px'}
   ${({ selectedCard }) => selectedCard && 'box-shadow: 1px 1px 1px 5px yellow'}
+  ${({ targetedCard }) => targetedCard && 'box-shadow: 1px 1px 1px 5px red'}
 `
 
 export const TopBanner = styled.div`

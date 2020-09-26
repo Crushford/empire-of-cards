@@ -40,7 +40,8 @@ export const Card = ({
   overlapIndex,
   selectCard,
   selectedCard,
-  handleCityClick
+  handleCityClick,
+  targetId
 }) => {
   const handleClick = () => {
     faceUp && value?.id && handleCityClick && handleCityClick(value.id)
@@ -54,6 +55,7 @@ export const Card = ({
       onClick={handleClick}
       selectCard={selectCard}
       selectedCard={faceUp && selectedCard === value?.id}
+      targetedCard={targetId && targetId === value?.id}
     >
       {faceUp && (
         <>

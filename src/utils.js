@@ -40,4 +40,17 @@ export const discardBattleCards = G => {
 
 export const moveCity = G => {}
 
-export const getCardFromId = G => {}
+export const getPlacedEmpireCardFromId = (G, attackedCityId) => {
+  let empireCard = {}
+
+  G.players.some(player =>
+    player.empire.some(item => {
+      if (item.id === attackedCityId) {
+        empireCard = item
+        return true
+      }
+    })
+  )
+
+  return empireCard
+}

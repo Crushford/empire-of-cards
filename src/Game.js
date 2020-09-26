@@ -5,7 +5,8 @@ import {
   removeActionCardFromHand,
   findAttackedPlayer,
   discardBattleCards,
-  moveCity
+  moveCity,
+  getPlacedEmpireCardFromId
 } from './utils'
 
 /**
@@ -84,7 +85,7 @@ const moveToEmpire = (G, ctx) => {
   const currentPlayer = G.players[ctx.currentPlayer]
   const cardMoving = G.selectedCard
 
-  if (cardMoving.indexOf('c') < 0) {
+  if (cardMoving.indexOf('c') === -1) {
     return INVALID_MOVE
   }
 
@@ -106,7 +107,7 @@ const attackCity = (G, ctx, attackedCityId) => {
     return INVALID_MOVE
   }
 
-  G.target = getCardFromId(G, attackedCityId)
+  G.target = getPlacedEmpireCardFromId(G, attackedCityId)
 
   const attackedPlayerIndex = findAttackedPlayer(G.players, attackedCityId)
   const currentPlayerIndex = +ctx.currentPlayer
