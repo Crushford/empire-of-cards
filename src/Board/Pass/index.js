@@ -6,6 +6,10 @@ const PassButton = styled.div`
   border: solid 3px black;
   background: lightgreen;
 `
-export const Pass = ({ onClick }) => {
-  return <PassButton onClick={onClick}>Pass</PassButton>
+export const Pass = ({ onClick, isUnderAttack }) => {
+  return (
+    <PassButton onClick={onClick}>
+      {isUnderAttack ? 'Do Not Defend' : 'Pass'}
+    </PassButton>
+  )
 }

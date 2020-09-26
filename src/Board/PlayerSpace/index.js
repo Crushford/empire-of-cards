@@ -28,7 +28,7 @@ const AllCards = styled.div`
 `
 
 export const PlayerSpace = ({
-  currentPlayer,
+  isCurrentPlayer,
   selectCard,
   selectedCard,
   handleEmpireClick,
@@ -41,7 +41,7 @@ export const PlayerSpace = ({
       <AllCards>
         <PlayerHand
           cards={hand}
-          faceUp={currentPlayer}
+          faceUp={isCurrentPlayer}
           selectCard={selectCard}
           selectedCard={selectedCard}
         />

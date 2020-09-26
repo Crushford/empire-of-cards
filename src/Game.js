@@ -1,6 +1,18 @@
 import { INVALID_MOVE } from 'boardgame.io/core'
 import { deck } from './constants'
-import { shuffleArray } from './utils'
+import {
+  shuffleArray,
+  removeActionCardFromHand,
+  findAttackedPlayer,
+  discardBattleCards,
+  moveCity
+} from './utils'
+
+/**
+ * To Do
+ *
+ *  1. work out what to do if all cards picked up are armies
+ */
 
 // Return true if `cells` is in a winning configuration.
 // function IsVictory(cells) {
@@ -94,19 +106,9 @@ const attackCity = (G, ctx, attackedCityId) => {
     return INVALID_MOVE
   }
 
-  const findAttackedPlayer = () => {
-    let attackedPlayer = ''
-    G.players.forEach((player, playerIndex) =>
-      player.empire.forEach(cityCard => {
-        if (cityCard.id === attackedCityId) {
-          attackedPlayer = playerIndex
-        }
-      })
-    )
-    return attackedPlayer
-  }
+  G.target = getCardFromId(G, attackedCityId)
 
-  const attackedPlayerIndex = findAttackedPlayer()
+  const attackedPlayerIndex = findAttackedPlayer(G.players, attackedCityId)
   const currentPlayerIndex = +ctx.currentPlayer
 
   if (attackedPlayerIndex === currentPlayerIndex) {
@@ -116,46 +118,42 @@ const attackCity = (G, ctx, attackedCityId) => {
   const currentPlayer = G.players[ctx.currentPlayer]
 
   //remove selected card from hand
-  currentPlayer.hand = currentPlayer.hand.filter(card => {
-    if (card.id === G.selectedCard) {
-      //add selected card to attack board
-      G.battle.attack = card
-      G.selectedCard = ''
-      return false
-    } else return true
-  })
+  const [selectedCard, newHand] = removeActionCardFromHand(
+    currentPlayer.hand,
+    G.selectedCard
+  )
 
-  ctx.events.setActivePlayers({
-    // Enumerate the set of players and the stages that they
-    // are in.
-    value: {
-      [attackedPlayerIndex]: 'defend'
-    },
-
-    // Calls endStage automatically after the player
-    // has made the specified number of moves.
-    moveLimit: 1,
-
-    // This takes the stage configuration to the
-    // value prior to this setActivePlayers call
-    // once the set of active players becomes empty
-    // (due to players either calling endStage or
-    // a moveLimit ending the stage for them).
-    revert: true
-  })
+  currentPlayer.hand = newHand
+  G.battle.attack = selectedCard
+  G.selectedCard = ''
 
   ctx.events.endTurn()
 }
 
-const defendCity = (G, ctx, army) => {
+const defendCity = (G, ctx) => {
+  const currentPlayer = G.players[ctx.currentPlayer]
+  const [army, newHand] = removeActionCardFromHand(
+    currentPlayer.hand,
+    G.selectedCard
+  )
+
+  currentPlayer.hand = newHand
   G.battle.defend = army
+
+  if (G.battle.attack > G.battle.defend) {
+    moveCity(G)
+  }
+
+  discardBattleCards(G)
   ctx.events.endStage()
-  ctx.events.endTurn()
 }
 
 const doNotDefend = (G, ctx) => {
   G.battle.defend = false
-  ctx.events.endStage()
+  G.discardPile.push(G.battle.attack)
+  G.battle.attack = ''
+
+  discardBattleCards(G)
   ctx.events.endTurn()
 }
 
@@ -186,16 +184,20 @@ export const EmpireOfCards = {
     battle: { attack: {}, defend: {} },
     target: {},
     timesPassed: 0,
-    selectedCard: ''
+    selectedCard: '',
+    discardPile: []
   }),
 
   turn: {
     stages: {
       action: {
-        moves: { selectCard, pass, attackCity, moveToEmpire }
-      },
-      defend: {
-        moves: { defendCity, doNotDefend }
+        moves: {
+          selectCard,
+          pass,
+          attackCity,
+          moveToEmpire,
+          defendCity
+        }
       }
     }
   },
@@ -212,7 +214,8 @@ export const EmpireOfCards = {
     play: {
       moves: {
         selectCard,
-        pass
+        pass,
+        doNotDefend
       },
       endIf: (G, ctx) => {
         const noCardLeftInHand =

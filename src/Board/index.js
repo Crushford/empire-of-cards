@@ -31,11 +31,13 @@ export const Board = props => {
   //       <div id="winner">Draw!</div>
   //     )
   // }
+  const isUnderAttack = props.G.battle?.attack?.title
+
   const handleDeckClick = () => {
     props.moves.startRound()
   }
   const handlePassClick = () => {
-    props.moves.pass()
+    isUnderAttack ? props.moves.doNotDefend() : props.moves.pass()
   }
   const handleCardClick = cardId => {
     props.moves.selectCard(cardId)
@@ -43,18 +45,22 @@ export const Board = props => {
   const handleEmpireClick = () => {
     props.moves.moveToEmpire()
   }
-
   const handleCityClick = cityId => {
     props.moves.attackCity(cityId)
   }
+  const handleDefenceClick = () => {
+    props.moves.defendCity()
+  }
 
   const players = props.G.players.map((player, index) => {
+    const isCurrentPlayer = props.ctx.playOrderPos === index
+
     return (
       <PlayerSpace
         key={index}
         playerNumber={index}
         player={player}
-        currentPlayer={props.ctx.playOrderPos === index}
+        isCurrentPlayer={isCurrentPlayer}
         selectCard={handleCardClick}
         selectedCard={props.G.selectedCard}
         handleEmpireClick={handleEmpireClick}
@@ -68,8 +74,11 @@ export const Board = props => {
       {players}
       <ActionSpace>
         <Deck onClick={handleDeckClick} />
-        <Pass onClick={handlePassClick} />
-        <BattleBoard cards={props.G.battle} />
+        <Pass onClick={handlePassClick} isUnderAttack={isUnderAttack} />
+        <BattleBoard
+          cards={props.G.battle}
+          handleDefenceClick={handleDefenceClick}
+        />
       </ActionSpace>
     </BoardContainer>
   )
