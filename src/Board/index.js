@@ -65,7 +65,7 @@ export const Board = props => {
         selectedCard={props.G.selectedCard}
         handleEmpireClick={handleEmpireClick}
         handleCityClick={handleCityClick}
-        targetId={props.G.target.id}
+        targetId={props.G.target.card?.id}
       />
     )
   })

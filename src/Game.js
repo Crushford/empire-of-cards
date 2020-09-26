@@ -3,10 +3,9 @@ import { deck } from './constants'
 import {
   shuffleArray,
   removeActionCardFromHand,
-  findAttackedPlayer,
   discardBattleCards,
   moveCity,
-  getPlacedEmpireCardFromId
+  getTargetedDetailsFromId
 } from './utils'
 
 /**
@@ -107,12 +106,18 @@ const attackCity = (G, ctx, attackedCityId) => {
     return INVALID_MOVE
   }
 
-  G.target = getPlacedEmpireCardFromId(G, attackedCityId)
-
-  const attackedPlayerIndex = findAttackedPlayer(G.players, attackedCityId)
   const currentPlayerIndex = +ctx.currentPlayer
+  const [targetedCard, targetedPlayer] = getTargetedDetailsFromId(
+    G,
+    attackedCityId
+  )
+  G.target = {
+    card: targetedCard,
+    defender: targetedPlayer,
+    attacker: currentPlayerIndex
+  }
 
-  if (attackedPlayerIndex === currentPlayerIndex) {
+  if (targetedPlayer === currentPlayerIndex) {
     return INVALID_MOVE
   }
 
@@ -141,11 +146,11 @@ const defendCity = (G, ctx) => {
   currentPlayer.hand = newHand
   G.battle.defend = army
 
-  if (G.battle.attack > G.battle.defend) {
+  if (G.battle.attack.attack > G.battle.defend.defence) {
     moveCity(G)
   }
-
   discardBattleCards(G)
+  G.target = {}
   ctx.events.endStage()
 }
 
@@ -155,6 +160,9 @@ const doNotDefend = (G, ctx) => {
   G.battle.attack = ''
 
   discardBattleCards(G)
+  moveCity(G)
+
+  G.target = {}
   ctx.events.endTurn()
 }
 
@@ -219,12 +227,13 @@ export const EmpireOfCards = {
         doNotDefend
       },
       endIf: (G, ctx) => {
-        const noCardLeftInHand =
+        const noCardLeftInEitherHand =
           G.players.filter(player => player.hand.length === 0).length ===
           ctx.numPlayers
         const everyPlayerPasses = G.timesPassed >= ctx.numPlayers
+        const notInBattle = !G.battle.attack
 
-        return noCardLeftInHand || everyPlayerPasses
+        return notInBattle && (noCardLeftInEitherHand || everyPlayerPasses)
       },
       next: 'newRound',
       onEnd: (G, ctx) => {

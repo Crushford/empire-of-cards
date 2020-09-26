@@ -19,18 +19,6 @@ export const removeActionCardFromHand = (currentPlayerHand, actionCard) => {
   return [selectedCard, newHand]
 }
 
-export const findAttackedPlayer = (players, attackedCityId) => {
-  let attackedPlayer = ''
-  players.forEach((player, playerIndex) =>
-    player.empire.forEach(cityCard => {
-      if (cityCard.id === attackedCityId) {
-        attackedPlayer = playerIndex
-      }
-    })
-  )
-  return attackedPlayer
-}
-
 export const discardBattleCards = G => {
   G.discardPile.push(G.battle.attack)
   G.battle.attack = ''
@@ -38,19 +26,28 @@ export const discardBattleCards = G => {
   G.battle.defend = ''
 }
 
-export const moveCity = G => {}
+export const moveCity = G => {
+  const attackingEmpire = G.players[G.target.attacker].empire
 
-export const getPlacedEmpireCardFromId = (G, attackedCityId) => {
-  let empireCard = {}
+  G.players[G.target.defender].empire = G.players[
+    G.target.defender
+  ].empire.filter(card => card.id !== G.target.card.id)
+  attackingEmpire.push(G.target.card)
+}
 
-  G.players.some(player =>
+export const getTargetedDetailsFromId = (G, attackedCityId) => {
+  let targetedCard = {}
+  let targetedPlayer = {}
+
+  G.players.some((player, playerIndex) =>
     player.empire.some(item => {
       if (item.id === attackedCityId) {
-        empireCard = item
+        targetedCard = item
+        targetedPlayer = playerIndex
         return true
-      }
+      } else return false
     })
   )
 
-  return empireCard
+  return [targetedCard, targetedPlayer]
 }
