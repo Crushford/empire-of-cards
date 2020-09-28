@@ -35,7 +35,7 @@ export const PlayerEmpire = ({
         .filter(card => card.color === color)
         .map((card, index) => (
           <Card
-            key={index}
+            key={card.id}
             value={card}
             faceUp={true}
             overlapIndex={index}

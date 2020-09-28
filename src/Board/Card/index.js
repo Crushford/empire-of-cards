@@ -5,7 +5,8 @@ import {
   Title,
   CardImage,
   AttributesContainer,
-  CardHalfContainer
+  CardHalfContainer,
+  CardText
 } from './style'
 
 const Attributes = ({ attack, defence }) => {
@@ -60,7 +61,11 @@ export const Card = ({
       {faceUp && (
         <>
           <CardHalf top={true} card={value} />
-          <CardImage src={value.imageUrl} />
+          {value.text ? (
+            <CardText content={value.imageUrl}>{value.text}</CardText>
+          ) : (
+            <CardImage src={value.imageUrl} />
+          )}
           <CardHalf card={value} />
         </>
       )}

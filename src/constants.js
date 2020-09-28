@@ -69,7 +69,8 @@ const cards = {
       title: 'Town Hall',
       benefit: 'handCapacity',
       bonus: 1,
-      color: CITY_COLORS[0]
+      color: CITY_COLORS[0],
+      text: 'Benefits: plus 1 to hand capacity'
     },
     {
       title: 'Armory',
@@ -88,7 +89,8 @@ const cards = {
       title: 'Town Hall',
       benefit: 'handCapacity',
       bonus: 1,
-      color: CITY_COLORS[1]
+      color: CITY_COLORS[1],
+      text: 'Benefits: plus 1 to hand capacity'
     },
     {
       title: 'Armory',
@@ -107,7 +109,8 @@ const cards = {
       title: 'Town Hall',
       benefit: 'handCapacity',
       bonus: 1,
-      color: CITY_COLORS[2]
+      color: CITY_COLORS[2],
+      text: 'Benefits: plus 1 to hand capacity'
     },
     {
       title: 'Armory',
@@ -126,7 +129,8 @@ const cards = {
       title: 'Town Hall',
       benefit: 'handCapacity',
       bonus: 1,
-      color: CITY_COLORS[3]
+      color: CITY_COLORS[3],
+      text: 'Benefits: plus 1 to hand capacity'
     },
     {
       title: 'Armory',

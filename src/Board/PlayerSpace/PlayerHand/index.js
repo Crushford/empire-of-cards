@@ -28,7 +28,7 @@ export const PlayerHand = ({ cards, faceUp, selectCard, selectedCard }) => {
         {cards &&
           cards.map((card, index) => (
             <Card
-              key={index}
+              key={card.id ? card.id : index}
               value={card}
               faceUp={faceUp}
               selectCard={selectCard}

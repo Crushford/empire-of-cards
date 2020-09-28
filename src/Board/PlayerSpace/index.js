@@ -15,8 +15,8 @@ const Container = styled.div`
   height: 33%;
   width: 60%;
   border: solid 1px hotpink;
-  transform: rotate(${({ position }) => position === 'bottom' && 180}deg);
-  ${({ position }) => position}:0;
+  transform: rotate(${({ isCurrentPlayer }) => isCurrentPlayer && 180}deg);
+  ${({ isCurrentPlayer }) => (isCurrentPlayer ? 'bottom' : 'top')}:0;
 `
 
 const AllCards = styled.div`
@@ -37,7 +37,7 @@ export const PlayerSpace = ({
   targetId
 }) => {
   return (
-    <Container position={position}>
+    <Container position={position} isCurrentPlayer={isCurrentPlayer}>
       <Banner color={color} />
       <AllCards>
         <PlayerHand

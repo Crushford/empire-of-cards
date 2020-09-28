@@ -49,3 +49,11 @@ export const CardHalfContainer = styled.div`
   max-height: 50%;
   ${({ top }) => !top && 'transform:rotate(180deg)'}
 `
+
+export const CardText = styled.h5`
+  height: 100%;
+  max-width: 100%;
+  transform: rotate(180deg);
+  font-size: 8px;
+  padding: 7px;
+`

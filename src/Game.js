@@ -1,5 +1,5 @@
 import { INVALID_MOVE } from 'boardgame.io/core'
-import { deck } from './constants'
+import { deck, CITY_COLORS } from './constants'
 import {
   shuffleArray,
   removeActionCardFromHand,
@@ -14,31 +14,35 @@ import {
  *  1. work out what to do if all cards picked up are armies
  */
 
-// Return true if `cells` is in a winning configuration.
-// function IsVictory(cells) {
-//   const positions = [
-//     [0, 1, 2],
-//     [3, 4, 5],
-//     [6, 7, 8],
-//     [0, 3, 6],
-//     [1, 4, 7],
-//     [2, 5, 8],
-//     [0, 4, 8],
-//     [2, 4, 6]
-//   ]
+function IsVictory(G) {
+  let winner = null
 
-//   const isRowComplete = row => {
-//     const symbols = row.map(i => cells[i])
-//     return symbols.every(i => i !== null && i === symbols[0])
-//   }
+  G.players.some((player, playerIndex) => {
+    let empireCount = {}
 
-//   return positions.map(isRowComplete).some(i => i === true)
-// }
+    CITY_COLORS.forEach(color => {
+      empireCount[color] = 0
+    })
 
-// // Return true if all `cells` are occupied.
-// function IsDraw(cells) {
-//   return cells.filter(c => c === null).length === 0
-// }
+    player.empire.forEach(card => {
+      empireCount[card.color]++
+    })
+
+    let fullSets = 0
+    for (const key in empireCount) {
+      if (empireCount[key] === 4) {
+        fullSets++
+      }
+    }
+    if (fullSets === G.completeSetsNeededToWin) {
+      winner = playerIndex
+      return true
+    }
+    return false
+  })
+
+  return winner
+}
 
 const startRound = (G, ctx) => {
   const currentPlayer = G.players[ctx.currentPlayer]
@@ -46,7 +50,7 @@ const startRound = (G, ctx) => {
   let additionalHandAllowance = 0
   currentPlayer.empire
     .filter(card => card.benefit === 'handCapacity')
-    .forEach(({ benefit }) => (additionalHandAllowance += benefit))
+    .forEach(({ bonus }) => (additionalHandAllowance += bonus))
 
   while (
     currentPlayer.hand.length <
@@ -81,10 +85,12 @@ const selectCard = (G, ctx, cardId) => {
 }
 
 const moveToEmpire = (G, ctx) => {
+  const isUnderAttack = G.battle?.attack?.title
   const currentPlayer = G.players[ctx.currentPlayer]
   const cardMoving = G.selectedCard
+  const cardMovingIsCity = cardMoving.indexOf('c') !== -1
 
-  if (cardMoving.indexOf('c') === -1) {
+  if (!cardMovingIsCity || isUnderAttack) {
     return INVALID_MOVE
   }
 
@@ -98,11 +104,15 @@ const moveToEmpire = (G, ctx) => {
     } else return true
   })
 
+  G.timesPassed = 0
   ctx.events.endTurn()
 }
 
 const attackCity = (G, ctx, attackedCityId) => {
-  if (G.selectedCard.indexOf('a') < 0) {
+  const isUnderAttack = G.battle?.attack?.title
+  const isArmySelected = G.selectedCard.indexOf('a') >= 0
+
+  if (!isArmySelected || isUnderAttack) {
     return INVALID_MOVE
   }
 
@@ -132,11 +142,16 @@ const attackCity = (G, ctx, attackedCityId) => {
   currentPlayer.hand = newHand
   G.battle.attack = selectedCard
   G.selectedCard = ''
+  G.timesPassed = 0
 
   ctx.events.endTurn()
 }
 
 const defendCity = (G, ctx) => {
+  const isArmySelected = G.selectedCard.indexOf('a') >= 0
+  if (!isArmySelected) {
+    return INVALID_MOVE
+  }
   const currentPlayer = G.players[ctx.currentPlayer]
   const [army, newHand] = removeActionCardFromHand(
     currentPlayer.hand,
@@ -162,12 +177,18 @@ const doNotDefend = (G, ctx) => {
   discardBattleCards(G)
   moveCity(G)
 
+  G.selectedCard = ''
   G.target = {}
-  ctx.events.endTurn()
+  ctx.events.endStage()
 }
 
 const pass = (G, ctx) => {
   G.timesPassed += 1
+  G.selectedCard = ''
+  if (G.timesPassed >= ctx.numPlayers) {
+    ctx.events.endPhase()
+  }
+  ctx.events.endStage()
   ctx.events.endTurn()
 }
 
@@ -194,7 +215,8 @@ export const EmpireOfCards = {
     target: {},
     timesPassed: 0,
     selectedCard: '',
-    discardPile: []
+    discardPile: [],
+    completeSetsNeededToWin: 2
   }),
 
   turn: {
@@ -205,7 +227,11 @@ export const EmpireOfCards = {
           pass,
           attackCity,
           moveToEmpire,
-          defendCity
+          defendCity,
+          doNotDefend
+        },
+        onEnd: (G, ctx) => {
+          G.timesPassed = 0
         }
       }
     }
@@ -215,7 +241,7 @@ export const EmpireOfCards = {
     newRound: {
       moves: { startRound },
       endIf: (G, ctx) =>
-        G.players.filter(player => player.hand.length === 5).length ===
+        G.players.filter(player => player.hand.length >= 5).length ===
         ctx.numPlayers,
       next: 'play',
       start: true
@@ -239,6 +265,12 @@ export const EmpireOfCards = {
       onEnd: (G, ctx) => {
         G.timesPassed = 0
       }
+    }
+  },
+  endIf: (G, ctx) => {
+    const winner = IsVictory(G)
+    if (winner !== null) {
+      return { winner }
     }
   }
 }
