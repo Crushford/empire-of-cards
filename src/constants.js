@@ -1,5 +1,19 @@
 export const CITY_COLORS = ['red', 'lightblue', 'orange', 'pink']
 
+const standardDeckOfCards = ['A', 2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K']
+
+const simpleDeck = {
+  cities: standardDeckOfCards
+    .map((value, index) => index < 4 && { title: value })
+    .filter(card => !!card.title),
+  armies: standardDeckOfCards
+    .map(
+      (value, index) =>
+        index > 4 && { title: value, attack: index + 1, defence: index + 1 }
+    )
+    .filter(card => !!card.title)
+}
+
 const armies = [
   {
     title: 'Catapult',
@@ -42,10 +56,25 @@ const makeTeams = category =>
     category.map((item, index) => ({
       ...item,
       color,
-      key: `${item.attack ? 'a' : 'c'}-${color}-${index}`
+      id: `${item.attack ? 'a' : 'c'}-${color}-${index}`
     }))
   )
 
 const deckWithTeams = [...makeTeams(armies).flat(), ...makeTeams(cities).flat()]
 
-export const deck = deckWithTeams
+export const getDeck = complexity => {
+  switch (complexity) {
+    case 'simple':
+      return [
+        ...makeTeams(simpleDeck.armies).flat(),
+        ...makeTeams(simpleDeck.cities).flat()
+      ]
+    case 'complex':
+      return [...makeTeams(armies).flat(), ...makeTeams(cities).flat()]
+
+    default:
+      return [...makeTeams(armies).flat(), ...makeTeams(cities).flat()]
+  }
+}
+
+export const deck = getDeck('simple')

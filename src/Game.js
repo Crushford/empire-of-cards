@@ -1,5 +1,5 @@
 import { INVALID_MOVE } from 'boardgame.io/core'
-import { deck, CITY_COLORS } from './constants'
+import { getDeck, CITY_COLORS } from './constants'
 import {
   shuffleArray,
   removeActionCardFromHand,
@@ -194,7 +194,8 @@ const pass = (G, ctx) => {
 
 export const EmpireOfCards = {
   setup: () => ({
-    deck: shuffleArray(deck),
+    deck: shuffleArray(getDeck('simple')),
+    gameComplexity: 'simple',
     players: [
       {
         color: 'blue',
