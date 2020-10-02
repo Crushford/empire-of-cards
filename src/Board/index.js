@@ -4,6 +4,8 @@ import { BattleBoard } from './BattleBoard'
 import { MessageBoard } from './MessageBoard'
 import { Deck } from './Deck'
 import { Pass } from './Pass'
+import { EndTurn } from './EndTurn'
+
 import { BoardContainer, ActionSpace, NextTurn, AcceptTurn } from './style'
 
 export const Board = ({ G, ctx, moves }) => {
@@ -35,6 +37,9 @@ export const Board = ({ G, ctx, moves }) => {
   }
   const handleAcceptTurn = () => {
     setNewPlayer(false)
+  }
+  const handleEndTurn = () => {
+    moves.endTurn()
   }
 
   const players = G.players.map((player, index) => {
@@ -69,6 +74,7 @@ export const Board = ({ G, ctx, moves }) => {
             <Deck onClick={handleDeckClick} />
             <MessageBoard G={G} ctx={ctx} />
             <Pass onClick={handlePassClick} isUnderAttack={isUnderAttack} />
+            <EndTurn onClick={handleEndTurn} />
             <BattleBoard
               cards={G.battle}
               handleDefenceClick={handleDefenceClick}

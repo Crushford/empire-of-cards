@@ -58,7 +58,28 @@ const startRound = (G, ctx) => {
   ) {
     currentPlayer.hand.push(G.deck.pop())
   }
-  ctx.events.endTurn()
+}
+
+const endTurn = (G, ctx) => {
+  const currentPlayer = G.players[ctx.currentPlayer]
+  let additionalHandAllowance = 0
+  currentPlayer.empire
+    .filter(card => card.benefit === 'handCapacity')
+    .forEach(({ bonus }) => (additionalHandAllowance += bonus))
+
+  if (
+    currentPlayer.hand.length <
+    currentPlayer.handSizeAllowance + additionalHandAllowance
+  ) {
+    return INVALID_MOVE
+  }
+
+  if (
+    G.players.filter(player => player.hand.length >= 5).length ===
+    ctx.numPlayers
+  ) {
+    ctx.events.endPhase()
+  } else ctx.events.endTurn()
 }
 
 const selectCard = (G, ctx, cardId) => {
@@ -240,10 +261,7 @@ export const EmpireOfCards = {
 
   phases: {
     newRound: {
-      moves: { startRound },
-      endIf: (G, ctx) =>
-        G.players.filter(player => player.hand.length >= 5).length ===
-        ctx.numPlayers,
+      moves: { startRound, endTurn },
       next: 'play',
       start: true
     },
