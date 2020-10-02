@@ -14,42 +14,74 @@ const simpleDeck = {
     .filter(card => !!card.title)
 }
 
-const armies = [
-  {
-    title: 'Catapult',
-    attack: 9,
-    defence: 1,
-    imageUrl:
-      'https://cdn.britannica.com/34/83934-050-4787BA22/Roman-torsion-arm-stone-bundle-cords-force.jpg'
-  },
-  { title: 'Armored Knight', attack: 5, defence: 9 },
-  { title: 'Archer', attack: 8, defence: 4 },
-  { title: 'Warrior', attack: 4, defence: 4 },
-  { title: 'Horseman', attack: 7, defence: 4 },
-  { title: 'Axeman', attack: 4, defence: 5 },
-  { title: 'Pikeman', attack: 5, defence: 8 },
-  { title: 'Mounted knight', attack: 9, defence: 6 }
-]
-const cities = [
-  { title: 'City Wall', benefit: 'defence', bonus: 1 },
-  {
-    title: 'Town Hall',
-    benefit: 'handCapacity',
-    bonus: 1,
+const normalDeck = {
+  armies: [
+    {
+      title: 'Catapult',
+      attack: 9,
+      defence: 1,
+      imageUrl:
+        'https://cdn.britannica.com/34/83934-050-4787BA22/Roman-torsion-arm-stone-bundle-cords-force.jpg'
+    },
+    { title: 'Armored Knight', attack: 5, defence: 9 },
+    { title: 'Archer', attack: 8, defence: 4 },
+    { title: 'Warrior', attack: 4, defence: 4 },
+    { title: 'Horseman', attack: 7, defence: 4 },
+    { title: 'Axeman', attack: 4, defence: 5 },
+    { title: 'Pikeman', attack: 5, defence: 8 },
+    { title: 'Mounted knight', attack: 9, defence: 6 }
+  ],
+  cities: [
+    { title: 'Cathedral' },
+    {
+      title: 'Town Hall'
+    },
+    {
+      title: 'Market'
+    },
+    {
+      title: 'Barracks'
+    }
+  ]
+}
 
-    text: 'Benefits: plus 1 to hand capacity'
-  },
-  {
-    title: 'Armory',
-    benefit: 'colorAttack',
-    bonus: 1
-  },
-  {
-    title: 'Forge',
-    benefit: 'colorDefence',
-    bonus: 1
-  }
-]
+const complexDeck = {
+  armies: [
+    {
+      title: 'Catapult',
+      attack: 9,
+      defence: 1,
+      imageUrl:
+        'https://cdn.britannica.com/34/83934-050-4787BA22/Roman-torsion-arm-stone-bundle-cords-force.jpg'
+    },
+    { title: 'Armored Knight', attack: 5, defence: 9 },
+    { title: 'Archer', attack: 8, defence: 4 },
+    { title: 'Warrior', attack: 4, defence: 4 },
+    { title: 'Horseman', attack: 7, defence: 4 },
+    { title: 'Axeman', attack: 4, defence: 5 },
+    { title: 'Pikeman', attack: 5, defence: 8 },
+    { title: 'Mounted knight', attack: 9, defence: 6 }
+  ],
+  cities: [
+    { title: 'City Wall', benefit: 'cityDefence', bonus: 1 },
+    {
+      title: 'Town Hall',
+      benefit: 'handCapacity',
+      bonus: 1,
+      text: 'Benefits: plus 1 to hand capacity'
+    },
+    {
+      title: 'Barracks',
+      benefit: 'colorAttack',
+      bonus: 1
+    },
+    {
+      title: 'Battel Academy',
+      benefit: 'colorDefence',
+      bonus: 1
+    }
+  ]
+}
 
 const makeTeams = category =>
   CITY_COLORS.map(color =>
@@ -60,8 +92,6 @@ const makeTeams = category =>
     }))
   )
 
-const deckWithTeams = [...makeTeams(armies).flat(), ...makeTeams(cities).flat()]
-
 export const getDeck = complexity => {
   switch (complexity) {
     case 'simple':
@@ -70,10 +100,16 @@ export const getDeck = complexity => {
         ...makeTeams(simpleDeck.cities).flat()
       ]
     case 'complex':
-      return [...makeTeams(armies).flat(), ...makeTeams(cities).flat()]
+      return [
+        ...makeTeams(complexDeck.armies).flat(),
+        ...makeTeams(complexDeck.cities).flat()
+      ]
 
     default:
-      return [...makeTeams(armies).flat(), ...makeTeams(cities).flat()]
+      return [
+        ...makeTeams(normalDeck.armies).flat(),
+        ...makeTeams(normalDeck.cities).flat()
+      ]
   }
 }
 

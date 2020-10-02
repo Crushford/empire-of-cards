@@ -41,7 +41,7 @@ export const CardImage = styled.img`
 
 export const AttributesContainer = styled.div`
   font-size: 14px;
-  width: 28px;
+  width: 40px;
   margin: 1px;
 `
 
