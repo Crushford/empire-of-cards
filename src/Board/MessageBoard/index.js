@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { getMessages } from './messages'
 
+const Turn = styled.h5`
+  color: ${({ isActive }) => (isActive ? 'green' : 'red')};
+`
 const Hint = styled.h5``
 const SpecialMessage = styled.h5`
   color: blue;
@@ -12,17 +15,26 @@ const MessageContainer = styled.div`
   padding: 30px;
 `
 
-export const MessageBoard = ({ G, ctx }) => {
+export const MessageBoard = ({ G, ctx, isMultiplayer, isActive }) => {
   const [messages, setMessages] = useState({ hint: '', specialMessage: '' })
 
   useEffect(() => {
     setMessages(getMessages(G, ctx))
-  }, [G, ctx])
+  }, [G, ctx, isActive])
 
   return (
     <MessageContainer>
-      <Hint>{messages.hint}</Hint>
-      <SpecialMessage>{messages.specialMessage}</SpecialMessage>
+      {isMultiplayer && (
+        <Turn isActive={isActive}>
+          {isActive ? 'Your Turn' : "Opponent's Turn"}
+        </Turn>
+      )}
+      {(!isMultiplayer || isActive) && (
+        <>
+          <Hint>{messages.hint}</Hint>
+          <SpecialMessage>{messages.specialMessage}</SpecialMessage>
+        </>
+      )}
     </MessageContainer>
   )
 }

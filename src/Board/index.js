@@ -8,7 +8,7 @@ import { EndTurn } from './EndTurn'
 
 import { BoardContainer, ActionSpace, NextTurn, AcceptTurn } from './style'
 
-export const Board = ({ G, ctx, moves }) => {
+export const Board = ({ G, ctx, moves, isMultiplayer, isActive }) => {
   const [newPlayer, setNewPlayer] = useState(true)
 
   useEffect(() => {
@@ -62,7 +62,7 @@ export const Board = ({ G, ctx, moves }) => {
 
   return (
     <BoardContainer>
-      {newPlayer ? (
+      {newPlayer && !isMultiplayer ? (
         <>
           <NextTurn> {G.players[ctx.currentPlayer].color}'s Turn</NextTurn>
           <AcceptTurn onClick={handleAcceptTurn}>Let's Go!</AcceptTurn>
@@ -72,7 +72,12 @@ export const Board = ({ G, ctx, moves }) => {
           {players}
           <ActionSpace>
             <Deck onClick={handleDeckClick} />
-            <MessageBoard G={G} ctx={ctx} />
+            <MessageBoard
+              G={G}
+              ctx={ctx}
+              isActive={isActive}
+              isMultiplayer={isMultiplayer}
+            />
             <Pass onClick={handlePassClick} isUnderAttack={isUnderAttack} />
             <EndTurn onClick={handleEndTurn} />
             <BattleBoard
