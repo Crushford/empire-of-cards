@@ -13,7 +13,7 @@ const LocalMultiPlayerEmpireOfCardsClient = Client({
 const OnlineMultiPLayerEmpireOfCardsClient = Client({
   game: EmpireOfCards,
   board: Board,
-  multiplayer: SocketIO({ server: 'localhost:8000' })
+  multiplayer: SocketIO({ server: `https://${window.location.hostname}:8000` })
 })
 
 const App = () => {
