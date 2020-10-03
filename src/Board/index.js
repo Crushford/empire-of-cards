@@ -8,7 +8,9 @@ import { EndTurn } from './EndTurn'
 
 import { BoardContainer, ActionSpace, NextTurn, AcceptTurn } from './style'
 
-export const Board = ({ G, ctx, moves, isMultiplayer, isActive }) => {
+export const Board = props => {
+  const { G, ctx, moves, isMultiplayer, isActive, playerID } = props
+  console.log(props)
   const [newPlayer, setNewPlayer] = useState(true)
 
   useEffect(() => {
@@ -43,7 +45,9 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive }) => {
   }
 
   const players = G.players.map((player, index) => {
-    const isCurrentPlayer = ctx.playOrderPos === index
+    const isCurrentPlayer = isMultiplayer
+      ? +playerID === index
+      : ctx.playOrderPos === index
 
     return (
       <PlayerSpace
