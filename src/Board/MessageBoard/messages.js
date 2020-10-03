@@ -1,11 +1,22 @@
 export const getMessages = (G, ctx) => {
+  const currentPlayer = G.players[ctx.currentPlayer]
   const getHint = () => {
     if (ctx.winner) {
       return `Winner is player ${G.players[ctx.winner].color}`
     }
 
     if (ctx.phase === 'newRound') {
-      return 'click the deck to draw cards'
+      let additionalHandAllowance = 0
+      currentPlayer.empire
+        .filter(card => card.benefit === 'handCapacity')
+        .forEach(({ bonus }) => (additionalHandAllowance += bonus))
+
+      if (
+        currentPlayer.hand.length ===
+        currentPlayer.handSizeAllowance + additionalHandAllowance
+      ) {
+        return 'End your turn when you are ready'
+      } else return 'click the deck to draw cards'
     }
 
     const isUnderAttack = G.battle?.attack?.title
@@ -13,27 +24,25 @@ export const getMessages = (G, ctx) => {
     if (isUnderAttack) {
       switch (G.selectedCard[0]) {
         case 'c':
-          return 'now is not the time for that'
+          return 'Now is not the time for that'
         case 'a':
-          return 'click defend box to defend'
+          return 'Click defend box to defend'
         default:
-          return 'select army to defend or click do not defend'
+          return 'Select army to defend or click do not defend'
       }
     }
 
     switch (G.selectedCard[0]) {
       case 'c':
-        return 'click empire to move to empire'
+        return 'Click empire to move to empire'
       case 'a':
-        return 'click city to attack'
+        return 'Click city to attack'
       default:
-        return 'select card to play'
+        return 'Select card to play'
     }
   }
 
   const getSpecialMessage = () => {
-    const currentPlayer = G.players[ctx.currentPlayer]
-
     if (ctx.turn < 5 && currentPlayer.hand.length > 5) {
       let additionalHandAllowance = 0
       currentPlayer.empire
