@@ -118,7 +118,7 @@ const selectCard = (G, ctx, cardId) => {
 }
 
 const moveToEmpire = (G, ctx) => {
-  const isUnderAttack = G.battle?.attack?.title
+  const isUnderAttack = G.battle && G.battle.attack && G.battle.attack.title
   const currentPlayer = G.players[ctx.currentPlayer]
   const cardMoving = G.selectedCard
   const cardMovingIsCity = cardMoving.indexOf('c') !== -1
@@ -142,7 +142,7 @@ const moveToEmpire = (G, ctx) => {
 }
 
 const attackCity = (G, ctx, attackedCityId) => {
-  const isUnderAttack = G.battle?.attack?.title
+  const isUnderAttack = G.battle && G.battle.attack && G.battle.attack.title
   const isArmySelected = G.selectedCard.indexOf('a') >= 0
 
   if (!isArmySelected || isUnderAttack) {

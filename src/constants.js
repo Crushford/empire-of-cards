@@ -95,10 +95,11 @@ const makeTeams = category =>
 export const getDeck = complexity => {
   switch (complexity) {
     case 'simple':
-      return [
-        ...makeTeams(simpleDeck.armies).flat(),
-        ...makeTeams(simpleDeck.cities).flat()
-      ]
+      // work around for lack of Array.flat()
+      return [].concat(
+        ...makeTeams(simpleDeck.armies),
+        ...makeTeams(simpleDeck.cities)
+      )
     case 'complex':
       return [
         ...makeTeams(complexDeck.armies).flat(),
