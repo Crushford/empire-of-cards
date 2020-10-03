@@ -78,6 +78,18 @@ const endTurn = (G, ctx) => {
     G.players.filter(player => player.hand.length >= 5).length ===
     ctx.numPlayers
   ) {
+    // on first round, after each player gets 5 cards, deal one card to each player, until someone has a city.
+    if (ctx.turn < 5) {
+      while (
+        !G.players.some(player =>
+          player.hand.some(card => card.id.indexOf('c') === 0)
+        )
+      ) {
+        G.players.forEach(player => {
+          player.hand.push(G.deck.pop())
+        })
+      }
+    }
     ctx.events.endPhase()
   } else ctx.events.endTurn()
 }
@@ -269,7 +281,8 @@ export const EmpireOfCards = {
       moves: {
         selectCard,
         pass,
-        doNotDefend
+        doNotDefend,
+        endTurn
       },
       endIf: (G, ctx) => {
         const noCardLeftInEitherHand =

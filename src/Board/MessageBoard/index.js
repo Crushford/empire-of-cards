@@ -1,46 +1,28 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { getMessages } from './messages'
 
 const Hint = styled.h5``
+const SpecialMessage = styled.h5`
+  color: blue;
+`
+const MessageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+`
 
 export const MessageBoard = ({ G, ctx }) => {
-  const getHint = () => {
-    if (ctx.winner) {
-      return `Winner is player ${G.players[ctx.winner].color}`
-    }
+  const [messages, setMessages] = useState({ hint: '', specialMessage: '' })
 
-    if (ctx.phase === 'newRound') {
-      return 'click the deck to draw cards'
-    }
-
-    const isUnderAttack = G.battle?.attack?.title
-
-    if (isUnderAttack) {
-      switch (G.selectedCard[0]) {
-        case 'c':
-          return 'now is not the time for that'
-        case 'a':
-          return 'click defend box to defend'
-        default:
-          return 'select army to defend or click do not defend'
-      }
-    }
-
-    switch (G.selectedCard[0]) {
-      case 'c':
-        return 'click empire to move to empire'
-      case 'a':
-        return 'click city to attack'
-      default:
-        return 'select card to action'
-    }
-  }
-
-  const hint = getHint()
+  useEffect(() => {
+    setMessages(getMessages(G, ctx))
+  }, [G, ctx])
 
   return (
-    <>
-      <Hint>{hint}</Hint>
-    </>
+    <MessageContainer>
+      <Hint>{messages.hint}</Hint>
+      <SpecialMessage>{messages.specialMessage}</SpecialMessage>
+    </MessageContainer>
   )
 }
