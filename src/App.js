@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Client } from 'boardgame.io/react'
-import { Local } from 'boardgame.io/multiplayer'
 import { SocketIO } from 'boardgame.io/multiplayer'
 
 import { Board } from './Board'

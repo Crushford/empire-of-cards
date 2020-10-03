@@ -8,9 +8,7 @@ import { EndTurn } from './EndTurn'
 
 import { BoardContainer, ActionSpace, NextTurn, AcceptTurn } from './style'
 
-export const Board = props => {
-  const { G, ctx, moves, isMultiplayer, isActive, playerID } = props
-  console.log(props)
+export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
   const [newPlayer, setNewPlayer] = useState(true)
 
   useEffect(() => {
@@ -83,7 +81,7 @@ export const Board = props => {
               isMultiplayer={isMultiplayer}
             />
             <Pass onClick={handlePassClick} isUnderAttack={isUnderAttack} />
-            <EndTurn onClick={handleEndTurn} />
+            {ctx.phase === 'newRound' && <EndTurn onClick={handleEndTurn} />}
             <BattleBoard
               cards={G.battle}
               handleDefenceClick={handleDefenceClick}
