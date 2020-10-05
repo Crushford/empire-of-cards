@@ -23,7 +23,7 @@ const normalDeck = {
       imageUrl:
         'https://cdn.britannica.com/34/83934-050-4787BA22/Roman-torsion-arm-stone-bundle-cords-force.jpg'
     },
-    { title: 'Armored Knight', attack: 5, defence: 9 },
+    { title: 'Poop Knight', attack: 5, defence: 9 },
     { title: 'Archer', attack: 8, defence: 4 },
     { title: 'Warrior', attack: 4, defence: 4 },
     { title: 'Horseman', attack: 7, defence: 4 },
