@@ -107,11 +107,11 @@ export const getDeck = complexity => {
       ]
 
     default:
-      return [
-        ...makeTeams(normalDeck.armies).flat(),
-        ...makeTeams(normalDeck.cities).flat()
-      ]
+      return [].concat(
+        ...makeTeams(normalDeck.armies),
+        ...makeTeams(normalDeck.cities)
+      )
   }
 }
 
-export const deck = getDeck('simple')
+export const deck = getDeck('')

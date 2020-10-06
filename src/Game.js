@@ -225,9 +225,10 @@ const pass = (G, ctx) => {
   ctx.events.endTurn()
 }
 
-export const EmpireOfCards = {
+export const empireOfCards = (deckType, name) => ({
+  name: name,
   setup: () => ({
-    deck: shuffleArray(getDeck('simple')),
+    deck: shuffleArray(getDeck(deckType)),
     gameComplexity: 'simple',
     players: [
       {
@@ -305,4 +306,4 @@ export const EmpireOfCards = {
       return { winner }
     }
   }
-}
+})
