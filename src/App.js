@@ -1,24 +1,32 @@
 import React, { useState } from 'react'
-import { Client } from 'boardgame.io/react'
-import { SocketIO } from 'boardgame.io/multiplayer'
+import './App.css'
+import { Client, Lobby } from 'boardgame.io/react'
+// import { SocketIO } from 'boardgame.io/multiplayer'
 
 import { Board } from './Board'
-import { EmpireOfCards } from './Game'
+import { SimpleDeck, NormalDeck } from './GameTypes'
 
-const LocalMultiPlayerEmpireOfCardsClient = Client({
-  game: EmpireOfCards,
-  board: Board
-})
+const localGame = complexity => {
+  const SimpleDeckClient = Client({
+    game: SimpleDeck,
+    board: Board
+  })
+  const NormalDeckClient = Client({
+    game: NormalDeck,
+    board: Board
+  })
 
-const OnlineMultiPLayerEmpireOfCardsClient = Client({
-  game: EmpireOfCards,
-  board: Board,
-  multiplayer: SocketIO({ server: `${window.location.href}` })
-})
+  switch (complexity) {
+    case 'simple':
+      return SimpleDeckClient
+    default:
+      return NormalDeckClient
+  }
+}
 
 const App = () => {
-  const [playerID, setPlayerID] = useState(null)
   const [gameType, setGameType] = useState(null)
+  const [gameComplexity, setGameComplexity] = useState(null)
 
   return (
     <>
@@ -29,16 +37,23 @@ const App = () => {
           <button onClick={() => setGameType('online')}>online</button>
         </div>
       )}
-      {gameType === 'online' && !playerID && (
+      {gameType === 'local' && !gameComplexity && (
         <div>
-          <p>Play as</p>
-          <button onClick={() => setPlayerID('0')}>Player 0</button>
-          <button onClick={() => setPlayerID('1')}>Player 1</button>
+          <p>Select Game Complexity?</p>
+          <button onClick={() => setGameComplexity('simple')}>simple</button>
+          <button onClick={() => setGameComplexity('normal')}>normal</button>
         </div>
       )}
-      {gameType === 'local' && <LocalMultiPlayerEmpireOfCardsClient />}
-      {gameType === 'online' && playerID && (
-        <OnlineMultiPLayerEmpireOfCardsClient playerID={playerID} />
+      {gameType === 'local' && gameComplexity && localGame(gameComplexity)}
+      {gameType === 'online' && (
+        <Lobby
+          gameServer={`http://${window.location.hostname}:8000`}
+          lobbyServer={`http://${window.location.hostname}:8000`}
+          gameComponents={[
+            { game: SimpleDeck, board: Board },
+            { game: NormalDeck, board: Board }
+          ]}
+        />
       )}
     </>
   )

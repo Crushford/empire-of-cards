@@ -1,9 +1,9 @@
 import { Server } from 'boardgame.io/server'
-import { EmpireOfCards } from './src/Game'
+import { SimpleDeck, NormalDeck } from './src/GameTypes'
 import path from 'path'
 import serve from 'koa-static'
 
-const server = Server({ games: [EmpireOfCards] })
+const server = Server({ games: [SimpleDeck, NormalDeck] })
 const PORT = process.env.PORT || 8000
 
 // Build path relative to the server.js file
@@ -19,3 +19,10 @@ server.run(PORT, () => {
       )
   )
 })
+
+const lobbyConfig = {
+  apiPort: 8080,
+  apiCallback: () => console.log('Running Lobby API on port 8080...')
+}
+
+server.run({ port: 8000, lobbyConfig })
