@@ -5,6 +5,7 @@ import serve from 'koa-static'
 
 const server = Server({ games: [SimpleDeck, NormalDeck] })
 const PORT = process.env.PORT || 8000
+const API_PORT = process.env.PORT || 8080
 
 // Build path relative to the server.js file
 const frontEndAppBuildPath = path.resolve(__dirname, './build')
@@ -21,8 +22,8 @@ server.run(PORT, () => {
 })
 
 const lobbyConfig = {
-  apiPort: 8080,
+  apiPort: API_PORT,
   apiCallback: () => console.log('Running Lobby API on port 8080...')
 }
 
-server.run({ port: 8000, lobbyConfig })
+server.run({ port: PORT, lobbyConfig })
