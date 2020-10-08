@@ -80,8 +80,11 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
               isActive={isActive}
               isMultiplayer={isMultiplayer}
             />
-            <Pass onClick={handlePassClick} isUnderAttack={isUnderAttack} />
-            {ctx.phase === 'newRound' && <EndTurn onClick={handleEndTurn} />}
+            {ctx.phase === 'newRound' ? (
+              <EndTurn onClick={handleEndTurn} />
+            ) : (
+              <Pass onClick={handlePassClick} isUnderAttack={isUnderAttack} />
+            )}
             <BattleBoard
               cards={G.battle}
               handleDefenceClick={handleDefenceClick}

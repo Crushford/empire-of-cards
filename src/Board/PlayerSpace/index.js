@@ -12,9 +12,7 @@ const Banner = styled.div`
 
 const Container = styled.div`
   position: fixed;
-  height: 33%;
-  width: 60%;
-  border: solid 1px hotpink;
+  width: ${({ isCurrentPlayer }) => (isCurrentPlayer ? '100%' : '30%')};
   transform: rotate(${({ isCurrentPlayer }) => isCurrentPlayer && 180}deg);
   ${({ isCurrentPlayer }) => (isCurrentPlayer ? 'bottom' : 'top')}:0;
 `

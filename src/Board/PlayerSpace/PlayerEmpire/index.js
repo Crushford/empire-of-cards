@@ -7,8 +7,7 @@ import { CITY_COLORS } from './../../../constants'
 const CitiesContainer = styled.div`
   display: flex;
   flex-direction: row;
-  height: 140px;
-  width: 410px;
+  max-height: 250px;
 `
 const Title = styled.h2`
   transform: rotate(180deg);
@@ -16,11 +15,27 @@ const Title = styled.h2`
 const City = styled.div`
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  &:hover {
+    overflow: visible;
+  }
+  &:last-child {
+    overflow: visible;
+  }
+`
+const CardWrapper = styled.div`
+  overflow: hidden;
+  &:hover {
+    overflow: visible;
+  }
+  &:last-child {
+    overflow: visible;
+  }
 `
 const Empire = styled.div`
   display: flex;
   flex-direction: column-reverse;
-  border: solid 1px black;
+  min-width: 50%;
 `
 
 export const PlayerEmpire = ({
@@ -29,22 +44,27 @@ export const PlayerEmpire = ({
   handleCityClick,
   targetId
 }) => {
-  const cities = CITY_COLORS.map((color, index) => (
-    <City key={index}>
-      {cards
-        .filter(card => card.color === color)
-        .map((card, index) => (
-          <Card
-            key={card.id}
-            value={card}
-            faceUp={true}
-            overlapIndex={index}
-            handleCityClick={handleCityClick}
-            targetId={targetId}
-          />
-        ))}
-    </City>
-  ))
+  const cityStacks = CITY_COLORS.map(color =>
+    cards.filter(card => card.color === color)
+  ).sort((a, b) => a.length - b.length)
+  const cities = cityStacks.map(
+    (cityColor, index) =>
+      cityColor[0] && (
+        <City key={index}>
+          {cityColor.map(card => (
+            <CardWrapper>
+              <Card
+                key={card.id}
+                value={card}
+                faceUp={true}
+                handleCityClick={handleCityClick}
+                targetId={targetId}
+              />
+            </CardWrapper>
+          ))}
+        </City>
+      )
+  )
   return (
     <Empire onClick={handleEmpireClick}>
       <Title>Empire</Title>
