@@ -6,7 +6,7 @@ import { Client, Lobby } from 'boardgame.io/react'
 import { Board } from './Board'
 import { SimpleDeck, NormalDeck } from './GameTypes'
 
-const localGame = complexity => {
+const LocalGame = complexity => {
   const SimpleDeckClient = Client({
     game: SimpleDeck,
     board: Board
@@ -18,9 +18,9 @@ const localGame = complexity => {
 
   switch (complexity) {
     case 'simple':
-      return SimpleDeckClient
+      return <SimpleDeckClient />
     default:
-      return NormalDeckClient
+      return <NormalDeckClient />
   }
 }
 
@@ -44,7 +44,9 @@ const App = () => {
           <button onClick={() => setGameComplexity('normal')}>normal</button>
         </div>
       )}
-      {gameType === 'local' && gameComplexity && localGame(gameComplexity)}
+      {gameType === 'local' && gameComplexity && (
+        <LocalGame gameComplexity={gameComplexity} />
+      )}
       {gameType === 'online' && (
         <Lobby
           gameServer={`http://${window.location.hostname}:8000`}
