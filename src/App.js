@@ -28,6 +28,9 @@ const App = () => {
   const [gameType, setGameType] = useState(null)
   const [gameComplexity, setGameComplexity] = useState(null)
 
+  const { protocol, hostname, port } = window.location
+  const server = `${protocol}//${hostname}:${port}`
+
   return (
     <>
       {!gameType && (
@@ -49,8 +52,8 @@ const App = () => {
       )}
       {gameType === 'online' && (
         <Lobby
-          gameServer={`http://${window.location.hostname}:8000`}
-          lobbyServer={`http://${window.location.hostname}:8000`}
+          gameServer={server}
+          lobbyServer={server}
           gameComponents={[
             { game: SimpleDeck, board: Board },
             { game: NormalDeck, board: Board }
