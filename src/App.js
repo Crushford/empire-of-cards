@@ -47,8 +47,8 @@ const App = () => {
       {gameType === 'local' && gameComplexity && localGame(gameComplexity)}
       {gameType === 'online' && (
         <Lobby
-          gameServer={`http://${window.location.hostname}`}
-          lobbyServer={`http://${window.location.hostname}`}
+          gameServer={`http://${window.location.hostname}:8000`}
+          lobbyServer={`http://${window.location.hostname}:8000`}
           gameComponents={[
             { game: SimpleDeck, board: Board },
             { game: NormalDeck, board: Board }

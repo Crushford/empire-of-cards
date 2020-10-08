@@ -21,9 +21,9 @@ server.run(PORT, () => {
   )
 })
 
-const lobbyConfig = {
-  apiPort: API_PORT,
-  apiCallback: () => console.log('Running Lobby API on port 8080...')
-}
+// const lobbyConfig = {
+//   apiPort: API_PORT,
+//   apiCallback: () => console.log('Running Lobby API on port 8080...')
+// }
 
-server.run({ port: PORT, lobbyConfig })
+// server.run({ port: PORT, lobbyConfig })
