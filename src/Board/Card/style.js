@@ -3,8 +3,6 @@ import styled from 'styled-components'
 export const Container = styled.div`
   height: 140px;
   width: 100px;
-  border-radius: 10%;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -56,4 +54,13 @@ export const CardText = styled.h5`
   transform: rotate(180deg);
   font-size: 8px;
   padding: 7px;
+`
+
+export const CardEdge = styled.div`
+  border: black solid 1px;
+  z-index: -1;
+  height: 140px;
+  width: 100px;
+  margin-right: -97px;
+  background: white;
 `
