@@ -1,17 +1,99 @@
-export const CITY_COLORS = ['red', 'lightblue', 'orange', 'pink']
+export const CITY_COLORS = [
+  'lightgreen',
+  'lightblue',
+  'orange',
+  'pink',
+  'lightbrown'
+]
 
-const standardDeckOfCards = ['A', 2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K']
+// const standardDeckOfCards = ['A', 2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K']
+
+// const simpleDeck = {
+//   cities: standardDeckOfCards
+//     .map((value, index) => index < 4 && { title: value })
+//     .filter(card => !!card.title),
+//   armies: standardDeckOfCards
+//     .map(
+//       (value, index) =>
+//         index > 4 && { title: value, attack: index + 1, defence: index + 1 }
+//     )
+//     .filter(card => !!card.title)
+// }
 
 const simpleDeck = {
-  cities: standardDeckOfCards
-    .map((value, index) => index < 4 && { title: value })
-    .filter(card => !!card.title),
-  armies: standardDeckOfCards
-    .map(
-      (value, index) =>
-        index > 4 && { title: value, attack: index + 1, defence: index + 1 }
-    )
-    .filter(card => !!card.title)
+  armies: [
+    {
+      title: '1',
+      attack: 1,
+      defence: 1,
+      imageUrl:
+        'https://cdn.pixabay.com/photo/2017/11/11/16/24/knight-2939429_960_720.png'
+    },
+    {
+      title: '2',
+      attack: 2,
+      defence: 2,
+      imageUrl:
+        'https://cdn.pixabay.com/photo/2017/11/11/16/24/knight-2939429_960_720.png'
+    },
+    {
+      title: '3',
+      attack: 3,
+      defence: 3,
+      imageUrl:
+        'https://cdn.pixabay.com/photo/2017/11/11/16/24/knight-2939429_960_720.png'
+    },
+    {
+      title: '4',
+      attack: 4,
+      defence: 4,
+      imageUrl:
+        'https://cdn.pixabay.com/photo/2017/11/11/16/24/knight-2939429_960_720.png'
+    },
+    {
+      title: '5',
+      attack: 5,
+      defence: 5,
+      imageUrl:
+        'https://cdn.pixabay.com/photo/2017/11/11/16/24/knight-2939429_960_720.png'
+    },
+    {
+      title: '6',
+      attack: 6,
+      defence: 6,
+      imageUrl:
+        'https://cdn.pixabay.com/photo/2017/11/11/16/24/knight-2939429_960_720.png'
+    },
+    {
+      title: '7',
+      attack: 7,
+      defence: 7,
+      imageUrl:
+        'https://cdn.pixabay.com/photo/2017/11/11/16/24/knight-2939429_960_720.png'
+    }
+  ],
+  cities: [
+    {
+      title: 'Cathedral',
+      imageUrl:
+        'https://cdn.pixabay.com/photo/2018/02/20/11/57/house-3167461_960_720.png'
+    },
+    {
+      title: 'Town Hall',
+      imageUrl:
+        'https://cdn.pixabay.com/photo/2018/02/20/12/00/house-3167469_960_720.png'
+    },
+    {
+      title: 'Market',
+      imageUrl:
+        'https://cdn.pixabay.com/photo/2018/02/18/14/24/house-3162387_960_720.png'
+    },
+    {
+      title: 'Barracks',
+      imageUrl:
+        'https://cdn.pixabay.com/photo/2018/02/18/14/13/house-3162364_960_720.png'
+    }
+  ]
 }
 
 const normalDeck = {
@@ -85,11 +167,15 @@ const complexDeck = {
 
 const makeTeams = category =>
   CITY_COLORS.map(color =>
-    category.map((item, index) => ({
-      ...item,
-      color,
-      id: `${item.attack ? 'a' : 'c'}-${color}-${index}`
-    }))
+    category.map((item, index) => {
+      let isBattleCard = !!item.attack
+
+      return {
+        ...item,
+        color: isBattleCard ? 'red' : color,
+        id: `${isBattleCard ? 'a' : 'c'}-${color}-${index}`
+      }
+    })
   )
 
 export const getDeck = complexity => {

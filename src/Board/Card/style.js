@@ -20,31 +20,30 @@ export const Container = styled.div`
 `
 
 export const TopBanner = styled.div`
-  height: 40px;
+  height: 100%;
   width: 100%;
   background: ${({ color }) => color};
   display: flex;
 `
 export const Title = styled.p`
   font-size: 14px;
-  height: 100%;
   text-align: center;
   margin: auto;
 `
 
 export const CardImage = styled.img`
-  height: 100%;
+  max-height: 60%;
   max-width: 100%;
+  object-fit: contain;
 `
 
 export const AttributesContainer = styled.div`
   font-size: 14px;
-  width: 40px;
-  margin: 1px;
+  margin: auto;
 `
 
 export const CardHalfContainer = styled.div`
-  max-height: 50%;
+  height: 20%;
   ${({ top }) => !top && 'transform:rotate(180deg)'}
 `
 
