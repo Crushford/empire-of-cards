@@ -57,6 +57,10 @@ const startRound = (G, ctx) => {
     currentPlayer.handSizeAllowance + additionalHandAllowance
   ) {
     currentPlayer.hand.push(G.deck.pop())
+    if (G.deck[0] === undefined) {
+      G.deck = shuffleArray(G.discardPile)
+      G.discardPile = []
+    }
   }
 }
 
