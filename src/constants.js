@@ -6,6 +6,8 @@ export const CITY_COLORS = [
   'lightbrown'
 ]
 
+export const PLAYER_COLORS = ['blue', 'red', 'brown', 'green']
+
 // const standardDeckOfCards = ['A', 2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K']
 
 // const simpleDeck = {

@@ -3,6 +3,23 @@ import styled from 'styled-components'
 import { PlayerEmpire } from './PlayerEmpire'
 import { PlayerHand } from './PlayerHand'
 
+const getPositionCSS = (position, isCurrentPlayer) => {
+  const width = isCurrentPlayer ? '100%' : '40%'
+
+  switch (position) {
+    case 0:
+      return `bottom:0; width: ${width};`
+    case 1:
+      return `left: calc((${width} - 250px) * -0.5); transform: rotate(90deg); top: 35%; width: ${width};`
+    case 2:
+      return `top:0; transform: rotate(180deg); width: ${width} ;`
+    case 3:
+      return `right: calc((${width} - 250px) * -0.5); transform: rotate(270deg); top: 35%; width: ${width};`
+    default:
+      console.log(`incorrect number of players`)
+  }
+}
+
 const Banner = styled.div`
   height: 20px;
   width: 100%;
@@ -12,16 +29,21 @@ const Banner = styled.div`
 
 const Container = styled.div`
   position: fixed;
-  width: ${({ isCurrentPlayer }) => (isCurrentPlayer ? '100%' : '30%')};
-  transform: rotate(${({ isCurrentPlayer }) => isCurrentPlayer && 180}deg);
-  ${({ isCurrentPlayer }) => (isCurrentPlayer ? 'bottom' : 'top')}:0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 250px;
+  ${({ position, isCurrentPlayer }) =>
+    getPositionCSS(position, isCurrentPlayer)}
 `
 
 const AllCards = styled.div`
+  height: 250px;
   display: flex;
-  flex-direction: row-reverse;
+  align-items: flex-end;
+  flex-direction: row;
+  margin-bottom: -10px;
   justify-content: space-evenly;
-  margin-top: -15px;
   width: 100%;
 `
 
@@ -36,7 +58,6 @@ export const PlayerSpace = ({
 }) => {
   return (
     <Container position={position} isCurrentPlayer={isCurrentPlayer}>
-      <Banner color={color} />
       <AllCards>
         <PlayerHand
           cards={hand}
@@ -52,6 +73,7 @@ export const PlayerSpace = ({
           targetId={targetId}
         />
       </AllCards>
+      <Banner color={color} />
     </Container>
   )
 }

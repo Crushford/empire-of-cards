@@ -9,9 +9,7 @@ const CitiesContainer = styled.div`
   flex-direction: row;
   max-height: 250px;
 `
-const Title = styled.h2`
-  transform: rotate(180deg);
-`
+const Title = styled.h2``
 const City = styled.div`
   display: flex;
   flex-direction: column;
@@ -34,8 +32,10 @@ const CardWrapper = styled.div`
 `
 const Empire = styled.div`
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   min-width: 50%;
+  height: 240px;
+  margin-bottom: -10px;
 `
 
 export const PlayerEmpire = ({

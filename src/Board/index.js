@@ -6,7 +6,13 @@ import { Deck } from './Deck'
 import { Pass } from './Pass'
 import { EndTurn } from './EndTurn'
 
-import { BoardContainer, ActionSpace, NextTurn, AcceptTurn } from './style'
+import {
+  BoardContainer,
+  ActionSpace,
+  NextTurn,
+  AcceptTurn,
+  PlayersContainer
+} from './style'
 
 export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
   const [newPlayer, setNewPlayer] = useState(true)
@@ -50,7 +56,6 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
     return (
       <PlayerSpace
         key={index}
-        playerNumber={index}
         player={player}
         isCurrentPlayer={isCurrentPlayer}
         selectCard={handleCardClick}
@@ -71,7 +76,9 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
         </>
       ) : (
         <>
-          {players}
+          <PlayersContainer currentPlayer={ctx.currentPlayer}>
+            {players}
+          </PlayersContainer>
           <ActionSpace>
             <Deck onClick={handleDeckClick} />
             <MessageBoard

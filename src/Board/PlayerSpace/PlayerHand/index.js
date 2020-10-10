@@ -7,7 +7,8 @@ const CardsContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  height: 140px;
+  height: 240px;
+  margin-bottom: -10px;
   min-width: 160px;
   max-width: 50%;
   z-index: 1;
@@ -21,10 +22,12 @@ const CardInHandWrapper = styled.div`
     overflow: visible;
   }
 `
+const Title = styled.h2``
 
 export const PlayerHand = ({ cards, faceUp, selectCard, selectedCard }) => {
   return (
     <CardsContainer>
+      {faceUp && <Title>Your Hand</Title>}
       {cards && faceUp
         ? cards.map((card, index) => (
             <CardInHandWrapper>

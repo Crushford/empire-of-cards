@@ -1,5 +1,5 @@
 import { INVALID_MOVE } from 'boardgame.io/core'
-import { getDeck, CITY_COLORS } from './constants'
+import { getDeck, CITY_COLORS, PLAYER_COLORS } from './constants'
 import {
   shuffleArray,
   removeActionCardFromHand,
@@ -231,25 +231,20 @@ const pass = (G, ctx) => {
 
 export const empireOfCards = (deckType, name) => ({
   name: name,
-  setup: () => ({
+  setup: (G, ctx) => ({
     deck: shuffleArray(getDeck(deckType)),
     gameComplexity: 'simple',
-    players: [
-      {
-        color: 'blue',
-        position: 'top',
-        hand: [],
-        empire: [],
-        handSizeAllowance: 5
-      },
-      {
-        color: 'red',
-        position: 'bottom',
-        hand: [],
-        empire: [],
-        handSizeAllowance: 5
-      }
-    ],
+    players: PLAYER_COLORS.map(
+      (color, index) =>
+        // times index by 2 for 2 players, so there are just players 0 and 2
+        index < G.numPlayers && {
+          color: color,
+          position: G.numPlayers === 2 ? index * 2 : index,
+          hand: [],
+          empire: [],
+          handSizeAllowance: 5
+        }
+    ).filter(player => player),
     battle: { attack: {}, defend: {} },
     target: {},
     timesPassed: 0,
@@ -257,7 +252,6 @@ export const empireOfCards = (deckType, name) => ({
     discardPile: [],
     completeSetsNeededToWin: 2
   }),
-
   turn: {
     stages: {
       action: {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import './App.css'
 import { Client, Lobby } from 'boardgame.io/react'
+import { Debug } from 'boardgame.io/debug'
 // import { SocketIO } from 'boardgame.io/multiplayer'
 
 import { Board } from './Board'
@@ -9,7 +10,8 @@ import { SimpleDeck, NormalDeck } from './GameTypes'
 const LocalGame = ({ gameComplexity }) => {
   const SimpleDeckClient = Client({
     game: SimpleDeck,
-    board: Board
+    board: Board,
+    debug: { impl: Debug }
   })
   const NormalDeckClient = Client({
     game: NormalDeck,

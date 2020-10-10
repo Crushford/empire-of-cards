@@ -34,3 +34,9 @@ export const AcceptTurn = styled.button`
   margin-right: auto;
   width: 300px; /* Need a specific value to work */
 `
+export const PlayersContainer = styled.div`
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  transform: ${currentPlayer => `rotate(${currentPlayer * 90}deg)`};
+`
