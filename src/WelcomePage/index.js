@@ -5,6 +5,7 @@ import { Debug } from 'boardgame.io/debug'
 import { Board } from '../Board'
 import { SimpleDeck, NormalDeck } from '../GameTypes'
 import { WelcomeContainer } from './style'
+import { HowToPlay } from './HowToPlay'
 
 const LocalGame = ({ gameComplexity, numberOfPlayers }) => {
   const SimpleDeckClient = Client({
@@ -41,6 +42,12 @@ export const WelcomePage = () => {
 
   return (
     <WelcomeContainer>
+      {!gameType && (
+        <>
+          <HowToPlay />
+          <h1>Ready to Play?</h1>
+        </>
+      )}
       {!gameType && (
         <div>
           <p>Local or Online Multiplayer?</p>
