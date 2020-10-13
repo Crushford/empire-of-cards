@@ -251,7 +251,7 @@ export const empireOfCards = (deckType, name) => ({
         // times index by 2 for 2 players, so there are just players indexes of 0 and 2 for board posistioning
         index < G.numPlayers && {
           color: color,
-          position: G.numPlayers === 2 ? index * 2 : index,
+          position: index,
           hand: [],
           empire: [],
           handSizeAllowance: 5

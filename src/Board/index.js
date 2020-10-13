@@ -50,21 +50,19 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
     moves.endTurn()
   }
 
-  const players = G.players.map((player, index) => {
-    // show active player as current player if someone is under attack
-    return (
-      <PlayerSpace
-        key={index}
-        player={player}
-        currentPlayer={isMultiplayer ? +playerID : currentPlayer}
-        selectCard={handleCardClick}
-        selectedCard={G.selectedCard}
-        handleEmpireClick={handleEmpireClick}
-        handleCityClick={handleCityClick}
-        targetId={G.target.card?.id}
-      />
-    )
-  })
+  const players = G.players.map((player, index) => (
+    <PlayerSpace
+      key={index}
+      player={player}
+      currentPlayer={isMultiplayer ? +playerID : currentPlayer}
+      selectCard={handleCardClick}
+      selectedCard={G.selectedCard}
+      handleEmpireClick={handleEmpireClick}
+      handleCityClick={handleCityClick}
+      targetId={G.target.card?.id}
+      numberOfPlayers={G.players.length}
+    />
+  ))
 
   return (
     <BoardContainer>

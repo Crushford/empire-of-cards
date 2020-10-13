@@ -3,15 +3,25 @@ import styled from 'styled-components'
 import { PlayerEmpire } from './PlayerEmpire'
 import { PlayerHand } from './PlayerHand'
 
-const getPositionCSS = (position, currentPlayer) => {
+const getPositionCSS = (position, currentPlayer, numberOfPlayers) => {
   const width = position === currentPlayer ? '1200px' : '800px'
 
-  const possiblePositions = [0, 1, 2, 3]
+  const getPossiblePositions = players => {
+    switch (players) {
+      case 2:
+        return [0, 2]
+      case 3:
+        return [0, 1, 2]
+      default:
+        return [0, 1, 2, 3]
+    }
+  }
+  const possiblePositions = getPossiblePositions(numberOfPlayers)
 
   const getRelativePosition = () => {
     let newPosition = position - currentPlayer
     return newPosition >= 0
-      ? newPosition
+      ? possiblePositions[newPosition]
       : possiblePositions[possiblePositions.length + newPosition]
   }
 
@@ -42,7 +52,8 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: flex-end;
   height: 250px;
-  ${({ position, currentPlayer }) => getPositionCSS(position, currentPlayer)}
+  ${({ position, currentPlayer, numberOfPlayers }) =>
+    getPositionCSS(position, currentPlayer, numberOfPlayers)}
 `
 
 const AllCards = styled.div`
@@ -62,10 +73,15 @@ export const PlayerSpace = ({
   handleEmpireClick,
   handleCityClick,
   player: { color, hand, empire, position },
-  targetId
+  targetId,
+  numberOfPlayers
 }) => {
   return (
-    <Container position={position} currentPlayer={currentPlayer}>
+    <Container
+      position={position}
+      currentPlayer={currentPlayer}
+      numberOfPlayers={numberOfPlayers}
+    >
       <AllCards>
         <PlayerHand
           cards={hand}
