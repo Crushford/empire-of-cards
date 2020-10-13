@@ -39,17 +39,6 @@ export const AcceptTurn = styled.button`
   width: 300px; /* Need a specific value to work */
 `
 
-// // rotate all players depending on current player. If player is normally on side, invert width and height
-// export const PlayersContainer = styled.div`
-//   /* width: ${({ currentPlayer }) =>
-//     parseInt(currentPlayer) % 2 === 1 ? '100vh' : '100vw'};
-//   height: ${({ currentPlayer }) =>
-//     parseInt(currentPlayer) % 2 === 1 ? '100vw' : '100vh'};
-//   z-index: -1;
-//   transform: ${({ currentPlayer }) =>
-//     `rotate(${parseInt(currentPlayer) * -90}deg)`}; */
-// `
-
 export const ScreenCover = styled.div`
   z-index: 2;
 `
