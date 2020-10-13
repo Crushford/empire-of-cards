@@ -3,18 +3,27 @@ import styled from 'styled-components'
 import { PlayerEmpire } from './PlayerEmpire'
 import { PlayerHand } from './PlayerHand'
 
-const getPositionCSS = (position, isCurrentPlayer) => {
-  const width = isCurrentPlayer ? '100%' : '40%'
+const getPositionCSS = (position, currentPlayer) => {
+  const width = position === currentPlayer ? '1200px' : '800px'
 
-  switch (position) {
+  const possiblePositions = [0, 1, 2, 3]
+
+  const getRelativePosition = () => {
+    let newPosition = position - currentPlayer
+    return newPosition >= 0
+      ? newPosition
+      : possiblePositions[possiblePositions.length + newPosition]
+  }
+
+  switch (getRelativePosition()) {
     case 0:
-      return `bottom:0; width: ${width};`
+      return `bottom:0; width: ${width}; left: calc(50% - (${width}) / 2)`
     case 1:
-      return `left: calc((${width} - 250px) * -0.5); transform: rotate(90deg); top: 35%; width: ${width};`
+      return `left: calc((${width} - 250px) * -0.5); transform: rotate(90deg); top: calc(50% - (${width}) / 2); width: ${width};`
     case 2:
-      return `top:0; transform: rotate(180deg); width: ${width} ;`
+      return `top:0; transform: rotate(180deg); width: ${width}; left: calc(50% - (${width}) / 2);`
     case 3:
-      return `right: calc((${width} - 250px) * -0.5); transform: rotate(270deg); top: 35%; width: ${width};`
+      return `right: calc((${width} - 250px) * -0.5); transform: rotate(270deg); top: calc(50% - (${width}) / 2); width: ${width};`
     default:
       console.log(`incorrect number of players`)
   }
@@ -33,8 +42,7 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: flex-end;
   height: 250px;
-  ${({ position, isCurrentPlayer }) =>
-    getPositionCSS(position, isCurrentPlayer)}
+  ${({ position, currentPlayer }) => getPositionCSS(position, currentPlayer)}
 `
 
 const AllCards = styled.div`
@@ -48,7 +56,7 @@ const AllCards = styled.div`
 `
 
 export const PlayerSpace = ({
-  isCurrentPlayer,
+  currentPlayer,
   selectCard,
   selectedCard,
   handleEmpireClick,
@@ -57,11 +65,11 @@ export const PlayerSpace = ({
   targetId
 }) => {
   return (
-    <Container position={position} isCurrentPlayer={isCurrentPlayer}>
+    <Container position={position} currentPlayer={currentPlayer}>
       <AllCards>
         <PlayerHand
           cards={hand}
-          faceUp={isCurrentPlayer}
+          faceUp={currentPlayer === position}
           selectCard={selectCard}
           selectedCard={selectedCard}
         />

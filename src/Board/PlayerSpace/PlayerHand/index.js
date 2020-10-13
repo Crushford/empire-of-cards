@@ -5,13 +5,18 @@ import { CardEdge } from '../../Card/style'
 
 const CardsContainer = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   height: 240px;
   margin-bottom: -10px;
   min-width: 160px;
   max-width: 50%;
   z-index: 1;
+`
+const AllCards = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 `
 const CardInHandWrapper = styled.div`
   overflow: 'hidden';
@@ -28,31 +33,33 @@ export const PlayerHand = ({ cards, faceUp, selectCard, selectedCard }) => {
   return (
     <CardsContainer>
       {faceUp && <Title>Your Hand</Title>}
-      {cards && faceUp
-        ? cards.map((card, index) => (
-            <CardInHandWrapper>
-              <Card
-                key={card.id ? card.id : index}
-                value={card}
-                faceUp={faceUp}
-                selectCard={selectCard}
-                selectedCard={selectedCard}
-              />
-            </CardInHandWrapper>
-          ))
-        : cards.map((card, index) =>
-            index === cards.length - 1 ? (
-              <Card
-                key={card.id ? card.id : index}
-                value={card}
-                faceUp={faceUp}
-                selectCard={selectCard}
-                selectedCard={selectedCard}
-              />
-            ) : (
-              <CardEdge />
-            )
-          )}
+      <AllCards>
+        {cards && faceUp
+          ? cards.map((card, index) => (
+              <CardInHandWrapper>
+                <Card
+                  key={card.id ? card.id : index}
+                  value={card}
+                  faceUp={faceUp}
+                  selectCard={selectCard}
+                  selectedCard={selectedCard}
+                />
+              </CardInHandWrapper>
+            ))
+          : cards.map((card, index) =>
+              index === cards.length - 1 ? (
+                <Card
+                  key={card.id ? card.id : index}
+                  value={card}
+                  faceUp={faceUp}
+                  selectCard={selectCard}
+                  selectedCard={selectedCard}
+                />
+              ) : (
+                <CardEdge />
+              )
+            )}
+      </AllCards>
     </CardsContainer>
   )
 }

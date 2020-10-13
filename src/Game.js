@@ -8,12 +8,6 @@ import {
   getTargetedDetailsFromId
 } from './utils'
 
-/**
- * To Do
- *
- *  1. work out what to do if all cards picked up are armies
- */
-
 function IsVictory(G) {
   let winner = null
 
@@ -66,11 +60,12 @@ const startRound = (G, ctx) => {
 
 const endTurn = (G, ctx) => {
   const currentPlayer = G.players[ctx.currentPlayer]
+
+  //check to see if player has any hand capacity bonus cards
   let additionalHandAllowance = 0
   currentPlayer.empire
     .filter(card => card.benefit === 'handCapacity')
     .forEach(({ bonus }) => (additionalHandAllowance += bonus))
-
   if (
     currentPlayer.hand.length <
     currentPlayer.handSizeAllowance + additionalHandAllowance
@@ -78,6 +73,7 @@ const endTurn = (G, ctx) => {
     return INVALID_MOVE
   }
 
+  // if call players have already picked up all of their cards
   if (
     G.players.filter(player => player.hand.length >= 5).length ===
     ctx.numPlayers
@@ -99,9 +95,10 @@ const endTurn = (G, ctx) => {
 }
 
 const selectCard = (G, ctx, cardId) => {
-  if (
-    G.players[ctx.currentPlayer].empire.filter(card => card.id === cardId) > 0
-  ) {
+  const currentPlayer = G.players[ctx.currentPlayer]
+
+  // Cannot select card within current player's own empire
+  if (currentPlayer.empire.filter(card => card.id === cardId) > 0) {
     return INVALID_MOVE
   }
 
@@ -153,7 +150,10 @@ const attackCity = (G, ctx, attackedCityId) => {
     return INVALID_MOVE
   }
 
-  const currentPlayerIndex = +ctx.currentPlayer
+  const currentPlayerIndex = parseInt(
+    ctx.activePlayers ? Object.keys(ctx.activePlayers)[0] : ctx.currentPlayer
+  )
+
   const [targetedCard, targetedPlayer] = getTargetedDetailsFromId(
     G,
     attackedCityId
@@ -168,7 +168,7 @@ const attackCity = (G, ctx, attackedCityId) => {
     return INVALID_MOVE
   }
 
-  const currentPlayer = G.players[ctx.currentPlayer]
+  const currentPlayer = G.players[currentPlayerIndex]
 
   //remove selected card from hand
   const [selectedCard, newHand] = removeActionCardFromHand(
@@ -181,15 +181,18 @@ const attackCity = (G, ctx, attackedCityId) => {
   G.selectedCard = ''
   G.timesPassed = 0
 
-  ctx.events.endTurn()
+  ctx.events.endTurn({ next: `${targetedPlayer}` })
 }
 
 const defendCity = (G, ctx) => {
+  debugger
   const isArmySelected = G.selectedCard.indexOf('a') >= 0
   if (!isArmySelected) {
     return INVALID_MOVE
   }
+
   const currentPlayer = G.players[ctx.currentPlayer]
+
   const [army, newHand] = removeActionCardFromHand(
     currentPlayer.hand,
     G.selectedCard
@@ -202,8 +205,12 @@ const defendCity = (G, ctx) => {
     moveCity(G)
   }
   discardBattleCards(G)
+
+  const playerAfterAttacker =
+    G.target.attacker === 4 ? 0 : G.target.attacker + 1
+
   G.target = {}
-  ctx.events.endStage()
+  ctx.events.endTurn({ next: `${playerAfterAttacker}` })
 }
 
 const doNotDefend = (G, ctx) => {
@@ -215,8 +222,12 @@ const doNotDefend = (G, ctx) => {
   moveCity(G)
 
   G.selectedCard = ''
+
+  const playerAfterAttacker =
+    G.target.attacker === 4 ? 0 : G.target.attacker + 1
+
+  ctx.events.endTurn({ next: `${playerAfterAttacker}` })
   G.target = {}
-  ctx.events.endStage()
 }
 
 const pass = (G, ctx) => {
@@ -231,12 +242,13 @@ const pass = (G, ctx) => {
 
 export const empireOfCards = (deckType, name) => ({
   name: name,
+  minPlayers: 2,
   setup: (G, ctx) => ({
     deck: shuffleArray(getDeck(deckType)),
     gameComplexity: 'simple',
     players: PLAYER_COLORS.map(
       (color, index) =>
-        // times index by 2 for 2 players, so there are just players 0 and 2
+        // times index by 2 for 2 players, so there are just players indexes of 0 and 2 for board posistioning
         index < G.numPlayers && {
           color: color,
           position: G.numPlayers === 2 ? index * 2 : index,
@@ -284,13 +296,13 @@ export const empireOfCards = (deckType, name) => ({
         endTurn
       },
       endIf: (G, ctx) => {
-        const noCardLeftInEitherHand =
+        const noCardLeftInAnyHand =
           G.players.filter(player => player.hand.length === 0).length ===
           ctx.numPlayers
         const everyPlayerPasses = G.timesPassed >= ctx.numPlayers
         const notInBattle = !G.battle.attack
 
-        return notInBattle && (noCardLeftInEitherHand || everyPlayerPasses)
+        return notInBattle && (noCardLeftInAnyHand || everyPlayerPasses)
       },
       next: 'newRound',
       onEnd: (G, ctx) => {

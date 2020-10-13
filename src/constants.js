@@ -3,7 +3,7 @@ export const CITY_COLORS = [
   'lightblue',
   'orange',
   'pink',
-  'lightbrown'
+  'sandybrown'
 ]
 
 export const PLAYER_COLORS = ['blue', 'red', 'brown', 'green']

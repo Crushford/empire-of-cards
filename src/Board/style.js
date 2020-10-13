@@ -14,6 +14,10 @@ export const ActionSpace = styled.div`
   align-items: center;
   justify-content: space-around;
   flex-direction: row;
+  position: fixed;
+  top: calc(50% - (250px / 2));
+  height: 250px;
+  z-index: 1;
 `
 export const NextTurn = styled.h1`
   position: absolute;
@@ -34,9 +38,18 @@ export const AcceptTurn = styled.button`
   margin-right: auto;
   width: 300px; /* Need a specific value to work */
 `
-export const PlayersContainer = styled.div`
-  width: 100vw;
-  height: 100vh;
-  z-index: -1;
-  transform: ${currentPlayer => `rotate(${currentPlayer * 90}deg)`};
+
+// // rotate all players depending on current player. If player is normally on side, invert width and height
+// export const PlayersContainer = styled.div`
+//   /* width: ${({ currentPlayer }) =>
+//     parseInt(currentPlayer) % 2 === 1 ? '100vh' : '100vw'};
+//   height: ${({ currentPlayer }) =>
+//     parseInt(currentPlayer) % 2 === 1 ? '100vw' : '100vh'};
+//   z-index: -1;
+//   transform: ${({ currentPlayer }) =>
+//     `rotate(${parseInt(currentPlayer) * -90}deg)`}; */
+// `
+
+export const ScreenCover = styled.div`
+  z-index: 2;
 `

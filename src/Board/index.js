@@ -11,15 +11,17 @@ import {
   ActionSpace,
   NextTurn,
   AcceptTurn,
-  PlayersContainer
+  ScreenCover
 } from './style'
 
 export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
   const [newPlayer, setNewPlayer] = useState(true)
 
+  const currentPlayer = parseInt(ctx.currentPlayer)
+
   useEffect(() => {
     setNewPlayer(true)
-  }, [ctx.currentPlayer])
+  }, [currentPlayer])
 
   const isUnderAttack = G.battle?.attack?.title
 
@@ -49,15 +51,12 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
   }
 
   const players = G.players.map((player, index) => {
-    const isCurrentPlayer = isMultiplayer
-      ? +playerID === index
-      : ctx.playOrderPos === index
-
+    // show active player as current player if someone is under attack
     return (
       <PlayerSpace
         key={index}
         player={player}
-        isCurrentPlayer={isCurrentPlayer}
+        currentPlayer={isMultiplayer ? +playerID : currentPlayer}
         selectCard={handleCardClick}
         selectedCard={G.selectedCard}
         handleEmpireClick={handleEmpireClick}
@@ -70,15 +69,16 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
   return (
     <BoardContainer>
       {newPlayer && !isMultiplayer ? (
-        <>
-          <NextTurn> {G.players[ctx.currentPlayer].color}'s Turn</NextTurn>
+        <ScreenCover>
+          <NextTurn>
+            {G.players[currentPlayer].color}
+            's Turn
+          </NextTurn>
           <AcceptTurn onClick={handleAcceptTurn}>Let's Go!</AcceptTurn>
-        </>
+        </ScreenCover>
       ) : (
         <>
-          <PlayersContainer currentPlayer={ctx.currentPlayer}>
-            {players}
-          </PlayersContainer>
+          {players}
           <ActionSpace>
             <Deck onClick={handleDeckClick} />
             <MessageBoard

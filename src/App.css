@@ -1,3 +1,6 @@
 .hidden {
   display: none;
 }
+#lobby-exit {
+  display: none;
+}

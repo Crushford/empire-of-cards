@@ -3,19 +3,22 @@ import './App.css'
 import { Client, Lobby } from 'boardgame.io/react'
 import { Debug } from 'boardgame.io/debug'
 // import { SocketIO } from 'boardgame.io/multiplayer'
+import { Local } from 'boardgame.io/multiplayer'
 
 import { Board } from './Board'
 import { SimpleDeck, NormalDeck } from './GameTypes'
 
-const LocalGame = ({ gameComplexity }) => {
+const LocalGame = ({ gameComplexity, numberOfPlayers }) => {
   const SimpleDeckClient = Client({
     game: SimpleDeck,
     board: Board,
-    debug: { impl: Debug }
+    debug: { impl: Debug },
+    numPlayers: numberOfPlayers
   })
   const NormalDeckClient = Client({
     game: NormalDeck,
-    board: Board
+    board: Board,
+    numPlayers: numberOfPlayers
   })
 
   switch (gameComplexity) {
@@ -29,9 +32,14 @@ const LocalGame = ({ gameComplexity }) => {
 const App = () => {
   const [gameType, setGameType] = useState(null)
   const [gameComplexity, setGameComplexity] = useState(null)
+  const [numberOfPlayers, setNumberOfPlayers] = useState(null)
 
   const { protocol, hostname, port } = window.location
   const server = `${protocol}//${hostname}:${port}`
+
+  const setNumPlayers = e => {
+    setNumberOfPlayers(parseInt(e.target.value))
+  }
 
   return (
     <>
@@ -44,13 +52,27 @@ const App = () => {
       )}
       {gameType === 'local' && !gameComplexity && (
         <div>
-          <p>Select Game Complexity?</p>
+          <p>Select Game Complexity</p>
           <button onClick={() => setGameComplexity('simple')}>simple</button>
           <button onClick={() => setGameComplexity('normal')}>normal</button>
         </div>
       )}
-      {gameType === 'local' && gameComplexity && (
-        <LocalGame gameComplexity={gameComplexity} />
+      {gameType === 'local' && gameComplexity && !numberOfPlayers && (
+        <div>
+          <p>How many players?</p>
+          <select onChange={setNumPlayers}>
+            <option selected disabled></option>
+            <option value={2}>2</option>
+            <option value={3}>3</option>
+            <option value={4}>4</option>
+          </select>
+        </div>
+      )}
+      {gameType === 'local' && gameComplexity && numberOfPlayers && (
+        <LocalGame
+          gameComplexity={gameComplexity}
+          numberOfPlayers={numberOfPlayers}
+        />
       )}
       {gameType === 'online' && (
         <Lobby
@@ -60,6 +82,7 @@ const App = () => {
             { game: SimpleDeck, board: Board },
             { game: NormalDeck, board: Board }
           ]}
+          debug={true}
         />
       )}
     </>
