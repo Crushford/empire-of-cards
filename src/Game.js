@@ -207,7 +207,7 @@ const defendCity = (G, ctx) => {
   discardBattleCards(G)
 
   const playerAfterAttacker =
-    G.target.attacker === 4 ? 0 : G.target.attacker + 1
+    G.target.attacker === ctx.numPlayers ? 0 : G.target.attacker + 1
 
   G.target = {}
   ctx.events.endTurn({ next: `${playerAfterAttacker}` })
