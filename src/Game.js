@@ -1,4 +1,4 @@
-import { INVALID_MOVE } from 'boardgame.io/core'
+import { INVALID_MOVE, TurnOrder } from 'boardgame.io/core'
 import { getDeck, CITY_COLORS, PLAYER_COLORS } from './constants'
 import {
   shuffleArray,
@@ -224,7 +224,7 @@ const doNotDefend = (G, ctx) => {
   G.selectedCard = ''
 
   const playerAfterAttacker =
-    G.target.attacker === 4 ? 0 : G.target.attacker + 1
+    G.target.attacker === ctx.numPlayers ? 0 : G.target.attacker + 1
 
   ctx.events.endTurn({ next: `${playerAfterAttacker}` })
   G.target = {}
@@ -286,7 +286,8 @@ export const empireOfCards = (deckType, name) => ({
     newRound: {
       moves: { startRound, endTurn },
       next: 'play',
-      start: true
+      start: true,
+      order: TurnOrder.CONTINUE
     },
     play: {
       moves: {
