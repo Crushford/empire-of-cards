@@ -307,6 +307,11 @@ export const empireOfCards = (deckType, name) => ({
       },
       next: 'newRound',
       onEnd: (G, ctx) => {
+        G.players.forEach(player => {
+          G.discardPile.push(...player.hand)
+          player.hand = []
+        })
+
         G.timesPassed = 0
       }
     }
