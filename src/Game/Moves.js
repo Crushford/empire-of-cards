@@ -1,14 +1,14 @@
-import { INVALID_MOVE, TurnOrder } from 'boardgame.io/core'
-import { getDeck, CITY_COLORS, PLAYER_COLORS } from './constants'
+import { INVALID_MOVE } from 'boardgame.io/core'
+import { CITY_COLORS } from '../constants'
 import {
   shuffleArray,
   removeActionCardFromHand,
   discardBattleCards,
   moveCity,
   getTargetedDetailsFromId
-} from './utils'
+} from '../utils'
 
-function IsVictory(G) {
+export const IsVictory = G => {
   let winner = null
 
   G.players.some((player, playerIndex) => {
@@ -38,7 +38,7 @@ function IsVictory(G) {
   return winner
 }
 
-const startRound = (G, ctx) => {
+export const startRound = (G, ctx) => {
   const currentPlayer = G.players[ctx.currentPlayer]
 
   let additionalHandAllowance = 0
@@ -58,7 +58,7 @@ const startRound = (G, ctx) => {
   }
 }
 
-const endTurn = (G, ctx) => {
+export const endTurn = (G, ctx) => {
   const currentPlayer = G.players[ctx.currentPlayer]
 
   //check to see if player has any hand capacity bonus cards
@@ -94,7 +94,7 @@ const endTurn = (G, ctx) => {
   } else ctx.events.endTurn()
 }
 
-const selectCard = (G, ctx, cardId) => {
+export const selectCard = (G, ctx, cardId) => {
   const currentPlayer = G.players[ctx.currentPlayer]
 
   // Cannot select card within current player's own empire
@@ -118,7 +118,7 @@ const selectCard = (G, ctx, cardId) => {
   })
 }
 
-const moveToEmpire = (G, ctx, _cardMoving = '') => {
+export const moveToEmpire = (G, ctx, _cardMoving = '') => {
   const isUnderAttack = G.battle && G.battle.attack && G.battle.attack.title
   const currentPlayer = G.players[ctx.currentPlayer]
   const cardMoving = _cardMoving || G.selectedCard
@@ -142,7 +142,7 @@ const moveToEmpire = (G, ctx, _cardMoving = '') => {
   ctx.events.endTurn()
 }
 
-const attackCity = (G, ctx, attackedCityId, attackingArmy = '') => {
+export const attackCity = (G, ctx, attackedCityId, attackingArmy = '') => {
   const isUnderAttack = G.battle && G.battle.attack && G.battle.attack.title
   const isArmySelected = G.selectedCard.indexOf('a') >= 0
 
@@ -184,7 +184,7 @@ const attackCity = (G, ctx, attackedCityId, attackingArmy = '') => {
   ctx.events.endTurn({ next: `${targetedPlayer}` })
 }
 
-const defendCity = (G, ctx) => {
+export const defendCity = (G, ctx) => {
   debugger
   const isArmySelected = G.selectedCard.indexOf('a') >= 0
   if (!isArmySelected) {
@@ -213,7 +213,7 @@ const defendCity = (G, ctx) => {
   ctx.events.endTurn({ next: `${playerAfterAttacker}` })
 }
 
-const doNotDefend = (G, ctx) => {
+export const doNotDefend = (G, ctx) => {
   G.battle.defend = false
   G.discardPile.push(G.battle.attack)
   G.battle.attack = ''
@@ -230,7 +230,7 @@ const doNotDefend = (G, ctx) => {
   G.target = {}
 }
 
-const pass = (G, ctx) => {
+export const pass = (G, ctx) => {
   G.timesPassed += 1
   G.selectedCard = ''
   if (G.timesPassed >= ctx.numPlayers) {
@@ -239,137 +239,3 @@ const pass = (G, ctx) => {
   ctx.events.endStage()
   ctx.events.endTurn()
 }
-
-export const empireOfCards = (deckType, name) => ({
-  name: name,
-  minPlayers: 2,
-  setup: (G, ctx) => ({
-    deck: shuffleArray(getDeck(deckType)),
-    gameComplexity: 'simple',
-    players: PLAYER_COLORS.map(
-      (color, index) =>
-        // times index by 2 for 2 players, so there are just players indexes of 0 and 2 for board posistioning
-        index < G.numPlayers && {
-          color: color,
-          position: index,
-          hand: [],
-          empire: [],
-          handSizeAllowance: 5
-        }
-    ).filter(player => player),
-    battle: { attack: {}, defend: {} },
-    target: {},
-    timesPassed: 0,
-    selectedCard: '',
-    discardPile: [],
-    completeSetsNeededToWin: 2,
-    firstToAct: Array.from(Array(G.numPlayers).keys())
-  }),
-  turn: {
-    stages: {
-      action: {
-        moves: {
-          selectCard,
-          pass,
-          attackCity,
-          moveToEmpire,
-          defendCity,
-          doNotDefend
-        },
-        onEnd: (G, ctx) => {
-          G.timesPassed = 0
-        }
-      }
-    }
-  },
-
-  phases: {
-    newRound: {
-      moves: { startRound, endTurn },
-      next: 'play',
-      start: true,
-      turn: { order: TurnOrder.CUSTOM_FROM('firstToAct') }
-    },
-    play: {
-      moves: {
-        selectCard,
-        pass,
-        doNotDefend,
-        endTurn,
-        attackCity,
-        moveToEmpire
-      },
-      endIf: (G, ctx) => {
-        const noCardLeftInAnyHand =
-          G.players.filter(player => player.hand.length === 0).length ===
-          ctx.numPlayers
-        const everyPlayerPasses = G.timesPassed >= ctx.numPlayers
-        const notInBattle = !G.battle.attack
-
-        return notInBattle && (noCardLeftInAnyHand || everyPlayerPasses)
-      },
-      next: 'newRound',
-      onEnd: (G, ctx) => {
-        G.players.forEach(player => {
-          G.discardPile.push(...player.hand)
-          player.hand = []
-        })
-
-        G.timesPassed = 0
-        G.firstToAct.push(G.firstToAct.shift())
-      }
-    }
-  },
-  endIf: (G, ctx) => {
-    const winner = IsVictory(G)
-    if (winner !== null) {
-      return { winner }
-    }
-  },
-  ai: {
-    enumerate: (G, ctx, playerId) => {
-      if (playerId === 2) {
-        debugger
-      }
-
-      let moves = []
-
-      if (ctx.phase === 'newRound') {
-        if (G.players[[ctx.currentPlayer]].hand[0]) {
-          moves.push({ move: 'endTurn', args: [] })
-        } else {
-          moves.push({ move: 'startRound', args: [] })
-        }
-      } else {
-        const isUnderAttack =
-          G.battle && G.battle.attack && G.battle.attack.title
-        if (isUnderAttack) {
-          moves.push({ move: 'doNotDefend', args: [] })
-          G.players[[ctx.currentPlayer]].hand.forEach(actionCard => {
-            if (actionCard.id[0] === 'a') {
-              moves.push({ move: 'defendCity', args: [actionCard.id] })
-            }
-          })
-        } else {
-          moves.push({ move: 'pass', args: [] })
-          G.players[[ctx.currentPlayer]].hand.forEach(actionCard => {
-            if (actionCard.id[0] === 'c') {
-              moves.push({ move: 'moveToEmpire', args: [actionCard.id] })
-            } else {
-              G.players.forEach(player => {
-                player.empire.forEach(city => {
-                  moves.push({
-                    move: 'attackCity',
-                    args: [city.id, actionCard.id]
-                  })
-                })
-              })
-            }
-          })
-        }
-      }
-
-      return moves
-    }
-  }
-})
