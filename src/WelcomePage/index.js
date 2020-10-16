@@ -11,7 +11,7 @@ const LocalGame = ({ gameComplexity, numberOfPlayers }) => {
   const SimpleDeckClient = Client({
     game: SimpleDeck,
     board: Board,
-    // debug: { impl: Debug },
+    debug: { impl: Debug },
     numPlayers: numberOfPlayers
   })
   const NormalDeckClient = Client({

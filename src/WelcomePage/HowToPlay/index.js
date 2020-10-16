@@ -5,14 +5,18 @@ export const HowToPlayContainer = styled.div`
   width: 80%;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   margin: auto;
+`
+
+export const HowToPlayTitle = styled.h1`
+  align-self: 'center';
 `
 
 export const HowToPlay = () => {
   return (
     <HowToPlayContainer>
-      <h1>How to Play!</h1>
+      <HowToPlayTitle>How to Play!</HowToPlayTitle>
       <p>
         The aim of the game is to collect 2 full sets of city cards in your
         empire. There are 5 sets available

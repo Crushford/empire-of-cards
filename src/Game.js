@@ -262,7 +262,8 @@ export const empireOfCards = (deckType, name) => ({
     timesPassed: 0,
     selectedCard: '',
     discardPile: [],
-    completeSetsNeededToWin: 2
+    completeSetsNeededToWin: 2,
+    firstToAct: Array.from(Array(G.numPlayers).keys())
   }),
   turn: {
     stages: {
@@ -287,7 +288,7 @@ export const empireOfCards = (deckType, name) => ({
       moves: { startRound, endTurn },
       next: 'play',
       start: true,
-      order: TurnOrder.CONTINUE
+      turn: { order: TurnOrder.CUSTOM_FROM('firstToAct') }
     },
     play: {
       moves: {
@@ -313,6 +314,7 @@ export const empireOfCards = (deckType, name) => ({
         })
 
         G.timesPassed = 0
+        G.firstToAct.push(G.firstToAct.shift())
       }
     }
   },
