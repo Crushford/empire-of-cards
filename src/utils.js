@@ -51,3 +51,51 @@ export const getTargetedDetailsFromId = (G, attackedCityId) => {
 
   return [targetedCard, targetedPlayer]
 }
+
+export const getAllPossibleMoves = (G, ctx) => {
+  let moves = []
+
+  if (ctx.phase === 'newRound') {
+    if (G.players[ctx.currentPlayer].hand[0]) {
+      moves.push({ move: 'endTurn', args: [] })
+    } else {
+      moves.push({ move: 'startRound', args: [] })
+    }
+  } else {
+    const isUnderAttack = G.battle && G.battle.attack && G.battle.attack.title
+    if (isUnderAttack) {
+      moves.push({ move: 'doNotDefend', args: [] })
+      G.players[ctx.currentPlayer].hand.forEach(actionCard => {
+        if (actionCard.id[0] === 'a') {
+          moves.push({ move: 'defendCity', args: [actionCard.id] })
+        }
+      })
+    } else {
+      moves.push({ move: 'pass', args: [] })
+      G.players[ctx.currentPlayer].hand.forEach(actionCard => {
+        if (actionCard.id[0] === 'c') {
+          moves.push({ move: 'moveToEmpire', args: [actionCard.id] })
+        } else {
+          G.players.forEach(player => {
+            player.empire.forEach(city => {
+              moves.push({
+                move: 'attackCity',
+                args: [city.id, actionCard.id]
+              })
+            })
+          })
+        }
+      })
+    }
+  }
+
+  return moves
+}
+
+export const randomAiMove = (G, ctx) => {
+  const moves = getAllPossibleMoves(G, ctx)
+  const randomMoveIndex = Math.floor(
+    Math.random() * Math.floor(moves.length - 1)
+  )
+  return moves[randomMoveIndex]
+}

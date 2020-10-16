@@ -6,6 +6,8 @@ import { Deck } from './Deck'
 import { Pass } from './Pass'
 import { EndTurn } from './EndTurn'
 
+import { randomAiMove } from '../utils'
+
 import {
   BoardContainer,
   ActionSpace,
@@ -20,8 +22,20 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
   const currentPlayer = parseInt(ctx.currentPlayer)
 
   useEffect(() => {
-    setNewPlayer(true)
-  }, [currentPlayer])
+    if (G.isPractice && ctx.currentPlayer > 0) {
+      try {
+        const randomMove = randomAiMove(G, ctx)
+        moves[randomMove.move](...randomMove.args)
+      } catch {
+        moves.pass()
+        moves.doNotDefend()
+      }
+    }
+  }, [currentPlayer, G, ctx, moves])
+
+  useEffect(() => {
+    !G.isPractice && setNewPlayer(true)
+  }, [currentPlayer, G.isPractice])
 
   const isUnderAttack = G.battle?.attack?.title
 

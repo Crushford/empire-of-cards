@@ -1,6 +1,6 @@
 import { TurnOrder } from 'boardgame.io/core'
 import { getDeck, PLAYER_COLORS } from '../constants'
-import { shuffleArray, getAllPossibleMoves } from '../utils'
+import { shuffleArray, getAllPossibleMoves, randomAiMove } from '../utils'
 
 import {
   doNotDefend,
@@ -37,7 +37,8 @@ export const empireOfCards = (deckType, name, isPractice) => ({
     selectedCard: '',
     discardPile: [],
     completeSetsNeededToWin: 2,
-    firstToAct: Array.from(Array(G.numPlayers).keys())
+    firstToAct: Array.from(Array(G.numPlayers).keys()),
+    isPractice: isPractice
   }),
   turn: {
     stages: {

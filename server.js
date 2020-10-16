@@ -1,5 +1,5 @@
 import { Server } from 'boardgame.io/server'
-import { SimpleDeck, NormalDeck } from './src/GameTypes'
+import { SimpleDeck, NormalDeck } from './src/Game/GameTypes'
 import path from 'path'
 import serve from 'koa-static'
 
