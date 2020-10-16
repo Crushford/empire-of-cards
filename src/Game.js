@@ -118,10 +118,10 @@ const selectCard = (G, ctx, cardId) => {
   })
 }
 
-const moveToEmpire = (G, ctx) => {
+const moveToEmpire = (G, ctx, _cardMoving = '') => {
   const isUnderAttack = G.battle && G.battle.attack && G.battle.attack.title
   const currentPlayer = G.players[ctx.currentPlayer]
-  const cardMoving = G.selectedCard
+  const cardMoving = _cardMoving || G.selectedCard
   const cardMovingIsCity = cardMoving.indexOf('c') !== -1
 
   if (!cardMovingIsCity || isUnderAttack) {
@@ -142,11 +142,11 @@ const moveToEmpire = (G, ctx) => {
   ctx.events.endTurn()
 }
 
-const attackCity = (G, ctx, attackedCityId) => {
+const attackCity = (G, ctx, attackedCityId, attackingArmy = '') => {
   const isUnderAttack = G.battle && G.battle.attack && G.battle.attack.title
   const isArmySelected = G.selectedCard.indexOf('a') >= 0
 
-  if (!isArmySelected || isUnderAttack) {
+  if ((!isArmySelected && !attackingArmy) || isUnderAttack) {
     return INVALID_MOVE
   }
 
@@ -173,7 +173,7 @@ const attackCity = (G, ctx, attackedCityId) => {
   //remove selected card from hand
   const [selectedCard, newHand] = removeActionCardFromHand(
     currentPlayer.hand,
-    G.selectedCard
+    attackingArmy || G.selectedCard
   )
 
   currentPlayer.hand = newHand
@@ -295,7 +295,9 @@ export const empireOfCards = (deckType, name) => ({
         selectCard,
         pass,
         doNotDefend,
-        endTurn
+        endTurn,
+        attackCity,
+        moveToEmpire
       },
       endIf: (G, ctx) => {
         const noCardLeftInAnyHand =
@@ -322,6 +324,52 @@ export const empireOfCards = (deckType, name) => ({
     const winner = IsVictory(G)
     if (winner !== null) {
       return { winner }
+    }
+  },
+  ai: {
+    enumerate: (G, ctx, playerId) => {
+      if (playerId === 2) {
+        debugger
+      }
+
+      let moves = []
+
+      if (ctx.phase === 'newRound') {
+        if (G.players[[ctx.currentPlayer]].hand[0]) {
+          moves.push({ move: 'endTurn', args: [] })
+        } else {
+          moves.push({ move: 'startRound', args: [] })
+        }
+      } else {
+        const isUnderAttack =
+          G.battle && G.battle.attack && G.battle.attack.title
+        if (isUnderAttack) {
+          moves.push({ move: 'doNotDefend', args: [] })
+          G.players[[ctx.currentPlayer]].hand.forEach(actionCard => {
+            if (actionCard.id[0] === 'a') {
+              moves.push({ move: 'defendCity', args: [actionCard.id] })
+            }
+          })
+        } else {
+          moves.push({ move: 'pass', args: [] })
+          G.players[[ctx.currentPlayer]].hand.forEach(actionCard => {
+            if (actionCard.id[0] === 'c') {
+              moves.push({ move: 'moveToEmpire', args: [actionCard.id] })
+            } else {
+              G.players.forEach(player => {
+                player.empire.forEach(city => {
+                  moves.push({
+                    move: 'attackCity',
+                    args: [city.id, actionCard.id]
+                  })
+                })
+              })
+            }
+          })
+        }
+      }
+
+      return moves
     }
   }
 })
