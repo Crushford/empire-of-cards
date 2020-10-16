@@ -10,7 +10,8 @@ import {
   IsVictory,
   startRound,
   selectCard,
-  moveToEmpire
+  moveToEmpire,
+  endTurn
 } from './Moves'
 
 export const empireOfCards = (deckType, name, isPractice) => ({
