@@ -37,8 +37,8 @@ export const HowToPlay = () => {
         defending card's value, the city will then move into your empire
       </p>
       <p>
-        At the start of a new round, you can pick up cards until you have 5 in
-        your hand. The round ends by either:
+        At the start of a new round, you must discard all of the cards left in
+        your hand and pick up 5 new card. The round ends by either:
         <ul>
           <li>No players have any cards left in their hand</li>
           <li>Every player passes</li>
@@ -48,7 +48,8 @@ export const HowToPlay = () => {
         If you run out of battle cards and you are attacked, you have no other
         option other than to not defend. To preserve your battle cards within
         the round, you can pass your turn. However, as mentioned above, if every
-        player passes, a new round will begin.
+        player passes, a new round will begin and you'll have to discard all of
+        the cards in your hand.
       </p>
     </HowToPlayContainer>
   )
