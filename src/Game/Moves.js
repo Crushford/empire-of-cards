@@ -150,9 +150,7 @@ export const attackCity = (G, ctx, attackedCityId, attackingArmy = '') => {
     return INVALID_MOVE
   }
 
-  const currentPlayerIndex = parseInt(
-    ctx.activePlayers ? Object.keys(ctx.activePlayers)[0] : ctx.currentPlayer
-  )
+  const currentPlayerIndex = ctx.currentPlayer
 
   const [targetedCard, targetedPlayer] = getTargetedDetailsFromId(
     G,
@@ -207,7 +205,7 @@ export const defendCity = (G, ctx) => {
   discardBattleCards(G)
 
   const playerAfterAttacker =
-    G.target.attacker === ctx.numPlayers ? 0 : G.target.attacker + 1
+    G.target.attacker === ctx.numPlayers - 1 ? 0 : G.target.attacker + 1
 
   G.target = {}
   ctx.events.endTurn({ next: `${playerAfterAttacker}` })
@@ -224,7 +222,7 @@ export const doNotDefend = (G, ctx) => {
   G.selectedCard = ''
 
   const playerAfterAttacker =
-    G.target.attacker === ctx.numPlayers ? 0 : G.target.attacker + 1
+    G.target.attacker === ctx.numPlayers - 1 ? 0 : G.target.attacker + 1
 
   ctx.events.endTurn({ next: `${playerAfterAttacker}` })
   G.target = {}

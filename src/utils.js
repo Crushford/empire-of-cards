@@ -74,7 +74,16 @@ export const getAllPossibleMoves = (G, ctx) => {
       moves.push({ move: 'pass', args: [] })
       G.players[ctx.currentPlayer].hand.forEach(actionCard => {
         if (actionCard.id[0] === 'c') {
+          // Ai Random attacks way more because way more moves are generated for each possibility fo this should even it out
           moves.push({ move: 'moveToEmpire', args: [actionCard.id] })
+          G.players.forEach(player => {
+            player.empire.forEach(city => {
+              moves.push({
+                move: 'moveToEmpire',
+                args: actionCard.id
+              })
+            })
+          })
         } else {
           G.players.forEach(player => {
             player.empire.forEach(city => {

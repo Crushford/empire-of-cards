@@ -23,13 +23,8 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
 
   useEffect(() => {
     if (G.isPractice && ctx.currentPlayer > 0) {
-      try {
-        const randomMove = randomAiMove(G, ctx)
-        moves[randomMove.move](...randomMove.args)
-      } catch {
-        moves.pass()
-        moves.doNotDefend()
-      }
+      const randomMove = randomAiMove(G, ctx)
+      moves[randomMove.move](...randomMove.args)
     }
   }, [currentPlayer, G, ctx, moves])
 
