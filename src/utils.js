@@ -7,16 +7,16 @@ export const shuffleArray = array => {
 }
 
 export const removeActionCardFromHand = (currentPlayerHand, actionCard) => {
-  let selectedCard = {}
+  let removedCard = {}
   let newHand = currentPlayerHand.filter(card => {
     if (card.id === actionCard) {
       //add selected card to attack board
-      selectedCard = card
+      removedCard = card
       return false
     } else return true
   })
 
-  return [selectedCard, newHand]
+  return { removedCard, newHand }
 }
 
 export const discardBattleCards = G => {
@@ -26,30 +26,32 @@ export const discardBattleCards = G => {
   G.battle.defend = ''
 }
 
-export const moveCity = G => {
+export const moveCityAfterBattle = G => {
   const attackingEmpire = G.players[G.target.attacker].empire
 
-  G.players[G.target.defender].empire = G.players[
-    G.target.defender
-  ].empire.filter(card => card.id !== G.target.card.id)
+  const defendingPlayerIndex = G.target.defender
+  const defendingEmpire = G.players[defendingPlayerIndex].empire
+  G.players[defendingPlayerIndex].empire = defendingEmpire.filter(
+    card => card.id !== G.target.card.id
+  )
   attackingEmpire.push(G.target.card)
 }
 
 export const getTargetedDetailsFromId = (G, attackedCityId) => {
   let targetedCard = {}
-  let targetedPlayer = {}
+  let targetedPlayerIndex = 0
 
   G.players.some((player, playerIndex) =>
     player.empire.some(item => {
       if (item.id === attackedCityId) {
         targetedCard = item
-        targetedPlayer = playerIndex
+        targetedPlayerIndex = playerIndex
         return true
       } else return false
     })
   )
 
-  return [targetedCard, targetedPlayer]
+  return { targetedCard, targetedPlayerIndex }
 }
 
 export const getAllPossibleMoves = (G, ctx) => {
@@ -80,7 +82,7 @@ export const getAllPossibleMoves = (G, ctx) => {
             player.empire.forEach(city => {
               moves.push({
                 move: 'moveToEmpire',
-                args: actionCard.id
+                args: [actionCard.id]
               })
             })
           })

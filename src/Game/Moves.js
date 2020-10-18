@@ -4,7 +4,7 @@ import {
   shuffleArray,
   removeActionCardFromHand,
   discardBattleCards,
-  moveCity,
+  moveCityAfterBattle,
   getTargetedDetailsFromId
 } from '../utils'
 
@@ -142,87 +142,94 @@ export const moveToEmpire = (G, ctx, _cardMoving = '') => {
   ctx.events.endTurn()
 }
 
-export const attackCity = (G, ctx, attackedCityId, attackingArmy = '') => {
+export const attackCity = (
+  G,
+  ctx,
+  attackedCityId,
+  attackingArmyIndexFromBot = ''
+) => {
   const isUnderAttack = G.battle && G.battle.attack && G.battle.attack.title
-  const isArmySelected = G.selectedCard.indexOf('a') >= 0
 
-  if ((!isArmySelected && !attackingArmy) || isUnderAttack) {
+  const attackingCardIndex = attackingArmyIndexFromBot || G.selectedCard
+
+  const isArmySelected = attackingCardIndex.indexOf('a') >= 0
+
+  if (!isArmySelected || isUnderAttack) {
     return INVALID_MOVE
   }
 
   const currentPlayerIndex = ctx.currentPlayer
 
-  const [targetedCard, targetedPlayer] = getTargetedDetailsFromId(
+  const { targetedCard, targetedPlayerIndex } = getTargetedDetailsFromId(
     G,
     attackedCityId
   )
-  G.target = {
-    card: targetedCard,
-    defender: targetedPlayer,
-    attacker: currentPlayerIndex
+
+  if (targetedPlayerIndex === currentPlayerIndex) {
+    return INVALID_MOVE
   }
 
-  if (targetedPlayer === currentPlayerIndex) {
-    return INVALID_MOVE
+  G.target = {
+    card: targetedCard,
+    defender: targetedPlayerIndex,
+    attacker: currentPlayerIndex
   }
 
   const currentPlayer = G.players[currentPlayerIndex]
 
-  //remove selected card from hand
-  const [selectedCard, newHand] = removeActionCardFromHand(
+  //remove attacking card from hand
+  const { removedCard: attackingCard, newHand } = removeActionCardFromHand(
     currentPlayer.hand,
-    attackingArmy || G.selectedCard
+    attackingCardIndex
   )
 
   currentPlayer.hand = newHand
-  G.battle.attack = selectedCard
+
+  G.battle.attack = attackingCard
   G.selectedCard = ''
   G.timesPassed = 0
 
-  ctx.events.endTurn({ next: `${targetedPlayer}` })
+  ctx.events.endTurn({ next: `${targetedPlayerIndex}` })
 }
 
-export const defendCity = (G, ctx) => {
-  debugger
-  const isArmySelected = G.selectedCard.indexOf('a') >= 0
+export const defendCity = (G, ctx, defendingCardIndexFromBot = '') => {
+  const defendingCardIndex = defendingCardIndexFromBot || G.selectedCard
+  const isArmySelected = defendingCardIndex.indexOf('a') >= 0
   if (!isArmySelected) {
     return INVALID_MOVE
   }
 
-  const currentPlayer = G.players[ctx.currentPlayer]
+  const currentPlayer = G.players[G.target.defender]
 
-  const [army, newHand] = removeActionCardFromHand(
+  //remove attacking card from hand
+  const { removedCard: defendingCard, newHand } = removeActionCardFromHand(
     currentPlayer.hand,
-    G.selectedCard
+    defendingCardIndex
   )
 
   currentPlayer.hand = newHand
-  G.battle.defend = army
+  G.battle.defend = defendingCard
 
   if (G.battle.attack.attack > G.battle.defend.defence) {
-    moveCity(G)
+    moveCityAfterBattle(G)
   }
   discardBattleCards(G)
 
-  const playerAfterAttacker =
-    G.target.attacker === ctx.numPlayers - 1 ? 0 : G.target.attacker + 1
+  const playerAfterAttacker = (G.target.attacker + 1) % ctx.playOrder.length
 
+  ctx.events.endTurn({ next: playerAfterAttacker })
   G.target = {}
-  ctx.events.endTurn({ next: `${playerAfterAttacker}` })
 }
 
 export const doNotDefend = (G, ctx) => {
   G.battle.defend = false
-  G.discardPile.push(G.battle.attack)
-  G.battle.attack = ''
 
   discardBattleCards(G)
-  moveCity(G)
+  moveCityAfterBattle(G)
 
   G.selectedCard = ''
 
-  const playerAfterAttacker =
-    G.target.attacker === ctx.numPlayers - 1 ? 0 : G.target.attacker + 1
+  const playerAfterAttacker = (G.target.attacker + 1) % ctx.playOrder.length
 
   ctx.events.endTurn({ next: `${playerAfterAttacker}` })
   G.target = {}

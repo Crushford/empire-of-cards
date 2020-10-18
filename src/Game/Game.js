@@ -1,6 +1,6 @@
 import { TurnOrder } from 'boardgame.io/core'
 import { getDeck, PLAYER_COLORS } from '../constants'
-import { shuffleArray, getAllPossibleMoves, randomAiMove } from '../utils'
+import { shuffleArray, getAllPossibleMoves } from '../utils'
 
 import {
   doNotDefend,

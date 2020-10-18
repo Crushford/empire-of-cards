@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Client, Lobby } from 'boardgame.io/react'
-// import { Debug } from 'boardgame.io/debug'
+import { Debug } from 'boardgame.io/debug'
 
 import { Board } from '../Board'
 import {
@@ -15,8 +15,8 @@ import { HowToPlay } from './HowToPlay'
 const LocalGame = ({ gameComplexity, numberOfPlayers, isPractice }) => {
   const standardOptions = {
     board: Board,
-    numPlayers: numberOfPlayers
-    // debug: { impl: Debug }
+    numPlayers: numberOfPlayers,
+    debug: { impl: Debug }
   }
   const SimpleDeckClient = Client({
     game: SimpleDeck,
