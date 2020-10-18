@@ -58,6 +58,7 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
   const handleEndTurn = () => {
     moves.endTurn()
   }
+  const newGame = () => document.location.reload()
 
   const players = G.players.map((player, index) => (
     <PlayerSpace
@@ -75,6 +76,15 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
 
   return (
     <BoardContainer>
+      {ctx.gameOver && (
+        <ScreenCover>
+          <NextTurn>
+            {G.players[ctx.gameOver.winner].color}
+            Wins!
+          </NextTurn>
+          <AcceptTurn onClick={newGame}>New Game</AcceptTurn>
+        </ScreenCover>
+      )}
       {newPlayer && !isMultiplayer ? (
         <ScreenCover>
           <NextTurn>
