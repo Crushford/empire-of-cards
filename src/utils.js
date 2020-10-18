@@ -1,3 +1,5 @@
+import { CITY_COLORS } from './constants'
+
 export const shuffleArray = array => {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1))
@@ -107,5 +109,25 @@ export const randomAiMove = (G, ctx) => {
   const randomMoveIndex = Math.floor(
     Math.random() * Math.floor(moves.length - 1)
   )
+  // attack city if player already has some of the empire
+  if (G.players[ctx.currentPlayer].empire[0]) {
+    const empires = {}
+
+    CITY_COLORS.forEach(color => {
+      empires[color] = [...G.players[ctx.currentPlayer].empire].filter(card => {
+        return card.id.match(color)
+      }).length
+    })
+
+    const biggestCollection = Object.keys(empires).reduce((a, b) =>
+      empires[a] > empires[b] ? a : b
+    )
+    return moves
+      .filter(move => move.move === 'attackCity')
+      .find(move => {
+        move.args[0].match(biggestCollection)
+      })
+  }
+
   return moves[randomMoveIndex]
 }
