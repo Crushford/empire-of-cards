@@ -27,14 +27,11 @@ export const discardBattleCards = G => {
 }
 
 export const moveCityAfterBattle = G => {
-  const attackingEmpire = G.players[G.target.attacker].empire
-
   const defendingPlayerIndex = G.target.defender
-  const defendingEmpire = G.players[defendingPlayerIndex].empire
-  G.players[defendingPlayerIndex].empire = defendingEmpire.filter(
-    card => card.id !== G.target.card.id
-  )
-  attackingEmpire.push(G.target.card)
+  G.players[defendingPlayerIndex].empire = G.players[
+    defendingPlayerIndex
+  ].empire.filter(card => card.id !== G.target.card.id)
+  G.players[G.target.attacker].empire.push(G.target.card)
 }
 
 export const getTargetedDetailsFromId = (G, attackedCityId) => {
@@ -87,13 +84,15 @@ export const getAllPossibleMoves = (G, ctx) => {
             })
           })
         } else {
-          G.players.forEach(player => {
-            player.empire.forEach(city => {
-              moves.push({
-                move: 'attackCity',
-                args: [city.id, actionCard.id]
+          G.players.forEach((player, index) => {
+            if (index === ctx.currentPlayer) {
+              player.empire.forEach(city => {
+                moves.push({
+                  move: 'attackCity',
+                  args: [city.id, actionCard.id]
+                })
               })
-            })
+            }
           })
         }
       })

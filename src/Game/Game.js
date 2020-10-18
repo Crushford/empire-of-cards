@@ -72,6 +72,7 @@ export const empireOfCards = (deckType, name, isPractice) => ({
         doNotDefend,
         endTurn,
         attackCity,
+        defendCity,
         moveToEmpire
       },
       endIf: (G, ctx) => {
