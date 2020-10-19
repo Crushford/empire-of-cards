@@ -18,8 +18,9 @@ const styles = theme => ({
   }
 })
 
-const LatestMessage = styled.h5`
+const LatestMessages = styled.h5`
   color: purple;
+  margin: 3px;
 `
 const ShowLog = styled.button``
 
@@ -57,7 +58,18 @@ export const BattleLog = ({ log }) => {
   }
   return (
     <>
-      <LatestMessage>Latest Battle Update: {log[log.length - 1]}</LatestMessage>
+      {log[log.length - 4] && (
+        <LatestMessages>{log[log.length - 4]}</LatestMessages>
+      )}
+      {log[log.length - 3] && (
+        <LatestMessages>{log[log.length - 3]}</LatestMessages>
+      )}
+      {log[log.length - 2] && (
+        <LatestMessages>{log[log.length - 2]}</LatestMessages>
+      )}
+      <LatestMessages>
+        Latest Battle Update: {log[log.length - 1]}
+      </LatestMessages>
       <ShowLog onClick={openLog}>Show Entire Log</ShowLog>
       <Dialog open={logOpen} onClose={closeLog}>
         <DialogTitle id="customized-dialog-title" onClose={closeLog}>
