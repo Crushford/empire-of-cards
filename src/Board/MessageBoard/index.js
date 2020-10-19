@@ -9,6 +9,9 @@ const Hint = styled.h5``
 const SpecialMessage = styled.h5`
   color: blue;
 `
+const LogMessage = styled.h5`
+  color: purple;
+`
 const MessageContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -33,6 +36,10 @@ export const MessageBoard = ({ G, ctx, isMultiplayer, isActive }) => {
         <>
           <Hint>{messages.hint}</Hint>
           <SpecialMessage>{messages.specialMessage}</SpecialMessage>
+
+          <LogMessage>
+            Lastest Battle Update: {G.log[G.log.length - 1]}
+          </LogMessage>
         </>
       )}
     </MessageContainer>

@@ -189,6 +189,12 @@ export const attackCity = (
   G.selectedCard = ''
   G.timesPassed = 0
 
+  G.log.push(
+    `${G.players[G.target.attacker].color} attacks ${
+      G.players[G.target.defender].color
+    }'s ${G.target.card.color} ${targetedCard.title}`
+  )
+
   ctx.events.endTurn({ next: `${targetedPlayerIndex}` })
 }
 
@@ -213,6 +219,15 @@ export const defendCity = (G, ctx, defendingCardIndexFromBot = '') => {
   if (G.battle.attack.attack > G.battle.defend.defence) {
     moveCityAfterBattle(G)
   }
+  G.log.push(
+    `${G.players[G.target.defender].color} ${
+      G.battle.attack.attack > G.battle.defend.defence
+        ? 'unsuccessfully'
+        : 'successfully'
+    } defends ${G.target.card.color} ${G.target.card.title} with ${
+      G.battle.defend.title
+    } against ${G.players[G.target.attacker].color}'s ${G.battle.attack.title}`
+  )
   discardBattleCards(G)
 
   const playerAfterAttacker = (G.target.attacker + 1) % ctx.playOrder.length
@@ -223,6 +238,11 @@ export const defendCity = (G, ctx, defendingCardIndexFromBot = '') => {
 
 export const doNotDefend = (G, ctx) => {
   G.battle.defend = false
+
+  G.log.push(`${G.players[G.target.defender].color} does not defend ${
+    G.target.card.color
+  } ${G.target.card.title} 
+   against ${G.players[G.target.attacker].color}'s ${G.battle.attack.title}`)
 
   discardBattleCards(G)
   moveCityAfterBattle(G)

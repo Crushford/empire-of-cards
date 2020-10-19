@@ -38,7 +38,8 @@ export const empireOfCards = (deckType, name, isPractice) => ({
     discardPile: [],
     completeSetsNeededToWin: 2,
     firstToAct: Array.from(Array(G.numPlayers).keys()),
-    isPractice: isPractice
+    isPractice: isPractice,
+    log: ['Game Started']
   }),
   turn: {
     stages: {
