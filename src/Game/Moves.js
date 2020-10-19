@@ -134,6 +134,9 @@ export const moveToEmpire = (G, ctx, _cardMoving = '') => {
       //add selected card to empire
       currentPlayer.empire.push(card)
       G.selectedCard = ''
+      G.log.push(
+        `${currentPlayer.color} places ${card.color} ${card.title} into their empire`
+      )
       return false
     } else return true
   })
@@ -258,6 +261,9 @@ export const doNotDefend = (G, ctx) => {
 export const pass = (G, ctx) => {
   G.timesPassed += 1
   G.selectedCard = ''
+
+  G.log.push(`${G.players[ctx.currentPlayer].color} passes`)
+
   if (G.timesPassed >= ctx.numPlayers) {
     ctx.events.endPhase()
   }
