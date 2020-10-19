@@ -18,7 +18,7 @@ export const empireOfCards = (deckType, name, isPractice) => ({
   name: name,
   minPlayers: 2,
   setup: (G, ctx) => ({
-    deck: shuffleArray(getDeck(deckType)),
+    deck: shuffleArray(getDeck(deckType, G.numPlayers)),
     gameComplexity: 'simple',
     players: PLAYER_COLORS.map(
       (color, index) =>
