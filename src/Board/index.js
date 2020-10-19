@@ -24,6 +24,7 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
   useEffect(() => {
     if (G.isPractice && ctx.currentPlayer > 0) {
       const randomMove = randomAiMove(G, ctx)
+      setNewPlayer(false)
       moves[randomMove.move](...randomMove.args)
     }
   }, [currentPlayer, G, ctx, moves])
@@ -76,15 +77,6 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
 
   return (
     <BoardContainer>
-      {ctx.gameOver && (
-        <ScreenCover>
-          <NextTurn>
-            {G.players[ctx.gameOver.winner].color}
-            Wins!
-          </NextTurn>
-          <AcceptTurn onClick={newGame}>New Game</AcceptTurn>
-        </ScreenCover>
-      )}
       {newPlayer && !isMultiplayer ? (
         <ScreenCover>
           <NextTurn>
@@ -96,24 +88,31 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
       ) : (
         <>
           {players}
-          <ActionSpace>
-            <Deck onClick={handleDeckClick} />
-            <MessageBoard
-              G={G}
-              ctx={ctx}
-              isActive={isActive}
-              isMultiplayer={isMultiplayer}
-            />
-            {ctx.phase === 'newRound' ? (
-              <EndTurn onClick={handleEndTurn} />
-            ) : (
-              <Pass onClick={handlePassClick} isUnderAttack={isUnderAttack} />
-            )}
-            <BattleBoard
-              cards={G.battle}
-              handleDefenceClick={handleDefenceClick}
-            />
-          </ActionSpace>
+          {ctx.gameover ? (
+            <>
+              <NextTurn>Game Over!</NextTurn>
+              <AcceptTurn onClick={newGame}>New Game</AcceptTurn>
+            </>
+          ) : (
+            <ActionSpace>
+              <Deck onClick={handleDeckClick} />
+              <MessageBoard
+                G={G}
+                ctx={ctx}
+                isActive={isActive}
+                isMultiplayer={isMultiplayer}
+              />
+              {ctx.phase === 'newRound' ? (
+                <EndTurn onClick={handleEndTurn} />
+              ) : (
+                <Pass onClick={handlePassClick} isUnderAttack={isUnderAttack} />
+              )}
+              <BattleBoard
+                cards={G.battle}
+                handleDefenceClick={handleDefenceClick}
+              />
+            </ActionSpace>
+          )}
         </>
       )}
     </BoardContainer>

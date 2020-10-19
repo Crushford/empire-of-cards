@@ -46,10 +46,10 @@ export const empireOfCards = (deckType, name, isPractice) => ({
         moves: {
           selectCard,
           pass,
+          doNotDefend,
           attackCity,
-          moveToEmpire,
           defendCity,
-          doNotDefend
+          moveToEmpire
         },
         onEnd: (G, ctx) => {
           G.timesPassed = 0
@@ -70,7 +70,6 @@ export const empireOfCards = (deckType, name, isPractice) => ({
         selectCard,
         pass,
         doNotDefend,
-        endTurn,
         attackCity,
         defendCity,
         moveToEmpire

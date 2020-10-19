@@ -35,7 +35,7 @@ const getPositionCSS = (position, currentPlayer, numberOfPlayers) => {
     case 3:
       return `right: calc((${width} - 250px) * -0.5); transform: rotate(270deg); top: calc(50% - (${width}) / 2); width: ${width};`
     default:
-      console.log(`incorrect number of players`)
+      console.error(`incorrect number of players`)
   }
 }
 

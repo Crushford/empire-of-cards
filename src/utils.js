@@ -87,7 +87,7 @@ export const getAllPossibleMoves = (G, ctx) => {
           })
         } else {
           G.players.forEach((player, index) => {
-            if (index === ctx.currentPlayer) {
+            if (index !== +ctx.currentPlayer) {
               player.empire.forEach(city => {
                 moves.push({
                   move: 'attackCity',
@@ -122,11 +122,29 @@ export const randomAiMove = (G, ctx) => {
     const biggestCollection = Object.keys(empires).reduce((a, b) =>
       empires[a] > empires[b] ? a : b
     )
-    return moves
+
+    empires[biggestCollection] = 0
+
+    const secondBiggestCollection = Object.keys(empires).reduce((a, b) =>
+      empires[a] > empires[b] ? a : b
+    )
+
+    const preferredMove = moves
       .filter(move => move.move === 'attackCity')
-      .find(move => {
-        move.args[0].match(biggestCollection)
-      })
+      .find(move => move.args[0].match(biggestCollection))
+
+    const secondPreferredMove = moves
+      .filter(move => move.move === 'attackCity')
+      .find(move => move.args[0].match(secondBiggestCollection))
+
+    if (preferredMove) {
+      for (let i = 0; i < 5; i++) {
+        moves.push(preferredMove)
+        if (secondPreferredMove) {
+          moves.push(preferredMove)
+        }
+      }
+    }
   }
 
   return moves[randomMoveIndex]
