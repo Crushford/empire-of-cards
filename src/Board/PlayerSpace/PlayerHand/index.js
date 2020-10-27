@@ -17,6 +17,7 @@ const AllCards = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
+  height: 160px;
 `
 const CardInHandWrapper = styled.div`
   overflow: 'hidden';

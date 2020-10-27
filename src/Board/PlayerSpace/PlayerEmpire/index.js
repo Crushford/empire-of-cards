@@ -7,12 +7,14 @@ import { CITY_COLORS } from './../../../constants'
 const CitiesContainer = styled.div`
   display: flex;
   flex-direction: row;
-  max-height: 250px;
+  align-items: flex-end;
+  height: 160px;
 `
 const Title = styled.h2``
 const City = styled.div`
   display: flex;
   flex-direction: column;
+  max-height: 260px;
   overflow: hidden;
   &:hover {
     overflow: visible;
