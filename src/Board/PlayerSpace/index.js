@@ -2,38 +2,44 @@ import React from 'react'
 import styled from 'styled-components'
 import { PlayerEmpire } from './PlayerEmpire'
 import { PlayerHand } from './PlayerHand'
+import { getRelativePosition } from '../../utils'
+
+const getMobilePositionCSS = (position, currentPlayer, numberOfPlayers) => {
+  const width = position === currentPlayer ? 70 : 25
+
+  const relativePosition = getRelativePosition(
+    position,
+    currentPlayer,
+    numberOfPlayers
+  )
+
+  if (relativePosition === 0) {
+    return `bottom:0; width: ${width}%; left: ${50 - width / 2}%)`
+  } else {
+    return `top:0; transform: rotate(180deg); width: ${width}%; left: ${
+      25 * relativePosition - width / 2
+    }%;`
+  }
+}
 
 const getPositionCSS = (position, currentPlayer, numberOfPlayers) => {
-  const width = position === currentPlayer ? '1200px' : '800px'
+  const width = position === currentPlayer ? 1200 : 800
 
-  const getPossiblePositions = players => {
-    switch (players) {
-      case 2:
-        return [0, 2]
-      case 3:
-        return [0, 1, 2]
-      default:
-        return [0, 1, 2, 3]
-    }
-  }
-  const possiblePositions = getPossiblePositions(numberOfPlayers)
-
-  const getRelativePosition = () => {
-    let newPosition = position - currentPlayer
-    return newPosition >= 0
-      ? possiblePositions[newPosition]
-      : possiblePositions[possiblePositions.length + newPosition]
-  }
-
-  switch (getRelativePosition()) {
+  switch (getRelativePosition(position, currentPlayer, numberOfPlayers)) {
     case 0:
-      return `bottom:0; width: ${width}; left: calc(50% - (${width}) / 2)`
+      return `bottom:0; left: calc(50% - ${width / 2}px); width: ${width}px;`
     case 1:
-      return `left: calc((${width} - 250px) * -0.5); transform: rotate(90deg); top: calc(50% - (${width}) / 2); width: ${width};`
+      return `left: calc((${width}px - 250px) * -0.5); transform: rotate(90deg); top: calc(50% - ${
+        width / 2
+      }px); width: ${width}px;`
     case 2:
-      return `top:0; transform: rotate(180deg); width: ${width}; left: calc(50% - (${width}) / 2);`
+      return `top:0; transform: rotate(180deg); left: calc(50% - ${
+        width / 2
+      }px); width: ${width}px;`
     case 3:
-      return `right: calc((${width} - 250px) * -0.5); transform: rotate(270deg); top: calc(50% - (${width}) / 2); width: ${width};`
+      return `right: calc((${width}px - 250px) * -0.5); transform: rotate(270deg); top: calc(50% - ${
+        width / 2
+      }px); width: ${width}px;`
     default:
       console.error(`incorrect number of players`)
   }
@@ -54,6 +60,12 @@ const Container = styled.div`
   height: 250px;
   ${({ position, currentPlayer, numberOfPlayers }) =>
     getPositionCSS(position, currentPlayer, numberOfPlayers)}
+
+  @media only screen and (max-width: 1247px) {
+    ${({ position, currentPlayer, numberOfPlayers }) => {
+      getMobilePositionCSS(position, currentPlayer, numberOfPlayers)
+    }}
+  }
 `
 
 const AllCards = styled.div`

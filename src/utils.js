@@ -149,3 +149,26 @@ export const randomAiMove = (G, ctx) => {
 
   return moves[randomMoveIndex]
 }
+
+export const getRelativePosition = (
+  position,
+  currentPlayer,
+  numberOfPlayers
+) => {
+  const getPossiblePositions = players => {
+    switch (players) {
+      case 2:
+        return [0, 2]
+      case 3:
+        return [0, 1, 2]
+      default:
+        return [0, 1, 2, 3]
+    }
+  }
+
+  const possiblePositions = getPossiblePositions(numberOfPlayers)
+  let newPosition = position - currentPlayer
+  return newPosition >= 0
+    ? possiblePositions[newPosition]
+    : possiblePositions[possiblePositions.length + newPosition]
+}
