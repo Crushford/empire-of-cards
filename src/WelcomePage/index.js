@@ -15,8 +15,8 @@ import { HowToPlay } from './HowToPlay'
 const LocalGame = ({ gameComplexity, numberOfPlayers, isPractice }) => {
   const standardOptions = {
     board: Board,
-    numPlayers: numberOfPlayers,
-    debug: { impl: Debug }
+    numPlayers: numberOfPlayers
+    // debug: { impl: Debug }
   }
   const SimpleDeckClient = Client({
     game: SimpleDeck,
@@ -98,18 +98,20 @@ export const WelcomePage = () => {
           <button onClick={() => setGameComplexity('normal')}>normal</button>
         </div>
       )}
-      {gameType === 'local' && gameComplexity && !numberOfPlayers && (
-        <div>
-          <p>How many players?</p>
-          <select onChange={setNumPlayers}>
-            <option selected disabled></option>
-            <option value={2}>2</option>
-            <option value={3}>3</option>
-            <option value={4}>4</option>
-          </select>
-        </div>
-      )}
-      {isPractice && gameComplexity && (
+      {(gameType === 'local' || isPractice) &&
+        gameComplexity &&
+        !numberOfPlayers && (
+          <div>
+            <p>How many players?</p>
+            <select onChange={setNumPlayers}>
+              <option selected disabled></option>
+              <option value={2}>2</option>
+              <option value={3}>3</option>
+              <option value={4}>4</option>
+            </select>
+          </div>
+        )}
+      {isPractice && gameComplexity && numberOfPlayers && (
         <LocalGame
           gameComplexity={gameComplexity}
           numberOfPlayers={numberOfPlayers}
