@@ -17,7 +17,7 @@ import {
 } from './style'
 
 export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
-  const [newPlayer, setNewPlayer] = useState(true)
+  const [newPlayer, setNewPlayer] = useState(false)
 
   const currentPlayer = parseInt(ctx.currentPlayer)
 
