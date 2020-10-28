@@ -57,7 +57,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  height: 250px;
   ${({ position, currentPlayer, numberOfPlayers }) =>
     getPositionCSS(position, currentPlayer, numberOfPlayers)}
 
@@ -73,7 +72,7 @@ const AllCards = styled.div`
   display: flex;
   align-items: flex-end;
   flex-direction: row;
-  margin-bottom: -10px;
+  margin-bottom: -20px;
   justify-content: space-evenly;
   width: 100%;
 `

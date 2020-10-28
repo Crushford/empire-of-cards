@@ -8,13 +8,13 @@ const CitiesContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-end;
-  height: 160px;
+  height: 230px;
 `
 const Title = styled.h2``
 const City = styled.div`
   display: flex;
   flex-direction: column;
-  max-height: 260px;
+  max-height: 100%;
   overflow: hidden;
   &:hover {
     overflow: visible;
@@ -36,8 +36,6 @@ const Empire = styled.div`
   display: flex;
   flex-direction: column;
   min-width: 50%;
-  height: 240px;
-  margin-bottom: -10px;
 `
 
 export const PlayerEmpire = ({
