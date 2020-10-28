@@ -22,24 +22,27 @@ const getMobilePositionCSS = (position, currentPlayer, numberOfPlayers) => {
   }
 }
 
-const getPositionCSS = (position, currentPlayer, numberOfPlayers) => {
-  const width = position === currentPlayer ? 1200 : 800
+const getPositionCSS = (position, currentPlayer, numberOfPlayers, height) => {
+  const width = position === currentPlayer ? 70 : 70
+  const widthUnit = '%'
 
   switch (getRelativePosition(position, currentPlayer, numberOfPlayers)) {
     case 0:
-      return `bottom:0; left: calc(50% - ${width / 2}px); width: ${width}px;`
-    case 1:
-      return `left: calc((${width}px - 250px) * -0.5); transform: rotate(90deg); top: calc(50% - ${
+      return `bottom:0; left: calc(50% - ${
         width / 2
-      }px); width: ${width}px;`
+      }${widthUnit}); width: ${width}${widthUnit};`
+    case 1:
+      return `left: calc((${width}${widthUnit} - ${height}) * -0.5); transform: rotate(90deg); top: calc(${width}${widthUnit}  - ${
+        width / 2
+      }${widthUnit}); width: ${width}${widthUnit};`
     case 2:
       return `top:0; transform: rotate(180deg); left: calc(50% - ${
         width / 2
-      }px); width: ${width}px;`
+      }${widthUnit}); width: ${width}${widthUnit};`
     case 3:
-      return `right: calc((${width}px - 250px) * -0.5); transform: rotate(270deg); top: calc(50% - ${
+      return `right: calc((${width}${widthUnit} - ${height}) * -0.5); transform: rotate(270deg); top: calc(${width}${widthUnit}  - ${
         width / 2
-      }px); width: ${width}px;`
+      }${widthUnit}); width: ${width}${widthUnit};`
     default:
       console.error(`incorrect number of players`)
   }
@@ -57,12 +60,12 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  ${({ position, currentPlayer, numberOfPlayers }) =>
-    getPositionCSS(position, currentPlayer, numberOfPlayers)}
-
+  height: ${({ height }) => height};
+  ${({ position, currentPlayer, numberOfPlayers, height }) =>
+    getPositionCSS(position, currentPlayer, numberOfPlayers, height)}
   @media only screen and (max-width: 1247px) {
-    ${({ position, currentPlayer, numberOfPlayers }) => {
-      getMobilePositionCSS(position, currentPlayer, numberOfPlayers)
+    ${({ position, currentPlayer, numberOfPlayers, height }) => {
+      getMobilePositionCSS(position, currentPlayer, numberOfPlayers, height)
     }}
   }
 `
@@ -92,6 +95,7 @@ export const PlayerSpace = ({
       position={position}
       currentPlayer={currentPlayer}
       numberOfPlayers={numberOfPlayers}
+      height={'260px'}
     >
       <AllCards>
         <PlayerHand
