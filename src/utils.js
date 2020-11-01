@@ -106,6 +106,9 @@ export const getAllPossibleMoves = (G, ctx) => {
 
 export const randomAiMove = (G, ctx) => {
   const moves = getAllPossibleMoves(G, ctx)
+  if (moves.length === 1) {
+    return moves[0]
+  }
   const randomMoveIndex = Math.floor(
     Math.random() * Math.floor(moves.length - 1)
   )
