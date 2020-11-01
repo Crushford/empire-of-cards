@@ -41,10 +41,9 @@ export const IsVictory = G => {
 export const startRound = (G, ctx) => {
   const currentPlayer = G.players[ctx.currentPlayer]
 
-  let additionalHandAllowance = 0
-  currentPlayer.empire
-    .filter(card => card.benefit === 'handCapacity')
-    .forEach(({ bonus }) => (additionalHandAllowance += bonus))
+  let additionalHandAllowance = currentPlayer.empire.filter(
+    card => card.benefit === 'handCapacity'
+  ).length
 
   while (
     currentPlayer.hand.length <
@@ -62,10 +61,9 @@ export const endTurn = (G, ctx) => {
   const currentPlayer = G.players[ctx.currentPlayer]
 
   //check to see if player has any hand capacity bonus cards
-  let additionalHandAllowance = 0
-  currentPlayer.empire
-    .filter(card => card.benefit === 'handCapacity')
-    .forEach(({ bonus }) => (additionalHandAllowance += bonus))
+  let additionalHandAllowance = currentPlayer.empire.filter(
+    card => card.benefit === 'handCapacity'
+  ).length
   if (
     currentPlayer.hand.length <
     currentPlayer.handSizeAllowance + additionalHandAllowance
@@ -249,8 +247,8 @@ export const defendCity = (G, ctx, defendingCardIndexFromBot = '') => {
 
   G.log.push(
     `${defenderColor} ${battleOutcome} defends ${targetedColor} ${targetedCardTitle} with ${defendingCardTitle} against ${attackingColor}'s ${attackingCardTitle}. 
-    ${attackBonus && 'An Attack bonus of 1 was applied.'} 
-    ${defenceBonus && 'An Defence bonus of 1 was applied.'}`
+    ${attackBonus > 0 ? 'An Attack bonus of 1 was applied.' : ''} 
+    ${defenceBonus > 0 ? 'An Defence bonus of 1 was applied.' : ''}`
   )
   discardBattleCards(G)
 

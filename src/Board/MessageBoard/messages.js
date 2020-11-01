@@ -6,10 +6,9 @@ export const getMessages = (G, ctx) => {
     }
 
     if (ctx.phase === 'newRound') {
-      let additionalHandAllowance = 0
-      currentPlayer.empire
-        .filter(card => card.benefit === 'handCapacity')
-        .forEach(({ bonus }) => (additionalHandAllowance += bonus))
+      let additionalHandAllowance = currentPlayer.empire.filter(
+        card => card.benefit === 'handCapacity'
+      ).length
 
       if (
         currentPlayer.hand.length ===
@@ -44,10 +43,9 @@ export const getMessages = (G, ctx) => {
 
   const getSpecialMessage = () => {
     if (ctx.turn < 5 && currentPlayer.hand.length > 5) {
-      let additionalHandAllowance = 0
-      currentPlayer.empire
-        .filter(card => card.benefit === 'handCapacity')
-        .forEach(({ bonus }) => (additionalHandAllowance += bonus))
+      let additionalHandAllowance = currentPlayer.empire.filter(
+        card => card.benefit === 'handCapacity'
+      ).length
 
       if (
         currentPlayer.hand.length >
