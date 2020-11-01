@@ -157,40 +157,47 @@ const normalDeck = {
   cities: [
     {
       title: 'City Wall',
-      imageUrl:
-        'https://cdn.pixabay.com/photo/2018/02/20/11/57/house-3167461_960_720.png',
       benefit: 'cityDefence',
-      bonus: 1
+      text: `Plus one defence for all cities you control in this same color`
     },
     {
       title: 'Town Hall',
-      imageUrl:
-        'https://cdn.pixabay.com/photo/2018/02/20/12/00/house-3167469_960_720.png',
       benefit: 'handCapacity',
-      bonus: 1
+      text: `At the start of the round you can pick up one extra card for each Town Hall you control`
     },
     {
       title: 'Market',
-      imageUrl:
-        'https://cdn.pixabay.com/photo/2018/02/18/14/24/house-3162387_960_720.png',
       benefit: 'retentionCapacity',
-      bonus: 1
+      text: `You may retain 1 card at the end of the round for each Market you control`
     },
     {
       title: 'Barracks',
-      imageUrl:
-        'https://cdn.pixabay.com/photo/2018/02/18/14/13/house-3162364_960_720.png',
-      benefit: 'specialization',
-      bonus: 1
+      benefit: 'specialization'
     }
   ]
 }
 
 const barracksSpecializations = [
-  { title: 'Barracks - Naval', specialization: ['Ship', 'Trireme'] },
-  { title: 'Barracks - Knights', specialization: ['Mounted Knight', 'Knight'] },
-  { title: 'Barracks - Melee', specialization: ['Warrior', 'Horseman'] },
-  { title: 'Barracks - Projectiles', specialization: ['Catapult', 'Archer'] }
+  {
+    title: 'Barracks - Naval',
+    specialization: ['Ship', 'Trireme'],
+    text: `Plus one attack to Ships and Triremes`
+  },
+  {
+    title: 'Barracks - Knights',
+    specialization: ['Mounted Knight', 'Knight'],
+    text: `Plus one attack to Knight and Mounted Knights`
+  },
+  {
+    title: 'Barracks - Melee',
+    specialization: ['Warrior', 'Horseman'],
+    text: `Plus one attack to Warriors and Horsemen`
+  },
+  {
+    title: 'Barracks - Projectiles',
+    specialization: ['Catapult', 'Archer'],
+    text: `Plus one attack to Archers and Catapults`
+  }
 ]
 
 const makeTeams = ({ category, numberOfPlayers = 4, isComplex }) => {
@@ -205,13 +212,14 @@ const makeTeams = ({ category, numberOfPlayers = 4, isComplex }) => {
         color: isBattleCard ? 'red' : color,
         id: `${isBattleCard ? 'a' : 'c'}-${color}-${index}`
       }
-      if (!isComplex || item.title !== 'Barracks') {
+
+      if (!isComplex || !item.title.includes('Barracks')) {
         return card
       }
 
       return {
-        ...card,
-        ...barracksSpecializations[colorIndex]
+        ...barracksSpecializations[colorIndex],
+        ...card
       }
     })
   )
