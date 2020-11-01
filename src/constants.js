@@ -201,7 +201,8 @@ const barracksSpecializations = [
 ]
 
 const makeTeams = ({ category, numberOfPlayers = 4, isComplex }) => {
-  const colors = CITY_COLORS.slice(0, numberOfPlayers + 5)
+  const numberOfColorsToPlayWith = isComplex ? 4 : numberOfPlayers + 5
+  const colors = CITY_COLORS.slice(0, numberOfColorsToPlayWith)
 
   return colors.map((color, colorIndex) =>
     category.map((item, index) => {
