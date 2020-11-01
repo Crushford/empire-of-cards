@@ -219,17 +219,38 @@ export const defendCity = (G, ctx, defendingCardIndexFromBot = '') => {
   currentPlayer.hand = newHand
   G.battle.defend = defendingCard
 
-  if (G.battle.attack.attack > G.battle.defend.defence) {
+  const attackBonus = G.players[G.target.attacker].empire.filter(
+    card =>
+      card.specialization && card.specialization.includes(G.battle.attack.title)
+  ).length
+  const defenceBonus =
+    G.players[G.target.defender].empire.filter(
+      card =>
+        card.color === G.target.defender.color && card.benefit === 'cityDefence'
+    ).length || G.target.defender.benefit === 'cityDefence'
+      ? 1
+      : 0
+
+  const attackValue = G.battle.attack.attack + attackBonus
+  const defenceValue = G.battle.defend.defence + defenceBonus
+
+  if (attackValue > defenceValue) {
     moveCityAfterBattle(G)
   }
+
+  const defenderColor = G.players[G.target.defender].color
+  const battleOutcome =
+    attackValue > defenceValue ? 'unsuccessfully' : 'successfully'
+  const targetedColor = G.target.card.color
+  const targetedCardTitle = G.target.card.title
+  const defendingCardTitle = G.battle.defend.title
+  const attackingColor = G.players[G.target.attacker].color
+  const attackingCardTitle = G.battle.attack.title
+
   G.log.push(
-    `${G.players[G.target.defender].color} ${
-      G.battle.attack.attack > G.battle.defend.defence
-        ? 'unsuccessfully'
-        : 'successfully'
-    } defends ${G.target.card.color} ${G.target.card.title} with ${
-      G.battle.defend.title
-    } against ${G.players[G.target.attacker].color}'s ${G.battle.attack.title}`
+    `${defenderColor} ${battleOutcome} defends ${targetedColor} ${targetedCardTitle} with ${defendingCardTitle} against ${attackingColor}'s ${attackingCardTitle}. 
+    ${attackBonus && 'An Attack bonus of 1 was applied.'} 
+    ${defenceBonus && 'An Defence bonus of 1 was applied.'}`
   )
   discardBattleCards(G)
 
