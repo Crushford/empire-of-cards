@@ -19,7 +19,7 @@ export const empireOfCards = (deckType, name, isPractice) => ({
   minPlayers: 2,
   setup: (G, ctx) => ({
     deck: shuffleArray(getDeck(deckType, G.numPlayers)),
-    gameComplexity: 'simple',
+    gameComplexity: deckType,
     players: PLAYER_COLORS.map(
       (color, index) =>
         // times index by 2 for 2 players, so there are just players indexes of 0 and 2 for board posistioning
