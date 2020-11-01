@@ -28,21 +28,19 @@ const getPositionCSS = (position, currentPlayer, numberOfPlayers, height) => {
 
   switch (getRelativePosition(position, currentPlayer, numberOfPlayers)) {
     case 0:
-      return `bottom:0; left: calc(50% - ${
-        width / 2
-      }${widthUnit}); width: ${width}${widthUnit};`
+      return `bottom:0; left: calc(50% - ${width / 2}vw); width: ${width}vw;`
     case 1:
-      return `left: calc((${width}${widthUnit} - ${height}) * -0.5); transform: rotate(90deg); top: calc(${width}${widthUnit}  - ${
+      return `left: calc((${width}vh - ${height}) * -0.5); transform: rotate(90deg); top: calc(${width}%  - ${
         width / 2
-      }${widthUnit}); width: ${width}${widthUnit};`
+      }vh); width: ${width}vh;`
     case 2:
       return `top:0; transform: rotate(180deg); left: calc(50% - ${
         width / 2
-      }${widthUnit}); width: ${width}${widthUnit};`
+      }vw); width: ${width}vw;`
     case 3:
-      return `right: calc((${width}${widthUnit} - ${height}) * -0.5); transform: rotate(270deg); top: calc(${width}${widthUnit}  - ${
+      return `right: calc((${width}vh - ${height}) * -0.5); transform: rotate(270deg); top: calc(${width}%  - ${
         width / 2
-      }${widthUnit}); width: ${width}${widthUnit};`
+      }vh); width: ${width}vh;`
     default:
       console.error(`incorrect number of players`)
   }

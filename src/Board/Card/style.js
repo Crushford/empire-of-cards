@@ -32,7 +32,7 @@ export const Title = styled.p`
 `
 
 export const CardImage = styled.img`
-  max-height: 60%;
+  height: 50%;
   max-width: 100%;
   object-fit: contain;
 `
@@ -43,7 +43,7 @@ export const AttributesContainer = styled.div`
 `
 
 export const CardHalfContainer = styled.div`
-  height: 20%;
+  height: 25%;
   ${({ top }) => !top && 'transform:rotate(180deg)'}
 `
 
