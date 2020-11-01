@@ -109,77 +109,109 @@ const normalDeck = {
       imageUrl:
         'https://cdn.britannica.com/34/83934-050-4787BA22/Roman-torsion-arm-stone-bundle-cords-force.jpg'
     },
-    { title: 'Armored Knight', attack: 5, defence: 9 },
-    { title: 'Archer', attack: 8, defence: 4 },
-    { title: 'Warrior', attack: 4, defence: 4 },
-    { title: 'Horseman', attack: 7, defence: 4 },
-    { title: 'Axeman', attack: 4, defence: 5 },
-    { title: 'Pikeman', attack: 5, defence: 8 },
-    { title: 'Mounted knight', attack: 9, defence: 6 }
-  ],
-  cities: [
-    { title: 'Cathedral' },
     {
-      title: 'Town Hall'
+      title: 'Archer',
+      attack: 8,
+      defence: 4,
+      imageUrl: 'https://freesvg.org/storage/img/thumb/bow-and-arrow-2.png'
     },
     {
-      title: 'Market'
+      title: 'Knight',
+      attack: 5,
+      defence: 9,
+      imageUrl: 'https://freesvg.org/storage/img/thumb/medieval-knight.png'
     },
     {
-      title: 'Barracks'
-    }
-  ]
-}
-
-const complexDeck = {
-  armies: [
-    {
-      title: 'Catapult',
+      title: 'Mounted Knight',
       attack: 9,
-      defence: 1,
-      imageUrl:
-        'https://cdn.britannica.com/34/83934-050-4787BA22/Roman-torsion-arm-stone-bundle-cords-force.jpg'
+      defence: 6,
+      imageUrl: 'https://freesvg.org/storage/img/thumb/KnightHorseback4.png'
     },
-    { title: 'Armored Knight', attack: 5, defence: 9 },
-    { title: 'Archer', attack: 8, defence: 4 },
-    { title: 'Warrior', attack: 4, defence: 4 },
-    { title: 'Horseman', attack: 7, defence: 4 },
-    { title: 'Axeman', attack: 4, defence: 5 },
-    { title: 'Pikeman', attack: 5, defence: 8 },
-    { title: 'Mounted knight', attack: 9, defence: 6 }
+    {
+      title: 'Warrior',
+      attack: 4,
+      defence: 4,
+      imageUrl: 'https://freesvg.org/img/nello-sword.png'
+    },
+    {
+      title: 'Horseman',
+      attack: 7,
+      defence: 4,
+      imageUrl: 'https://freesvg.org/storage/img/thumb/Horse-Silhouette.png'
+    },
+    {
+      title: 'Ship',
+      attack: 4,
+      defence: 5,
+      imageUrl:
+        'https://cdn1.vectorstock.com/i/1000x1000/47/50/ancient-ship-icon-simple-style-vector-20314750.jpg'
+    },
+    {
+      title: 'Trireme',
+      attack: 5,
+      defence: 8,
+      imageUrl:
+        'https://thumbs.dreamstime.com/b/trireme-floating-sea-waves-intage-engraving-illustration-hand-drawn-design-element-sailing-ship-vintage-color-poster-90311288.jpg'
+    }
   ],
   cities: [
-    { title: 'City Wall', benefit: 'cityDefence', bonus: 1 },
+    {
+      title: 'City Wall',
+      imageUrl:
+        'https://cdn.pixabay.com/photo/2018/02/20/11/57/house-3167461_960_720.png',
+      benefit: 'cityDefence',
+      bonus: 1
+    },
     {
       title: 'Town Hall',
+      imageUrl:
+        'https://cdn.pixabay.com/photo/2018/02/20/12/00/house-3167469_960_720.png',
       benefit: 'handCapacity',
-      bonus: 1,
-      text: 'Benefits: plus 1 to hand capacity'
+      bonus: 1
+    },
+    {
+      title: 'Market',
+      imageUrl:
+        'https://cdn.pixabay.com/photo/2018/02/18/14/24/house-3162387_960_720.png',
+      benefit: 'retentionCapacity',
+      bonus: 1
     },
     {
       title: 'Barracks',
-      benefit: 'colorAttack',
-      bonus: 1
-    },
-    {
-      title: 'Battel Academy',
-      benefit: 'colorDefence',
+      imageUrl:
+        'https://cdn.pixabay.com/photo/2018/02/18/14/13/house-3162364_960_720.png',
+      benefit: 'specialization',
       bonus: 1
     }
   ]
 }
 
-const makeTeams = (category, numberOfPlayers) => {
+const barracksSpecializations = [
+  { title: 'Barracks - Naval', specialization: ['Ship', 'Trireme'] },
+  { title: 'Barracks - Knights', specialization: ['Mounted Knight', 'Knight'] },
+  { title: 'Barracks - Melee', specialization: ['Warrior', 'Horseman'] },
+  { title: 'Barracks - Projectiles', specialization: ['Catapult', 'Archer'] }
+]
+
+const makeTeams = ({ category, numberOfPlayers = 4, isComplex }) => {
   const colors = CITY_COLORS.slice(0, numberOfPlayers + 5)
 
-  return colors.map(color =>
+  return colors.map((color, colorIndex) =>
     category.map((item, index) => {
       let isBattleCard = !!item.attack
 
-      return {
+      const card = {
         ...item,
         color: isBattleCard ? 'red' : color,
         id: `${isBattleCard ? 'a' : 'c'}-${color}-${index}`
+      }
+      if (!isComplex || item.title !== 'Barracks') {
+        return card
+      }
+
+      return {
+        ...card,
+        ...barracksSpecializations[colorIndex]
       }
     })
   )
@@ -190,19 +222,14 @@ export const getDeck = (complexity, numberOfPlayers) => {
     case 'simple':
       // work around for lack of Array.flat()
       return [].concat(
-        ...makeTeams(simpleDeck.armies, numberOfPlayers),
-        ...makeTeams(simpleDeck.cities, numberOfPlayers)
+        ...makeTeams({ category: simpleDeck.armies, numberOfPlayers }),
+        ...makeTeams({ category: simpleDeck.cities, numberOfPlayers })
       )
-    case 'complex':
-      return [
-        ...makeTeams(complexDeck.armies).flat(),
-        ...makeTeams(complexDeck.cities).flat()
-      ]
 
     default:
       return [].concat(
-        ...makeTeams(normalDeck.armies),
-        ...makeTeams(normalDeck.cities)
+        ...makeTeams({ category: normalDeck.armies, isComplex: true }),
+        ...makeTeams({ category: normalDeck.cities, isComplex: true })
       )
   }
 }
