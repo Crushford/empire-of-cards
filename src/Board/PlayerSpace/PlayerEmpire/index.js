@@ -7,12 +7,14 @@ import { CITY_COLORS } from './../../../constants'
 const CitiesContainer = styled.div`
   display: flex;
   flex-direction: row;
-  max-height: 250px;
+  align-items: flex-end;
+  height: 230px;
 `
 const Title = styled.h2``
 const City = styled.div`
   display: flex;
   flex-direction: column;
+  max-height: 100%;
   overflow: hidden;
   &:hover {
     overflow: visible;
@@ -34,8 +36,6 @@ const Empire = styled.div`
   display: flex;
   flex-direction: column;
   min-width: 50%;
-  height: 240px;
-  margin-bottom: -10px;
 `
 
 export const PlayerEmpire = ({

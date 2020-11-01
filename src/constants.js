@@ -2,8 +2,10 @@ export const CITY_COLORS = [
   'lightgreen',
   'lightblue',
   'orange',
-  'pink',
-  'yellow'
+  'plum',
+  'yellow',
+  'lightgrey',
+  'hotpink'
 ]
 
 export const PLAYER_COLORS = ['blue', 'red', 'brown', 'green']
@@ -167,8 +169,10 @@ const complexDeck = {
   ]
 }
 
-const makeTeams = category =>
-  CITY_COLORS.map(color =>
+const makeTeams = (category, numberOfPlayers) => {
+  const colors = CITY_COLORS.slice(0, numberOfPlayers + 5)
+
+  return colors.map(color =>
     category.map((item, index) => {
       let isBattleCard = !!item.attack
 
@@ -179,14 +183,15 @@ const makeTeams = category =>
       }
     })
   )
+}
 
-export const getDeck = complexity => {
+export const getDeck = (complexity, numberOfPlayers) => {
   switch (complexity) {
     case 'simple':
       // work around for lack of Array.flat()
       return [].concat(
-        ...makeTeams(simpleDeck.armies),
-        ...makeTeams(simpleDeck.cities)
+        ...makeTeams(simpleDeck.armies, numberOfPlayers),
+        ...makeTeams(simpleDeck.cities, numberOfPlayers)
       )
     case 'complex':
       return [

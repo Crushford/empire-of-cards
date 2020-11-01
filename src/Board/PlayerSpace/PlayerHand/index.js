@@ -6,9 +6,8 @@ import { CardEdge } from '../../Card/style'
 const CardsContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-end;
   height: 240px;
-  margin-bottom: -10px;
   min-width: 160px;
   max-width: 50%;
   z-index: 1;

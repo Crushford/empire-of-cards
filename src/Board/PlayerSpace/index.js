@@ -2,38 +2,47 @@ import React from 'react'
 import styled from 'styled-components'
 import { PlayerEmpire } from './PlayerEmpire'
 import { PlayerHand } from './PlayerHand'
+import { getRelativePosition } from '../../utils'
 
-const getPositionCSS = (position, currentPlayer, numberOfPlayers) => {
-  const width = position === currentPlayer ? '1200px' : '800px'
+const getMobilePositionCSS = (position, currentPlayer, numberOfPlayers) => {
+  const width = position === currentPlayer ? 70 : 25
 
-  const getPossiblePositions = players => {
-    switch (players) {
-      case 2:
-        return [0, 2]
-      case 3:
-        return [0, 1, 2]
-      default:
-        return [0, 1, 2, 3]
-    }
+  const relativePosition = getRelativePosition(
+    position,
+    currentPlayer,
+    numberOfPlayers
+  )
+
+  if (relativePosition === 0) {
+    return `bottom:0; width: ${width}%; left: ${50 - width / 2}%)`
+  } else {
+    return `top:0; transform: rotate(180deg); width: ${width}%; left: ${
+      25 * relativePosition - width / 2
+    }%;`
   }
-  const possiblePositions = getPossiblePositions(numberOfPlayers)
+}
 
-  const getRelativePosition = () => {
-    let newPosition = position - currentPlayer
-    return newPosition >= 0
-      ? possiblePositions[newPosition]
-      : possiblePositions[possiblePositions.length + newPosition]
-  }
+const getPositionCSS = (position, currentPlayer, numberOfPlayers, height) => {
+  const width = position === currentPlayer ? 70 : 70
+  const widthUnit = '%'
 
-  switch (getRelativePosition()) {
+  switch (getRelativePosition(position, currentPlayer, numberOfPlayers)) {
     case 0:
-      return `bottom:0; width: ${width}; left: calc(50% - (${width}) / 2)`
+      return `bottom:0; left: calc(50% - ${
+        width / 2
+      }${widthUnit}); width: ${width}${widthUnit};`
     case 1:
-      return `left: calc((${width} - 250px) * -0.5); transform: rotate(90deg); top: calc(50% - (${width}) / 2); width: ${width};`
+      return `left: calc((${width}${widthUnit} - ${height}) * -0.5); transform: rotate(90deg); top: calc(${width}${widthUnit}  - ${
+        width / 2
+      }${widthUnit}); width: ${width}${widthUnit};`
     case 2:
-      return `top:0; transform: rotate(180deg); width: ${width}; left: calc(50% - (${width}) / 2);`
+      return `top:0; transform: rotate(180deg); left: calc(50% - ${
+        width / 2
+      }${widthUnit}); width: ${width}${widthUnit};`
     case 3:
-      return `right: calc((${width} - 250px) * -0.5); transform: rotate(270deg); top: calc(50% - (${width}) / 2); width: ${width};`
+      return `right: calc((${width}${widthUnit} - ${height}) * -0.5); transform: rotate(270deg); top: calc(${width}${widthUnit}  - ${
+        width / 2
+      }${widthUnit}); width: ${width}${widthUnit};`
     default:
       console.error(`incorrect number of players`)
   }
@@ -51,9 +60,14 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  height: 250px;
-  ${({ position, currentPlayer, numberOfPlayers }) =>
-    getPositionCSS(position, currentPlayer, numberOfPlayers)}
+  height: ${({ height }) => height};
+  ${({ position, currentPlayer, numberOfPlayers, height }) =>
+    getPositionCSS(position, currentPlayer, numberOfPlayers, height)}
+  @media only screen and (max-width: 1247px) {
+    ${({ position, currentPlayer, numberOfPlayers, height }) => {
+      getMobilePositionCSS(position, currentPlayer, numberOfPlayers, height)
+    }}
+  }
 `
 
 const AllCards = styled.div`
@@ -61,7 +75,7 @@ const AllCards = styled.div`
   display: flex;
   align-items: flex-end;
   flex-direction: row;
-  margin-bottom: -10px;
+  margin-bottom: -20px;
   justify-content: space-evenly;
   width: 100%;
 `
@@ -81,6 +95,7 @@ export const PlayerSpace = ({
       position={position}
       currentPlayer={currentPlayer}
       numberOfPlayers={numberOfPlayers}
+      height={'260px'}
     >
       <AllCards>
         <PlayerHand

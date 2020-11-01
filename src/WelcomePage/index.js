@@ -98,7 +98,8 @@ export const WelcomePage = () => {
           <button onClick={() => setGameComplexity('normal')}>normal</button>
         </div>
       )}
-      {(gameType === 'local' || isPractice) && gameComplexity  &&
+      {(gameType === 'local' || isPractice) &&
+        gameComplexity &&
         !numberOfPlayers && (
           <div>
             <p>How many players?</p>

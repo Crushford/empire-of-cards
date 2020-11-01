@@ -34,7 +34,9 @@ export const MessageBoard = ({ G, ctx, isMultiplayer, isActive }) => {
       {(!isMultiplayer || isActive) && (
         <>
           <Hint>{messages.hint}</Hint>
-          <SpecialMessage>{messages.specialMessage}</SpecialMessage>
+          {messages.specialMessage && (
+            <SpecialMessage>{messages.specialMessage}</SpecialMessage>
+          )}
           <BattleLog log={G.log} />
         </>
       )}
