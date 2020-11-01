@@ -24,7 +24,6 @@ const getMobilePositionCSS = (position, currentPlayer, numberOfPlayers) => {
 
 const getPositionCSS = (position, currentPlayer, numberOfPlayers, height) => {
   const width = position === currentPlayer ? 70 : 70
-  const widthUnit = '%'
 
   switch (getRelativePosition(position, currentPlayer, numberOfPlayers)) {
     case 0:
