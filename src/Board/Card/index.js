@@ -1,11 +1,10 @@
 import React from 'react'
 import {
   Container,
-  TopBanner,
+  Banner,
   Title,
   CardImage,
   AttributesContainer,
-  CardHalfContainer,
   CardText
 } from './style'
 
@@ -25,14 +24,12 @@ const Attributes = ({ attack, defence }) => {
 }
 
 const CardHalf = ({ top, card: { title, attack, defence, color } }) => (
-  <CardHalfContainer top={top}>
-    <TopBanner color={color}>
-      <Title>{title}</Title>
-      {attack && defence && (
-        <Attributes attack={attack} defence={defence}></Attributes>
-      )}
-    </TopBanner>
-  </CardHalfContainer>
+  <Banner top={top} color={color}>
+    <Title>{title}</Title>
+    {attack && defence && (
+      <Attributes attack={attack} defence={defence}></Attributes>
+    )}
+  </Banner>
 )
 
 export const Card = ({
@@ -62,7 +59,7 @@ export const Card = ({
         <>
           <CardHalf top={true} card={value} />
           {value.text ? (
-            <CardText content={value.imageUrl}>{value.text}</CardText>
+            <CardText>{value.text}</CardText>
           ) : (
             <CardImage src={value.imageUrl} />
           )}
