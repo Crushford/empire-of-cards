@@ -6,7 +6,7 @@ import { Deck } from './Deck'
 import { Pass } from './Pass'
 import { EndTurn } from './EndTurn'
 
-import { randomAiMove } from '../utils'
+import { randomAiMove, checkIfPlayerHandIsAtCapacity } from '../utils'
 
 import {
   BoardContainer,
@@ -62,13 +62,7 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
   }
   const newGame = () => document.location.reload()
 
-  const additionalHandAllowance = G.players[currentPlayerId].empire.filter(
-    card => card.benefit === 'handCapacity'
-  ).length
-
-  const showEndTurn =
-    G.players[currentPlayerId].hand.length ===
-    G.normalHandSizeAllowance + additionalHandAllowance
+  const showEndTurn = checkIfPlayerHandIsAtCapacity(G, ctx)
 
   const players = G.players.map((player, index) => (
     <PlayerSpace
@@ -100,7 +94,14 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
           {players}
           {ctx.gameover ? (
             <>
-              <NextTurn>Game Over!</NextTurn>
+              <NextTurn>
+                Game Over!
+                <br />
+                {G.players[ctx.gameover.winner].color} Wins! <br />
+                {parseInt(ctx.currentPlayer) === parseInt(ctx.gameover.winner)
+                  ? 'Congratulations!'
+                  : 'Better Luck Next Time'}
+              </NextTurn>
               <AcceptTurn onClick={newGame}>New Game</AcceptTurn>
             </>
           ) : (

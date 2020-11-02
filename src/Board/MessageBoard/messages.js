@@ -1,3 +1,5 @@
+import { checkIfPlayerHandIsAtCapacity } from '../../utils'
+
 export const getMessages = (G, ctx) => {
   const currentPlayer = G.players[ctx.currentPlayer]
   const getHint = () => {
@@ -13,14 +15,7 @@ export const getMessages = (G, ctx) => {
         return `you may retain ${retentionCapacity} cards, click cards in your hand to select,  click the deck when you are finished to draw cards`
       }
 
-      const additionalHandAllowance = currentPlayer.empire.filter(
-        card => card.benefit === 'handCapacity'
-      ).length
-
-      if (
-        currentPlayer.hand.length ===
-        G.normalHandSizeAllowance + additionalHandAllowance
-      ) {
+      if (checkIfPlayerHandIsAtCapacity(G, ctx)) {
         return 'End your turn when you are ready'
       } else return 'click the deck to draw cards'
     }

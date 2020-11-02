@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Client, Lobby } from 'boardgame.io/react'
-import { Debug } from 'boardgame.io/debug'
+// import { Debug } from 'boardgame.io/debug'
 
 import { Board } from '../Board'
 import {

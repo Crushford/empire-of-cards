@@ -53,11 +53,22 @@ export const getTargetedDetailsFromId = (G, attackedCityId) => {
   return { targetedCard, targetedPlayerIndex }
 }
 
+export const checkIfPlayerHandIsAtCapacity = (G, ctx) => {
+  const additionalHandAllowance = G.players[ctx.currentPlayer].empire.filter(
+    card => card.benefit === 'handCapacity'
+  ).length
+
+  return (
+    G.players[ctx.currentPlayer].hand.length >=
+    G.normalHandSizeAllowance + additionalHandAllowance
+  )
+}
+
 export const getAllPossibleMoves = (G, ctx) => {
   let moves = []
 
   if (ctx.phase === 'newRound') {
-    if (G.players[ctx.currentPlayer].hand[0]) {
+    if (checkIfPlayerHandIsAtCapacity(G, ctx)) {
       moves.push({ move: 'endTurn', args: [] })
     } else {
       moves.push({ move: 'startRound', args: [] })

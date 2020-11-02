@@ -5,7 +5,8 @@ import {
   removeActionCardFromHand,
   discardBattleCards,
   moveCityAfterBattle,
-  getTargetedDetailsFromId
+  getTargetedDetailsFromId,
+  checkIfPlayerHandIsAtCapacity
 } from '../utils'
 
 export const IsVictory = G => {
@@ -72,16 +73,7 @@ export const startRound = (G, ctx) => {
 }
 
 export const endTurn = (G, ctx) => {
-  const currentPlayer = G.players[ctx.currentPlayer]
-
-  //check to see if player has any hand capacity bonus cards
-  const additionalHandAllowance = currentPlayer.empire.filter(
-    card => card.benefit === 'handCapacity'
-  ).length
-  if (
-    currentPlayer.hand.length <
-    G.normalHandSizeAllowance + additionalHandAllowance
-  ) {
+  if (!checkIfPlayerHandIsAtCapacity(G, ctx)) {
     return INVALID_MOVE
   }
 
@@ -303,6 +295,10 @@ export const pass = (G, ctx) => {
 }
 
 export const retainCard = (G, ctx, cardId) => {
+  if (checkIfPlayerHandIsAtCapacity(G, ctx)) {
+    return INVALID_MOVE
+  }
+
   if (G.retainingCardIds.includes(cardId)) {
     G.retainingCardIds = G.retainingCardIds.filter(id => id !== cardId)
   } else {
