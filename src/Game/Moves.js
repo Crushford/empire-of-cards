@@ -224,10 +224,8 @@ export const defendCity = (G, ctx, defendingCardIndexFromBot = '') => {
   const defenceBonus =
     G.players[G.target.defender].empire.filter(
       card =>
-        card.color === G.target.defender.color && card.benefit === 'cityDefence'
-    ).length || G.target.defender.benefit === 'cityDefence'
-      ? 1
-      : 0
+        card.color === G.target.card.color && card.benefit === 'cityDefence'
+    ).length || (G.target.card.benefit === 'cityDefence' ? 1 : 0)
 
   const attackValue = G.battle.attack.attack + attackBonus
   const defenceValue = G.battle.defend.defence + defenceBonus
@@ -248,7 +246,7 @@ export const defendCity = (G, ctx, defendingCardIndexFromBot = '') => {
   G.log.push(
     `${defenderColor} ${battleOutcome} defends ${targetedColor} ${targetedCardTitle} with ${defendingCardTitle} against ${attackingColor}'s ${attackingCardTitle}. 
     ${attackBonus > 0 ? 'An Attack bonus of 1 was applied.' : ''} 
-    ${defenceBonus > 0 ? 'An Defence bonus of 1 was applied.' : ''}`
+    ${defenceBonus > 0 ? 'A Defence bonus of 1 was applied.' : ''}`
   )
   discardBattleCards(G)
 
