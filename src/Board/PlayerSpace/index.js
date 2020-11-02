@@ -85,7 +85,8 @@ export const PlayerSpace = ({
   handleCityClick,
   player: { color, hand, empire, position },
   targetId,
-  numberOfPlayers
+  numberOfPlayers,
+  retainingCardIds
 }) => {
   return (
     <Container
@@ -100,6 +101,7 @@ export const PlayerSpace = ({
           faceUp={currentPlayer === position}
           selectCard={selectCard}
           selectedCard={selectedCard}
+          retainingCardIds={retainingCardIds}
         />
         <PlayerEmpire
           cards={empire}

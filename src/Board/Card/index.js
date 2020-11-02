@@ -39,7 +39,8 @@ export const Card = ({
   selectCard,
   selectedCard,
   handleCityClick,
-  targetId
+  targetId,
+  isOnRetainedList
 }) => {
   const handleClick = () => {
     faceUp && value?.id && handleCityClick && handleCityClick(value.id)
@@ -51,8 +52,8 @@ export const Card = ({
       faceUp={faceUp}
       overlapIndex={overlapIndex}
       onClick={handleClick}
-      selectCard={selectCard}
-      selectedCard={faceUp && selectedCard === value?.id}
+      isOnRetainedList={isOnRetainedList}
+      isSelected={faceUp && selectedCard === value?.id}
       targetedCard={targetId && targetId === value?.id}
     >
       {faceUp && (

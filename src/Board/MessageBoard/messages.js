@@ -6,7 +6,14 @@ export const getMessages = (G, ctx) => {
     }
 
     if (ctx.phase === 'newRound') {
-      let additionalHandAllowance = currentPlayer.empire.filter(
+      const retentionCapacity = G.players[ctx.currentPlayer].empire.filter(
+        cardInEmpire => cardInEmpire.benefit === 'retentionCapacity'
+      ).length
+      if (retentionCapacity > 1) {
+        return `you may retain ${retentionCapacity} cards, click cards in your hand to select,  click the deck when you are finished to draw cards`
+      }
+
+      const additionalHandAllowance = currentPlayer.empire.filter(
         card => card.benefit === 'handCapacity'
       ).length
 

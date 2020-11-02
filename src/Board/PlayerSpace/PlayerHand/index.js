@@ -28,7 +28,13 @@ const CardInHandWrapper = styled.div`
 `
 const Title = styled.h2``
 
-export const PlayerHand = ({ cards, faceUp, selectCard, selectedCard }) => {
+export const PlayerHand = ({
+  cards,
+  faceUp,
+  selectCard,
+  selectedCard,
+  retainingCardIds
+}) => {
   return (
     <CardsContainer>
       {faceUp && <Title>Your Hand</Title>}
@@ -42,6 +48,7 @@ export const PlayerHand = ({ cards, faceUp, selectCard, selectedCard }) => {
                   faceUp={faceUp}
                   selectCard={selectCard}
                   selectedCard={selectedCard}
+                  isOnRetainedList={retainingCardIds.includes(card.id)}
                 />
               </CardInHandWrapper>
             ))

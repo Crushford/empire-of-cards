@@ -19,7 +19,7 @@ import {
 export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
   const [newPlayer, setNewPlayer] = useState(false)
 
-  const currentPlayer = parseInt(ctx.currentPlayer)
+  const currentPlayerId = parseInt(ctx.currentPlayer)
 
   useEffect(() => {
     if (G.isPractice && ctx.currentPlayer > 0) {
@@ -27,11 +27,11 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
       setNewPlayer(false)
       moves[randomMove.move](...randomMove.args)
     }
-  }, [currentPlayer, G, ctx, moves])
+  }, [currentPlayerId, G, ctx, moves])
 
   useEffect(() => {
     !G.isPractice && setNewPlayer(true)
-  }, [currentPlayer, G.isPractice])
+  }, [currentPlayerId, G.isPractice])
 
   const isUnderAttack = G.battle?.attack?.title
 
@@ -42,7 +42,8 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
     isUnderAttack ? moves.doNotDefend() : moves.pass()
   }
   const handleCardClick = cardId => {
-    moves.selectCard(cardId)
+    ctx.phase === 'play' && moves.selectCard(cardId)
+    ctx.phase === 'newRound' && moves.retainCard(cardId)
   }
   const handleEmpireClick = () => {
     moves.moveToEmpire()
@@ -61,17 +62,26 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
   }
   const newGame = () => document.location.reload()
 
+  const additionalHandAllowance = G.players[currentPlayerId].empire.filter(
+    card => card.benefit === 'handCapacity'
+  ).length
+
+  const showEndTurn =
+    G.players[currentPlayerId].hand.length ===
+    G.normalHandSizeAllowance + additionalHandAllowance
+
   const players = G.players.map((player, index) => (
     <PlayerSpace
       key={index}
       player={player}
-      currentPlayer={isMultiplayer ? +playerID : currentPlayer}
+      currentPlayer={isMultiplayer ? +playerID : currentPlayerId}
       selectCard={handleCardClick}
       selectedCard={G.selectedCard}
       handleEmpireClick={handleEmpireClick}
       handleCityClick={handleCityClick}
       targetId={G.target.card?.id}
       numberOfPlayers={G.players.length}
+      retainingCardIds={G.retainingCardIds}
     />
   ))
 
@@ -80,7 +90,7 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
       {newPlayer && !isMultiplayer ? (
         <ScreenCover>
           <NextTurn>
-            {G.players[currentPlayer].color}
+            {G.players[currentPlayerId].color}
             's Turn
           </NextTurn>
           <AcceptTurn onClick={handleAcceptTurn}>Let's Go!</AcceptTurn>
@@ -103,7 +113,7 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
                 isMultiplayer={isMultiplayer}
               />
               {ctx.phase === 'newRound' ? (
-                <EndTurn onClick={handleEndTurn} />
+                showEndTurn && <EndTurn onClick={handleEndTurn} />
               ) : (
                 <Pass onClick={handlePassClick} isUnderAttack={isUnderAttack} />
               )}
