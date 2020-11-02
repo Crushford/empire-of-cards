@@ -11,7 +11,8 @@ import {
   startRound,
   selectCard,
   moveToEmpire,
-  endTurn
+  endTurn,
+  retainCard
 } from './Moves'
 
 export const empireOfCards = (deckType, name, isPractice) => ({
@@ -27,8 +28,7 @@ export const empireOfCards = (deckType, name, isPractice) => ({
           color: color,
           position: index,
           hand: [],
-          empire: [],
-          handSizeAllowance: 5
+          empire: []
         }
     ).filter(player => player),
     battle: { attack: {}, defend: {} },
@@ -39,7 +39,9 @@ export const empireOfCards = (deckType, name, isPractice) => ({
     completeSetsNeededToWin: 2,
     firstToAct: Array.from(Array(G.numPlayers).keys()),
     isPractice: isPractice,
-    log: ['Game Started']
+    log: ['Game Started'],
+    retainingCardIds: [],
+    normalHandSizeAllowance: 5
   }),
   turn: {
     stages: {
@@ -61,7 +63,7 @@ export const empireOfCards = (deckType, name, isPractice) => ({
 
   phases: {
     newRound: {
-      moves: { startRound, endTurn },
+      moves: { startRound, endTurn, retainCard },
       next: 'play',
       start: true,
       turn: { order: TurnOrder.CUSTOM_FROM('firstToAct') }
@@ -86,11 +88,6 @@ export const empireOfCards = (deckType, name, isPractice) => ({
       },
       next: 'newRound',
       onEnd: (G, ctx) => {
-        G.players.forEach(player => {
-          G.discardPile.push(...player.hand)
-          player.hand = []
-        })
-
         G.timesPassed = 0
         G.firstToAct.push(G.firstToAct.shift())
       }

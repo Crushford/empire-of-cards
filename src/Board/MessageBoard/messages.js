@@ -12,7 +12,7 @@ export const getMessages = (G, ctx) => {
 
       if (
         currentPlayer.hand.length ===
-        currentPlayer.handSizeAllowance + additionalHandAllowance
+        G.normalHandSizeAllowance + additionalHandAllowance
       ) {
         return 'End your turn when you are ready'
       } else return 'click the deck to draw cards'
@@ -49,7 +49,7 @@ export const getMessages = (G, ctx) => {
 
       if (
         currentPlayer.hand.length >
-        currentPlayer.handSizeAllowance + additionalHandAllowance
+        G.normalHandSizeAllowance + additionalHandAllowance
       ) {
         return 'If neither player is dealt any city cards to begin with, each player is dealt a card until a city card is dealt'
       }

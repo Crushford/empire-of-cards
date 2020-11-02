@@ -41,13 +41,27 @@ export const IsVictory = G => {
 export const startRound = (G, ctx) => {
   const currentPlayer = G.players[ctx.currentPlayer]
 
-  let additionalHandAllowance = currentPlayer.empire.filter(
+  // discard all cards not on retention list
+  const discardCards = G.players[ctx.currentPlayer].hand.filter(
+    card => !G.retainingCardIds.includes(card.id)
+  )
+  discardCards.forEach(discardingCard => {
+    G.discardPile.push(discardingCard)
+    G.players[ctx.currentPlayer].hand = G.players[
+      ctx.currentPlayer
+    ].hand.filter(cardInHand => cardInHand.id !== discardingCard.id)
+  })
+
+  // reset retaining cards
+  G.retainingCardIds = []
+
+  const additionalHandAllowance = currentPlayer.empire.filter(
     card => card.benefit === 'handCapacity'
   ).length
 
   while (
     currentPlayer.hand.length <
-    currentPlayer.handSizeAllowance + additionalHandAllowance
+    G.normalHandSizeAllowance + additionalHandAllowance
   ) {
     currentPlayer.hand.push(G.deck.pop())
     if (G.deck[0] === undefined) {
@@ -61,12 +75,12 @@ export const endTurn = (G, ctx) => {
   const currentPlayer = G.players[ctx.currentPlayer]
 
   //check to see if player has any hand capacity bonus cards
-  let additionalHandAllowance = currentPlayer.empire.filter(
+  const additionalHandAllowance = currentPlayer.empire.filter(
     card => card.benefit === 'handCapacity'
   ).length
   if (
     currentPlayer.hand.length <
-    currentPlayer.handSizeAllowance + additionalHandAllowance
+    G.normalHandSizeAllowance + additionalHandAllowance
   ) {
     return INVALID_MOVE
   }
@@ -286,4 +300,19 @@ export const pass = (G, ctx) => {
   }
   ctx.events.endStage()
   ctx.events.endTurn()
+}
+
+export const retainCard = (G, ctx, cardId) => {
+  if (G.retainingCardIds.includes(cardId)) {
+    G.retainingCardIds = G.retainingCardIds.filter(id => id !== cardId)
+  } else {
+    const retentionCapacity = G.players[ctx.currentPlayer].empire.filter(
+      cardInEmpire => cardInEmpire.benefit === 'retentionCapacity'
+    ).length
+    const numberOfRetainedCards = G.retainingCardIds.length
+
+    if (retentionCapacity > numberOfRetainedCards) {
+      G.retainingCardIds.push(cardId)
+    }
+  }
 }
