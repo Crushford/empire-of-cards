@@ -19,34 +19,45 @@ export const HowToPlay = () => {
       <HowToPlayTitle>How to Play!</HowToPlayTitle>
       <p>
         The aim of the game is to collect 2 full sets of city cards in your
-        empire. There are 5 sets available
+        empire. There are 4 sets available
       </p>
       <p>
-        You can get city cards in 2 ways:
+        You can collect city cards in 2 ways:
         <ol>
           <li>
-            Pick up city card from the deck and on your turn, place them in your
-            empire
+            Move a city from your hand to your empire by clicking on the ciy,
+            then clicking in the space on the right of your city.
           </li>
           <li>
             Attack another player's empire with your battle cards. Battle cards
-            have attack and defence written on them
+            have attack and defence values written on them. To attack, click
+            your battle card to select it, then click the city you wish to
+            attack
           </li>
         </ol>
       </p>
       <p>
-        When you attack another player, you place your card face down in the
-        attack square. The player you attacked can then defend using one of
-        their battle cards, if the attacking card's value is higher than the
-        defending card's value, the city will then move into your empire
+        When attacking, the attacking card is placed face down in the attack
+        square. The attacked player can then defend using one of their battle
+        cards, if the attacking card's attack value is higher than the defending
+        card's defence value, the city will be moved into the attacking player's
+        hand.
+        <br />
+        To defend, click on the army card you wish to defend with to select it,
+        then click on the defence square
       </p>
       <p>
-        At the start of a new round, you must discard all of the cards left in
-        your hand and pick up 5 new card. The round ends by either:
+        At the start of a new round, you must discard the cards left in your
+        hand and pick up new cards. The round ends by either:
         <ul>
           <li>No players have any cards left in their hand</li>
           <li>Every player passes</li>
         </ul>
+      </p>
+      <p>
+        Each city has a special advantage given to the player who has the city
+        in their empire. A description of the advantages is printed on each city
+        card
       </p>
       <p>
         If you run out of battle cards and you are attacked, you have no other

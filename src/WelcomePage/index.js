@@ -55,7 +55,8 @@ const LocalGame = ({ gameComplexity, numberOfPlayers, isPractice }) => {
 
 export const WelcomePage = () => {
   const [gameType, setGameType] = useState(null)
-  const [gameComplexity, setGameComplexity] = useState(null)
+  // simple game disabled by setting normal game as default
+  const [gameComplexity, setGameComplexity] = useState('normal')
   const [numberOfPlayers, setNumberOfPlayers] = useState(null)
   const [isPractice, setIsPractice] = useState(null)
 
@@ -72,14 +73,12 @@ export const WelcomePage = () => {
         <>
           <HowToPlay />
           <h1>Ready to Play?</h1>
+          <button onClick={() => setIsPractice(true)}>Single Player</button>
           <div>
-            <p>Local or Online Multiplayer?</p>
+            <p>Multiplayer</p>
             <button onClick={() => setGameType('local')}>local</button>
             <button onClick={() => setGameType('online')}>online</button>
           </div>
-          <button onClick={() => setIsPractice(true)}>
-            No, let me practice
-          </button>
         </>
       )}
       {isPractice && !gameComplexity && (
