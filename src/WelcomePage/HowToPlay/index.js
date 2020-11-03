@@ -5,8 +5,9 @@ export const HowToPlayContainer = styled.div`
   width: 80%;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   margin: auto;
+  text-align: center;
 `
 
 export const HowToPlayTitle = styled.h1`

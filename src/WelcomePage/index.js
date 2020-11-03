@@ -9,7 +9,7 @@ import {
   PracticeSimpleDeck,
   PracticeNormalDeck
 } from '../Game/GameTypes'
-import { WelcomeContainer } from './style'
+import { WelcomeContainer, GameOption } from './style'
 import { HowToPlay } from './HowToPlay'
 
 const LocalGame = ({ gameComplexity, numberOfPlayers, isPractice }) => {
@@ -73,11 +73,15 @@ export const WelcomePage = () => {
         <>
           <HowToPlay />
           <h1>Ready to Play?</h1>
-          <button onClick={() => setIsPractice(true)}>Single Player</button>
           <div>
-            <p>Multiplayer</p>
-            <button onClick={() => setGameType('local')}>local</button>
-            <button onClick={() => setGameType('online')}>online</button>
+            <GameOption onClick={() => setIsPractice(true)}>
+              Single Player
+            </GameOption>
+            {/* <p>Multiplayer</p> */}
+            <GameOption onClick={() => setGameType('local')}>
+              Local Multiplayer
+            </GameOption>
+            {/* <GameOption onClick={() => setGameType('online')}>online</GameOption> */}
           </div>
         </>
       )}
@@ -85,16 +89,24 @@ export const WelcomePage = () => {
         <>
           <div>
             <p>Select Game Complexity</p>
-            <button onClick={() => setGameComplexity('simple')}>simple</button>
-            <button onClick={() => setGameComplexity('normal')}>normal</button>
+            <GameOption onClick={() => setGameComplexity('simple')}>
+              simple
+            </GameOption>
+            <GameOption onClick={() => setGameComplexity('normal')}>
+              normal
+            </GameOption>
           </div>
         </>
       )}
       {gameType === 'local' && !gameComplexity && (
         <div>
           <p>Select Game Complexity</p>
-          <button onClick={() => setGameComplexity('simple')}>simple</button>
-          <button onClick={() => setGameComplexity('normal')}>normal</button>
+          <GameOption onClick={() => setGameComplexity('simple')}>
+            simple
+          </GameOption>
+          <GameOption onClick={() => setGameComplexity('normal')}>
+            normal
+          </GameOption>
         </div>
       )}
       {(gameType === 'local' || isPractice) &&
