@@ -101,12 +101,12 @@ export const WelcomePage = () => {
         gameComplexity &&
         !numberOfPlayers && (
           <div>
-            <p>How many players?</p>
+            <p>How many {isPractice ? 'opponents' : 'players'}?</p>
             <select onChange={setNumPlayers}>
               <option selected disabled></option>
-              <option value={2}>2</option>
-              <option value={3}>3</option>
-              <option value={4}>4</option>
+              <option value={2}>{isPractice ? 1 : 2}</option>
+              <option value={3}>{isPractice ? 2 : 3}</option>
+              <option value={4}>{isPractice ? 3 : 4}</option>
             </select>
           </div>
         )}
