@@ -106,8 +106,7 @@ const normalDeck = {
       title: 'Catapult',
       attack: 9,
       defence: 1,
-      imageUrl:
-        'https://cdn.britannica.com/34/83934-050-4787BA22/Roman-torsion-arm-stone-bundle-cords-force.jpg'
+      imageUrl: 'https://freesvg.org/img/liftarn-Catapult.png'
     },
     {
       title: 'Archer',
