@@ -8,7 +8,7 @@ import { Deck } from './Deck'
 import { Pass } from './Pass'
 import { EndTurn } from './EndTurn'
 import { randomAiMove, checkIfPlayerHandIsAtCapacity } from '../utils'
-import { GTAG_MANAGER_ID } from './constants'
+import { GTAG_MANAGER_ID } from '../constants'
 import {
   BoardContainer,
   ActionSpace,
