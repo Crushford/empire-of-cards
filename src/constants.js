@@ -10,19 +10,7 @@ export const CITY_COLORS = [
 
 export const PLAYER_COLORS = ['blue', 'red', 'brown', 'green']
 
-// const standardDeckOfCards = ['A', 2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K']
-
-// const simpleDeck = {
-//   cities: standardDeckOfCards
-//     .map((value, index) => index < 4 && { title: value })
-//     .filter(card => !!card.title),
-//   armies: standardDeckOfCards
-//     .map(
-//       (value, index) =>
-//         index > 4 && { title: value, attack: index + 1, defence: index + 1 }
-//     )
-//     .filter(card => !!card.title)
-// }
+export const GTAG_MANAGER_ID = 'GTM-NWG52D6'
 
 const simpleDeck = {
   armies: [

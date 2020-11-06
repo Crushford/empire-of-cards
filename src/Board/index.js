@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
+import TagManager from 'react-gtm-module'
+
 import { PlayerSpace } from './PlayerSpace'
 import { BattleBoard } from './BattleBoard'
 import { MessageBoard } from './MessageBoard'
 import { Deck } from './Deck'
 import { Pass } from './Pass'
 import { EndTurn } from './EndTurn'
-
 import { randomAiMove, checkIfPlayerHandIsAtCapacity } from '../utils'
-
+import { GTAG_MANAGER_ID } from './constants'
 import {
   BoardContainer,
   ActionSpace,
@@ -20,6 +21,18 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
   const [newPlayer, setNewPlayer] = useState(false)
 
   const currentPlayerId = parseInt(ctx.currentPlayer)
+
+  useEffect(() => {
+    if (ctx.turn === 0 || ctx.gameover) {
+      const tagManagerArgs = {
+        gtmId: GTAG_MANAGER_ID,
+        events: {
+          ...ctx
+        }
+      }
+      TagManager.initialize(tagManagerArgs)
+    }
+  }, [ctx])
 
   useEffect(() => {
     if (G.isPractice && ctx.currentPlayer > 0) {
