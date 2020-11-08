@@ -175,7 +175,7 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
                 isActive={isActive}
                 isMultiplayer={isMultiplayer}
               />
-              {!G.battle.waitingOnBattleResult && (
+              {!G.battle.waitingOnBattleResult && isViewersTurn && (
                 <>
                   {ctx.phase === 'newRound' ? (
                     showEndTurn && <EndTurn onClick={handleEndTurn} />
