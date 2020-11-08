@@ -81,7 +81,9 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
     <PlayerSpace
       key={index}
       player={player}
-      currentPlayer={isMultiplayer ? +playerID : currentPlayerId}
+      currentPlayer={
+        G.isPractice ? 0 : isMultiplayer ? +playerID : currentPlayerId
+      }
       selectCard={handleCardClick}
       selectedCard={G.selectedCard}
       handleEmpireClick={handleEmpireClick}
