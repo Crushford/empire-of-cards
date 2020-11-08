@@ -21,6 +21,15 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
   const [newPlayer, setNewPlayer] = useState(false)
 
   const currentPlayerId = parseInt(ctx.currentPlayer)
+  const viewingPlayer = G.isPractice
+    ? 0
+    : isMultiplayer
+    ? +playerID
+    : currentPlayerId
+
+  const isViewersTurn = parseInt(viewingPlayer) === currentPlayerId
+
+  console.log(currentPlayerId, viewingPlayer, isViewersTurn)
 
   useEffect(() => {
     if (ctx.turn === 0 || ctx.gameover) {
@@ -63,35 +72,41 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
   const isUnderAttack = G.battle?.attack?.title
 
   const handleDeckClick = () => {
-    moves.startRound()
+    isViewersTurn && moves.startRound()
   }
   const handlePassClick = () => {
-    if (isUnderAttack) {
-      moves.doNotDefend()
-      setTimeout(() => moves.battleOutcome(), 3000)
-    } else {
-      moves.pass()
+    if (isViewersTurn) {
+      if (isUnderAttack) {
+        moves.doNotDefend()
+        setTimeout(() => moves.battleOutcome(), 3000)
+      } else {
+        moves.pass()
+      }
     }
   }
   const handleCardClick = cardId => {
-    ctx.phase === 'play' && moves.selectCard(cardId)
-    ctx.phase === 'newRound' && moves.retainCard(cardId)
+    if (isViewersTurn) {
+      ctx.phase === 'play' && moves.selectCard(cardId)
+      ctx.phase === 'newRound' && moves.retainCard(cardId)
+    }
   }
   const handleEmpireClick = () => {
-    moves.moveToEmpire()
+    isViewersTurn && moves.moveToEmpire()
   }
   const handleCityClick = cityId => {
-    moves.attackCity(cityId)
+    isViewersTurn && moves.attackCity(cityId)
   }
   const handleDefenceClick = () => {
-    moves.defendCity()
-    setTimeout(() => moves.battleOutcome(), 3000)
+    if (isViewersTurn) {
+      moves.defendCity()
+      setTimeout(() => moves.battleOutcome(), 3000)
+    }
   }
   const handleAcceptTurn = () => {
-    setNewPlayer(false)
+    isViewersTurn && setNewPlayer(false)
   }
   const handleEndTurn = () => {
-    moves.endTurn()
+    isViewersTurn && moves.endTurn()
   }
   const newGame = () => document.location.reload()
 
@@ -101,9 +116,7 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
     <PlayerSpace
       key={index}
       player={player}
-      currentPlayer={
-        G.isPractice ? 0 : isMultiplayer ? +playerID : currentPlayerId
-      }
+      currentPlayer={viewingPlayer}
       selectCard={handleCardClick}
       selectedCard={G.selectedCard}
       handleEmpireClick={handleEmpireClick}
