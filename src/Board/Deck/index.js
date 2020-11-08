@@ -3,7 +3,12 @@ import styled from 'styled-components'
 import { Card } from '../Card'
 import { CardEdge } from '../Card/style'
 
-const Label = styled.h2``
+const Title = styled.h2`
+  margin: 2px;
+`
+const Information = styled.p`
+  margin: 2px;
+`
 const Container = styled.div`
   height: 220px;
   width: 120px;
@@ -18,10 +23,11 @@ const Cards = styled.div`
   display: flex;
   flex-direction: row;
 `
-export const Deck = ({ onClick }) => {
+export const Deck = ({ onClick, cardsInDeck }) => {
   return (
     <Container onClick={onClick}>
-      <Label>Deck</Label>
+      <Title>Deck </Title>
+      <Information>(cards left in deck = {cardsInDeck})</Information>
       <Cards>
         <CardEdge />
         <CardEdge />
