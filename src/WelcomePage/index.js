@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Client, Lobby } from 'boardgame.io/react'
-import { Debug } from 'boardgame.io/debug'
+// import { Debug } from 'boardgame.io/debug'
 
 import { Board } from '../Board'
 import {
@@ -9,14 +9,14 @@ import {
   PracticeSimpleDeck,
   PracticeNormalDeck
 } from '../Game/GameTypes'
-import { WelcomeContainer, GameOption } from './style'
+import { WelcomeContainer, GameOption, GameOptions } from './style'
 import { HowToPlay } from './HowToPlay'
 
 const LocalGame = ({ gameComplexity, numberOfPlayers, isPractice }) => {
   const standardOptions = {
     board: Board,
-    numPlayers: numberOfPlayers,
-    debug: { impl: Debug }
+    numPlayers: numberOfPlayers
+    // debug: { impl: Debug }
   }
   const SimpleDeckClient = Client({
     game: SimpleDeck,
@@ -59,6 +59,7 @@ export const WelcomePage = () => {
   const [gameComplexity, setGameComplexity] = useState('normal')
   const [numberOfPlayers, setNumberOfPlayers] = useState(null)
   const [isPractice, setIsPractice] = useState(null)
+  const [showHowToPlay, setShowHowToPlay] = useState(false)
 
   const { protocol, hostname, port } = window.location
   const server = `${protocol}//${hostname}:${port}`
@@ -71,18 +72,22 @@ export const WelcomePage = () => {
     <WelcomeContainer>
       {!(gameType || isPractice) && (
         <>
-          <HowToPlay />
-          <h1>Ready to Play?</h1>
-          <div>
+          <h1>Empire Of Cards</h1>
+          <GameOptions>
             <GameOption onClick={() => setIsPractice(true)}>
               Single Player
             </GameOption>
-            {/* <p>Multiplayer</p> */}
             <GameOption onClick={() => setGameType('local')}>
-              Local Multiplayer
+              Pass and Play Multiplayer
             </GameOption>
-            {/* <GameOption onClick={() => setGameType('online')}>online</GameOption> */}
-          </div>
+            <GameOption onClick={() => setGameType('online')}>
+              Online Multiplayer
+            </GameOption>
+            <GameOption onClick={() => setShowHowToPlay(!showHowToPlay)}>
+              How To Play
+            </GameOption>
+          </GameOptions>
+          {showHowToPlay && <HowToPlay />}
         </>
       )}
       {isPractice && !gameComplexity && (
@@ -139,10 +144,7 @@ export const WelcomePage = () => {
         <Lobby
           gameServer={server}
           lobbyServer={server}
-          gameComponents={[
-            { game: SimpleDeck, board: Board },
-            { game: NormalDeck, board: Board }
-          ]}
+          gameComponents={[{ game: NormalDeck, board: Board }]}
           debug={true}
         />
       )}
