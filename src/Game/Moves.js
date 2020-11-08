@@ -40,6 +40,9 @@ export const IsVictory = G => {
 }
 
 export const startRound = (G, ctx) => {
+  if (G.playerHasDrawn) {
+    return INVALID_MOVE
+  }
   const currentPlayer = G.players[ctx.currentPlayer]
 
   // discard all cards not on retention list
@@ -70,10 +73,11 @@ export const startRound = (G, ctx) => {
       G.discardPile = []
     }
   }
+  G.playerHasDrawn = true
 }
 
 export const endTurn = (G, ctx) => {
-  if (!checkIfPlayerHandIsAtCapacity(G, ctx)) {
+  if (!checkIfPlayerHandIsAtCapacity(G, ctx) || !G.playerHasDrawn) {
     return INVALID_MOVE
   }
 
@@ -96,6 +100,7 @@ export const endTurn = (G, ctx) => {
     }
     ctx.events.endPhase()
   } else ctx.events.endTurn()
+  G.playerHasDrawn = false
 }
 
 export const selectCard = (G, ctx, cardId) => {
@@ -252,7 +257,6 @@ export const battleOutcome = (G, ctx) => {
     moveCityAfterBattle(G)
   }
 
-  console.log(G.target.defender)
   const defenderColor = G.players[G.target.defender].color
   const battleOutcome =
     attackValue > defenceValue ? 'unsuccessfully' : 'successfully'

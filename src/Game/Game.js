@@ -42,7 +42,8 @@ export const empireOfCards = (deckType, name, isPractice) => ({
     isPractice: isPractice,
     log: ['Game Started'],
     retainingCardIds: [],
-    normalHandSizeAllowance: 5
+    normalHandSizeAllowance: 5,
+    playerHasDrawn: false
   }),
   turn: {
     stages: {
