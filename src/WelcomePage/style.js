@@ -14,3 +14,7 @@ export const GameOption = styled.button`
   margin: 30px;
   font-size: 20px;
 `
+export const GameOptions = styled.div`
+  display: flex;
+  flex-direction: column;
+`
