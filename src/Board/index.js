@@ -39,6 +39,9 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
       const randomMove = randomAiMove(G, ctx)
       setNewPlayer(false)
       moves[randomMove.move](...randomMove.args)
+      if (randomMove.move === 'defendCity') {
+        setTimeout(() => moves.battleOutcome(), 5000)
+      }
     }
   }, [currentPlayerId, G, ctx, moves])
 
@@ -66,6 +69,7 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
   }
   const handleDefenceClick = () => {
     moves.defendCity()
+    setTimeout(() => moves.battleOutcome(), 5000)
   }
   const handleAcceptTurn = () => {
     setNewPlayer(false)

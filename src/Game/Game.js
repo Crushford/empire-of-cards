@@ -12,7 +12,8 @@ import {
   selectCard,
   moveToEmpire,
   endTurn,
-  retainCard
+  retainCard,
+  battleOutcome
 } from './Moves'
 
 export const empireOfCards = (deckType, name, isPractice) => ({
@@ -52,6 +53,7 @@ export const empireOfCards = (deckType, name, isPractice) => ({
           doNotDefend,
           attackCity,
           defendCity,
+          battleOutcome,
           moveToEmpire
         },
         onEnd: (G, ctx) => {
@@ -75,6 +77,7 @@ export const empireOfCards = (deckType, name, isPractice) => ({
         doNotDefend,
         attackCity,
         defendCity,
+        battleOutcome,
         moveToEmpire
       },
       endIf: (G, ctx) => {

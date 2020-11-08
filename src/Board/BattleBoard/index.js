@@ -31,11 +31,11 @@ export const BattleBoard = ({
     <Container>
       <CardWithLabel>
         <Label>Attack</Label>
-        {attack.id && <Card value={attack} faceUp={false} />}
+        {attack.id && <Card value={attack} faceUp={Boolean(defend.id)} />}
       </CardWithLabel>
       <CardWithLabel onClick={handleDefenceClick}>
         <Label>Defend</Label>
-        {defend.id && <Card value={defend} />}
+        {defend.id && <Card value={defend} faceUp={true} />}
       </CardWithLabel>
     </Container>
   )

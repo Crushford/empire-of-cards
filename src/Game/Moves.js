@@ -223,18 +223,24 @@ export const defendCity = (G, ctx, defendingCardIndexFromBot = '') => {
   currentPlayer.hand = newHand
   G.battle.defend = defendingCard
 
-  const attackBonus = G.players[G.target.attacker].empire.filter(
+  G.battle.attackBonus = G.players[G.target.attacker].empire.filter(
     card =>
       card.specialization && card.specialization.includes(G.battle.attack.title)
   ).length
-  const defenceBonus =
+  G.battle.defenceBonus =
     G.players[G.target.defender].empire.filter(
       card =>
         card.color === G.target.card.color && card.benefit === 'cityDefence'
     ).length || (G.target.card.benefit === 'cityDefence' ? 1 : 0)
+}
 
-  const attackValue = G.battle.attack.attack + attackBonus
-  const defenceValue = G.battle.defend.defence + defenceBonus
+export const battleOutcome = (G, ctx) => {
+  if (!G.battle.defend) {
+    return INVALID_MOVE
+  }
+
+  const attackValue = G.battle.attack.attack + G.battle.attackBonus
+  const defenceValue = G.battle.defend.defence + G.battle.defenceBonus
 
   if (attackValue > defenceValue) {
     moveCityAfterBattle(G)
@@ -251,8 +257,8 @@ export const defendCity = (G, ctx, defendingCardIndexFromBot = '') => {
 
   G.log.push(
     `${defenderColor} ${battleOutcome} defends ${targetedColor} ${targetedCardTitle} with ${defendingCardTitle} against ${attackingColor}'s ${attackingCardTitle}. 
-    ${attackBonus > 0 ? 'An Attack bonus of 1 was applied.' : ''} 
-    ${defenceBonus > 0 ? 'A Defence bonus of 1 was applied.' : ''}`
+    ${G.battle.attackBonus > 0 ? 'An Attack bonus of 1 was applied.' : ''} 
+    ${G.battle.defenceBonus > 0 ? 'A Defence bonus of 1 was applied.' : ''}`
   )
   discardBattleCards(G)
 
