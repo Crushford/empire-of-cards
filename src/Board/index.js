@@ -155,7 +155,7 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
             </ActionSpace>
           ) : (
             <ActionSpace>
-              <Deck onClick={handleDeckClick} />
+              <Deck onClick={handleDeckClick} cardsInDeck={G.deck.length} />
               <MessageBoard
                 G={G}
                 ctx={ctx}
