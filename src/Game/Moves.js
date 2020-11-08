@@ -232,58 +232,57 @@ export const defendCity = (G, ctx, defendingCardIndexFromBot = '') => {
       card =>
         card.color === G.target.card.color && card.benefit === 'cityDefence'
     ).length || (G.target.card.benefit === 'cityDefence' ? 1 : 0)
+  G.battle.waitingOnBattleResult = true
+}
+
+export const doNotDefend = (G, ctx) => {
+  G.battle.waitingOnBattleResult = true
 }
 
 export const battleOutcome = (G, ctx) => {
-  if (!G.battle.defend) {
+  if (!G.battle.waitingOnBattleResult) {
     return INVALID_MOVE
   }
-
   const attackValue = G.battle.attack.attack + G.battle.attackBonus
-  const defenceValue = G.battle.defend.defence + G.battle.defenceBonus
+  const defenceValue = G.battle.defend
+    ? G.battle.defend.defence + G.battle.defenceBonus
+    : 0
 
   if (attackValue > defenceValue) {
     moveCityAfterBattle(G)
   }
 
+  console.log(G.target.defender)
   const defenderColor = G.players[G.target.defender].color
   const battleOutcome =
     attackValue > defenceValue ? 'unsuccessfully' : 'successfully'
   const targetedColor = G.target.card.color
   const targetedCardTitle = G.target.card.title
-  const defendingCardTitle = G.battle.defend.title
   const attackingColor = G.players[G.target.attacker].color
   const attackingCardTitle = G.battle.attack.title
 
-  G.log.push(
-    `${defenderColor} ${battleOutcome} defends ${targetedColor} ${targetedCardTitle} with ${defendingCardTitle} against ${attackingColor}'s ${attackingCardTitle}. 
+  if (G.battle.defend) {
+    const defendingCardTitle = G.battle.defend.title
+    G.log.push(
+      `${defenderColor} ${battleOutcome} defends ${targetedColor} ${targetedCardTitle} with ${defendingCardTitle} against ${attackingColor}'s ${attackingCardTitle}. 
     ${G.battle.attackBonus > 0 ? 'An Attack bonus of 1 was applied.' : ''} 
     ${G.battle.defenceBonus > 0 ? 'A Defence bonus of 1 was applied.' : ''}`
-  )
-  discardBattleCards(G)
-
-  const playerAfterAttacker = (G.target.attacker + 1) % ctx.playOrder.length
-
-  ctx.events.endTurn({ next: playerAfterAttacker })
-  G.target = {}
-}
-
-export const doNotDefend = (G, ctx) => {
-  G.battle.defend = false
-
-  G.log.push(`${G.players[G.target.defender].color} does not defend ${
-    G.target.card.color
-  } ${G.target.card.title} 
-   against ${G.players[G.target.attacker].color}'s ${G.battle.attack.title}`)
+    )
+  } else {
+    G.log
+      .push(`${defenderColor} does not defend ${targetedColor} ${targetedCardTitle} 
+   against ${attackingColor}'s ${attackingCardTitle}`)
+  }
 
   discardBattleCards(G)
-  moveCityAfterBattle(G)
-
   G.selectedCard = ''
+  G.battle.defenceBonus = 0
+  G.battle.attackBonus = 0
 
   const playerAfterAttacker = (G.target.attacker + 1) % ctx.playOrder.length
 
-  ctx.events.endTurn({ next: `${playerAfterAttacker}` })
+  G.battle.waitingOnBattleResult = false
+  ctx.events.endTurn({ next: playerAfterAttacker })
   G.target = {}
 }
 

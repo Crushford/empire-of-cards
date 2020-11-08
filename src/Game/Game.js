@@ -32,7 +32,7 @@ export const empireOfCards = (deckType, name, isPractice) => ({
           empire: []
         }
     ).filter(player => player),
-    battle: { attack: {}, defend: {} },
+    battle: { attack: {}, defend: {}, waitingOnBattleResult: false },
     target: {},
     timesPassed: 0,
     selectedCard: '',

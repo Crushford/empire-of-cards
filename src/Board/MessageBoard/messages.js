@@ -1,6 +1,8 @@
 import { checkIfPlayerHandIsAtCapacity } from '../../utils'
 
 export const getMessages = (G, ctx) => {
+  if (G.battle.waitingOnBattleResult) return ''
+
   const currentPlayer = G.players[ctx.currentPlayer]
   const getHint = () => {
     if (ctx.winner) {

@@ -2,7 +2,12 @@ import React from 'react'
 import styled from 'styled-components'
 import { Card } from '../Card'
 
-const Label = styled.h2``
+const SectionTitle = styled.h2``
+
+const BonusInformation = styled.h4`
+  color: 'red';
+`
+
 const Container = styled.div`
   height: 220px;
   width: 240px;
@@ -24,18 +29,32 @@ const CardWithLabel = styled.div`
 `
 
 export const BattleBoard = ({
-  cards: { attack, defend },
+  battleDetails: {
+    attack,
+    defend,
+    attackBonus,
+    defenceBonus,
+    waitingOnBattleResult
+  },
   handleDefenceClick
 }) => {
   return (
     <Container>
       <CardWithLabel>
-        <Label>Attack</Label>
-        {attack.id && <Card value={attack} faceUp={Boolean(defend.id)} />}
+        <SectionTitle>Attack</SectionTitle>
+        {attack.id && (
+          <Card value={attack} faceUp={Boolean(waitingOnBattleResult)} />
+        )}
+        {attackBonus > 0 && (
+          <BonusInformation>Bonus +1 Attack</BonusInformation>
+        )}
       </CardWithLabel>
       <CardWithLabel onClick={handleDefenceClick}>
-        <Label>Defend</Label>
+        <SectionTitle>Defend</SectionTitle>
         {defend.id && <Card value={defend} faceUp={true} />}
+        {defenceBonus > 0 && (
+          <BonusInformation>Bonus +1 Defence</BonusInformation>
+        )}
       </CardWithLabel>
     </Container>
   )

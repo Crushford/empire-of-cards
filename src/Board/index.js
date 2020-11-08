@@ -35,12 +35,23 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
   }, [ctx])
 
   useEffect(() => {
-    if (G.isPractice && ctx.currentPlayer > 0) {
+    if (
+      G.isPractice &&
+      ctx.currentPlayer > 0 &&
+      !G.battle.waitingOnBattleResult
+    ) {
       const randomMove = randomAiMove(G, ctx)
       setNewPlayer(false)
-      moves[randomMove.move](...randomMove.args)
-      if (randomMove.move === 'defendCity') {
-        setTimeout(() => moves.battleOutcome(), 5000)
+
+      // delay battle outcome to show attack  er and defender
+      if (randomMove.move === 'doNotDefend') {
+        moves.doNotDefend()
+        setTimeout(() => moves.battleOutcome(), 3000)
+      } else {
+        moves[randomMove.move](...randomMove.args)
+        if (randomMove.move === 'defendCity') {
+          setTimeout(() => moves.battleOutcome(), 3000)
+        }
       }
     }
   }, [currentPlayerId, G, ctx, moves])
@@ -55,7 +66,12 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
     moves.startRound()
   }
   const handlePassClick = () => {
-    isUnderAttack ? moves.doNotDefend() : moves.pass()
+    if (isUnderAttack) {
+      moves.doNotDefend()
+      setTimeout(() => moves.battleOutcome(), 3000)
+    } else {
+      moves.pass()
+    }
   }
   const handleCardClick = cardId => {
     ctx.phase === 'play' && moves.selectCard(cardId)
@@ -69,7 +85,7 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
   }
   const handleDefenceClick = () => {
     moves.defendCity()
-    setTimeout(() => moves.battleOutcome(), 5000)
+    setTimeout(() => moves.battleOutcome(), 3000)
   }
   const handleAcceptTurn = () => {
     setNewPlayer(false)
@@ -146,13 +162,20 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
                 isActive={isActive}
                 isMultiplayer={isMultiplayer}
               />
-              {ctx.phase === 'newRound' ? (
-                showEndTurn && <EndTurn onClick={handleEndTurn} />
-              ) : (
-                <Pass onClick={handlePassClick} isUnderAttack={isUnderAttack} />
+              {!G.battle.waitingOnBattleResult && (
+                <>
+                  {ctx.phase === 'newRound' ? (
+                    showEndTurn && <EndTurn onClick={handleEndTurn} />
+                  ) : (
+                    <Pass
+                      onClick={handlePassClick}
+                      isUnderAttack={isUnderAttack}
+                    />
+                  )}
+                </>
               )}
               <BattleBoard
-                cards={G.battle}
+                battleDetails={G.battle}
                 handleDefenceClick={handleDefenceClick}
               />
             </ActionSpace>
