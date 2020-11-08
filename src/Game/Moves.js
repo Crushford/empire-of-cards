@@ -177,7 +177,7 @@ export const attackCity = (
     attackedCityId
   )
 
-  if (targetedPlayerIndex === currentPlayerIndex) {
+  if (parseInt(targetedPlayerIndex) === parseInt(currentPlayerIndex)) {
     return INVALID_MOVE
   }
 
