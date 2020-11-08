@@ -90,6 +90,7 @@ export const empireOfCards = (deckType, name, isPractice) => ({
         return notInBattle && (noCardLeftInAnyHand || everyPlayerPasses)
       },
       next: 'newRound',
+      turn: { order: TurnOrder.CUSTOM_FROM('firstToAct') },
       onEnd: (G, ctx) => {
         G.timesPassed = 0
         G.firstToAct.push(G.firstToAct.shift())
