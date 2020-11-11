@@ -9,7 +9,7 @@ export const BoardContainer = styled.div`
   height: calc(100vw * 0.5625);
   width: 100vw;
   grid-template-columns: repeat(32, minmax(3.125%, 3.125%));
-  grid-template-rows: repeat(18, minmax(5.55%, 5.55%));
+  grid-template-rows: repeat(18, minmax(5.556%, 5.556%));
   grid-template-areas:
     '. . . . . . . . . . . . player2 player2 player2 player2 player2 player2 player2 player2 . . . . . . . . . . . .'
     '. playerInfo1 playerInfo1 playerInfo1 . . . . . . . . player2 player2 player2 player2 player2 player2 player2 player2 . playerInfo2 playerInfo2 playerInfo2 . . . . . . . .'
