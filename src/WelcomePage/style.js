@@ -21,3 +21,7 @@ export const GameOptions = styled.div`
   display: flex;
   flex-direction: column;
 `
+
+export const Title = styled.div`
+  color: 'white';
+`

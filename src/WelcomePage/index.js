@@ -9,7 +9,7 @@ import {
   PracticeSimpleDeck,
   PracticeNormalDeck
 } from '../Game/GameTypes'
-import { WelcomeContainer, GameOption, GameOptions } from './style'
+import { WelcomeContainer, GameOption, GameOptions, Title } from './style'
 import { HowToPlay } from './HowToPlay'
 
 const LocalGame = ({ gameComplexity, numberOfPlayers, isPractice }) => {
@@ -72,7 +72,7 @@ export const WelcomePage = () => {
     <WelcomeContainer>
       {!(gameType || isPractice) && (
         <>
-          <h1>Empire Of Cards</h1>
+          <Title>Empire Of Cards</Title>
           <GameOptions>
             <GameOption onClick={() => setIsPractice(true)}>
               Single Player
