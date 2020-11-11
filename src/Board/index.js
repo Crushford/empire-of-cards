@@ -4,18 +4,14 @@ import TagManager from 'react-gtm-module'
 import { PlayerSpace } from './PlayerSpace'
 import { BattleBoard } from './ActionSpace/BattleBoard'
 import { MessageBoard } from './MessageBoard'
+import { PlayerInfo } from './PlayerInfo'
+import { GameOver } from './GameOver'
 import { Deck } from './Deck'
 
 import { EndTurn } from './EndTurn'
 import { randomAiMove, checkIfPlayerHandIsAtCapacity } from '../utils'
 import { GTAG_MANAGER_ID } from '../constants'
-import {
-  BoardContainer,
-  GameOver,
-  NextTurn,
-  AcceptTurn,
-  ScreenCover
-} from './style'
+import { BoardContainer, NextTurn, AcceptTurn, ScreenCover } from './style'
 
 export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
   const [newPlayer, setNewPlayer] = useState(false)
@@ -115,9 +111,6 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
 
     setNewPlayer(false)
   }
-  const handleEndTurn = () => {}
-  const newGame = () => document.location.reload()
-
   const showEndTurn = checkIfPlayerHandIsAtCapacity(G, ctx)
 
   const players = G.players.map((player, index) => (
@@ -135,6 +128,17 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
     />
   ))
 
+  const playerInfoSections = G.players.map((player, index) => (
+    <PlayerInfo
+      key={index}
+      player={player}
+      playerName={'player' + index}
+      playerDetails={player}
+      currentPlayer={viewingPlayer}
+      numberOfPlayers={G.players.length}
+    />
+  ))
+
   return (
     <BoardContainer>
       {newPlayer && !isMultiplayer ? (
@@ -147,35 +151,9 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
         </ScreenCover>
       ) : (
         <>
-          {ctx.gameover && (
-            <GameOver>
-              <h1>
-                Game Over!
-                <br />
-                {G.players[ctx.gameover.winner].color} Wins! <br />
-                {parseInt(ctx.currentPlayer) === parseInt(ctx.gameover.winner)
-                  ? 'Congratulations!'
-                  : 'Better Luck Next Time'}
-              </h1>
-              <p>
-                Thanks for playing, Empire of Cards is still a work in progress,
-                would you mind sending some feedback on the game?
-                <br />
-                <a
-                  href={`https://docs.google.com/forms/d/e/1FAIpQLSfK6zgugtFf0Lw3YVHjIannTkrY3LOWi2A9TIBeSoiHnH4-Tw/viewform?usp=pp_url&entry.661267773=${
-                    ctx.numPlayers
-                  }&entry.885079316=${
-                    G.isMultiplayer ? 'Multiplayer' : 'Single+Player'
-                  }&entry.993122104=${ctx.turn}`}
-                >
-                  Here is the link to the form
-                </a>
-              </p>
-              <AcceptTurn onClick={newGame}>New Game</AcceptTurn>
-            </GameOver>
-          )}
+          {ctx.gameover && <GameOver G={G} ctx={ctx} />}
           {players}
-
+          {playerInfoSections}
           <Deck onClick={handleDeckClick} cardsInDeck={G.deck.length} />
           <MessageBoard
             G={G}

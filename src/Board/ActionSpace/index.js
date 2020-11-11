@@ -8,7 +8,6 @@ export const ActionSpaceContainer = styled.div`
   align-items: center;
   justify-content: space-around;
   flex-direction: row;
-  position: fixed;
   top: calc(50% - (60% / 2));
   height: 60%;
   z-index: 0;

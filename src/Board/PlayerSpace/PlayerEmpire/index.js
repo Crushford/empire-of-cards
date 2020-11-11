@@ -44,6 +44,7 @@ const Empire = styled.div`
   display: flex;
   flex-direction: column;
   min-width: 50%;
+  height: 50%;
 `
 
 export const PlayerEmpire = ({

@@ -7,8 +7,7 @@ const CardsContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  z-index: 1;
-  height: 150px;
+  height: 50%;
 `
 const AllCards = styled.div`
   display: flex;

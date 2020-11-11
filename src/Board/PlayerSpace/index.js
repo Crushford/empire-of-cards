@@ -12,30 +12,41 @@ const Banner = styled.div`
 `
 
 const Container = styled.div`
-  display: flex;
+  height: 100%;
   flex-direction: column;
   justify-content: flex-end;
-  grid-area: ${({ gridAreaName }) => gridAreaName};
   ${({ gridAreaName }) => {
     switch (gridAreaName) {
       case 'player1':
         return `transform: rotate(90deg);
-    transform-origin: 50% 62%;`
+    transform-origin: 50% 37%;
+    height: 79%;
+    width: 133%;`
       case 'player2':
         return `transform: rotate(180deg);`
       case 'player3':
         return `transform: rotate(270deg);
-    transform-origin: 50% 38%;`
+    transform-origin: 38% 52%;
+    height: 79%;
+    width: 133%;`
       default:
         return
     }
   }}
+`
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  grid-area: ${({ gridAreaName }) => gridAreaName};
 `
 
 const AllCards = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+  margin-bottom: -20px;
+  height: 100%;
 `
 
 export const PlayerSpace = ({
@@ -58,24 +69,26 @@ export const PlayerSpace = ({
   const gridAreaName = `player${relativePosition}`
 
   return (
-    <Container gridAreaName={gridAreaName}>
-      <AllCards>
-        <PlayerEmpire
-          cards={empire}
-          faceUp={true}
-          handleEmpireClick={handleEmpireClick}
-          handleCityClick={handleCityClick}
-          targetId={targetId}
-        />
-        <PlayerHand
-          cards={hand}
-          faceUp={currentPlayer === position}
-          selectCard={selectCard}
-          selectedCard={selectedCard}
-          retainingCardIds={retainingCardIds}
-        />
-      </AllCards>
-      <Banner color={color} />
-    </Container>
+    <Wrapper gridAreaName={gridAreaName}>
+      <Container gridAreaName={gridAreaName}>
+        <AllCards>
+          <PlayerEmpire
+            cards={empire}
+            faceUp={true}
+            handleEmpireClick={handleEmpireClick}
+            handleCityClick={handleCityClick}
+            targetId={targetId}
+          />
+          <PlayerHand
+            cards={hand}
+            faceUp={currentPlayer === position}
+            selectCard={selectCard}
+            selectedCard={selectedCard}
+            retainingCardIds={retainingCardIds}
+          />
+        </AllCards>
+        <Banner color={color} />
+      </Container>
+    </Wrapper>
   )
 }

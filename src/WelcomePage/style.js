@@ -6,6 +6,9 @@ export const WelcomeContainer = styled.div`
   align-items: center;
   margin: auto;
   text-align: center;
+  background: black;
+  height: 100vh;
+  width: 100vw;
 `
 export const GameOption = styled.button`
   background: navy;

@@ -12,34 +12,25 @@ export const BoardContainer = styled.div`
   grid-template-rows: repeat(18, minmax(5.55%, 5.55%));
   grid-template-areas:
     '. . . . . . . . . . . . player2 player2 player2 player2 player2 player2 player2 player2 . . . . . . . . . . . .'
-    '. . . . . . . . . . . . player2 player2 player2 player2 player2 player2 player2 player2 . . . . . . . . . . . .'
-    '. . . . . . . . . . . . player2 player2 player2 player2 player2 player2 player2 player2 . . . . . . . . . . . .'
-    '. . . . . . . . . . . . player2 player2 player2 player2 player2 player2 player2 player2 . . . . . . . . . . . .'
+    '. playerInfo1 playerInfo1 playerInfo1 . . . . . . . . player2 player2 player2 player2 player2 player2 player2 player2 . playerInfo2 playerInfo2 playerInfo2 . . . . . . . .'
+    '. playerInfo1 playerInfo1 playerInfo1 . . . . . . . . player2 player2 player2 player2 player2 player2 player2 player2 . playerInfo2 playerInfo2 playerInfo2 . . . . . . . .'
+    '. playerInfo1 playerInfo1 playerInfo1 . . . . . . . . player2 player2 player2 player2 player2 player2 player2 player2 . playerInfo2 playerInfo2 playerInfo2 . . . . . . . .'
     '. . . . . . . . . . . . player2 player2 player2 player2 player2 player2 player2 player2 . . . . . . . . . . . .'
     'player1 player1 player1 player1 player1 player1 . . . . . . player2 player2 player2 player2 player2 player2 player2 player2 . . . . . . player3 player3 player3 player3 player3 player3'
     'player1 player1 player1 player1 player1 player1 . . . . . . . . . . . . . . . . . . . . player3 player3 player3 player3 player3 player3'
     'player1 player1 player1 player1 player1 player1 . . . . . . . . battleSpace battleSpace battleSpace battleSpace . . endTurnButton endTurnButton endTurnButton . . . player3 player3 player3 player3 player3 player3'
     'player1 player1 player1 player1 player1 player1 . . . . . . . . battleSpace battleSpace battleSpace battleSpace . . endTurnButton endTurnButton endTurnButton . . . player3 player3 player3 player3 player3 player3'
-    'player1 player1 player1 player1 player1 player1 . deck deck deck . . . . battleSpace battleSpace battleSpace battleSpace . . endTurnButton endTurnButton endTurnButton . . . player3 player3 player3 player3 player3 player3'
-    'player1 player1 player1 player1 player1 player1 . deck deck deck . . . . battleSpace battleSpace battleSpace battleSpace . . endTurnButton endTurnButton endTurnButton . . . player3 player3 player3 player3 player3 player3'
-    'player1 player1 player1 player1 player1 player1 . deck deck deck . . . . . . . . . . . . . . . . player3 player3 player3 player3 player3 player3'
-    'player1 player1 player1 player1 player1 player1 . deck deck deck . . player0 player0 player0 player0 player0 player0 player0 player0 . . . . . . player3 player3 player3 player3 player3 player3'
+    'player1 player1 player1 player1 player1 player1 . deck deck deck deck . . . battleSpace battleSpace battleSpace battleSpace . . endTurnButton endTurnButton endTurnButton . . . player3 player3 player3 player3 player3 player3'
+    'player1 player1 player1 player1 player1 player1 . deck deck deck deck . . . battleSpace battleSpace battleSpace battleSpace . . endTurnButton endTurnButton endTurnButton . . . player3 player3 player3 player3 player3 player3'
+    'player1 player1 player1 player1 player1 player1 . deck deck deck deck . . . . . . . . . . . . . . . player3 player3 player3 player3 player3 player3'
+    'player1 player1 player1 player1 player1 player1 . deck deck deck deck . player0 player0 player0 player0 player0 player0 player0 player0 . . . . . . player3 player3 player3 player3 player3 player3'
     '. . . . . . . . . . . . player0 player0 player0 player0 player0 player0 player0 player0 . . . . . . . . . . . .'
-    '. . . . . messageBoard messageBoard messageBoard messageBoard messageBoard messageBoard . player0 player0 player0 player0 player0 player0 player0 player0 . . . . . . . . . . . .'
-    '. . . . . messageBoard messageBoard messageBoard messageBoard messageBoard messageBoard . player0 player0 player0 player0 player0 player0 player0 player0 . . . . . . . . . . . .'
-    '. . . . . messageBoard messageBoard messageBoard messageBoard messageBoard messageBoard . player0 player0 player0 player0 player0 player0 player0 player0 . . . . . . . . . . . .'
+    '. playerInfo0 playerInfo0 playerInfo0 . messageBoard messageBoard messageBoard messageBoard messageBoard messageBoard . player0 player0 player0 player0 player0 player0 player0 player0 . . . . . . . playerInfo3 playerInfo3 playerInfo3 . .'
+    '. playerInfo0 playerInfo0 playerInfo0 . messageBoard messageBoard messageBoard messageBoard messageBoard messageBoard . player0 player0 player0 player0 player0 player0 player0 player0 . . . . . . . playerInfo3 playerInfo3 playerInfo3 . .'
+    '. playerInfo0 playerInfo0 playerInfo0 . messageBoard messageBoard messageBoard messageBoard messageBoard messageBoard . player0 player0 player0 player0 player0 player0 player0 player0 . . . . . . . playerInfo3 playerInfo3 playerInfo3 . .'
     '. . . . . messageBoard messageBoard messageBoard messageBoard messageBoard messageBoard . player0 player0 player0 player0 player0 player0 player0 player0 . . . . . . . . . . . .';
 `
 
-export const GameOver = styled.div`
-  height: 30%;
-  width: 30%;
-  background-color: 'black';
-  position: fixed;
-  top: calc(100% - (30% / 2));
-  left: calc(100% - (30% / 2));
-  z-index: 2;
-`
 export const NextTurn = styled.h1``
 export const AcceptTurn = styled.button`
   padding: 15px;
