@@ -29,8 +29,6 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
 
   const isViewersTurn = parseInt(viewingPlayer) === currentPlayerId
 
-  console.log(currentPlayerId, viewingPlayer, isViewersTurn)
-
   useEffect(() => {
     if (ctx.turn === 0 || ctx.gameover) {
       const tagManagerArgs = {

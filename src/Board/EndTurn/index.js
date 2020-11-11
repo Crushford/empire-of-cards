@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const EndTurnButton = styled.div`
+const EndTurnButton = styled.button`
   padding: 40px;
   border: solid 3px black;
   background: lightblue;

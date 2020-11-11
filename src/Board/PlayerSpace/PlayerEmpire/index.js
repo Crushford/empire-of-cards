@@ -8,9 +8,17 @@ const CitiesContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-end;
-  height: 230px;
+  height: 160px;
+  border: solid black 1px;
+  border-radius: 10px;
 `
-const Title = styled.h2``
+const Title = styled.h2`
+  margin: auto;
+  margin-bottom: -13px;
+  background: white;
+  z-index: 1;
+  width: fit-content;
+`
 const City = styled.div`
   display: flex;
   flex-direction: column;

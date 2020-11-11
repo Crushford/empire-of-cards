@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 
 export const Container = styled.div`
-  height: 140px;
-  width: 100px;
+  height: 100px;
+  width: 71.42px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -60,8 +60,8 @@ export const CardText = styled.h5`
 export const CardEdge = styled.div`
   border: black solid 1px;
   z-index: -1;
-  height: 140px;
-  width: 100px;
-  margin-right: -97px;
+  height: 100px;
+  width: 71.42px;
+  margin-right: -80px;
   background: white;
 `

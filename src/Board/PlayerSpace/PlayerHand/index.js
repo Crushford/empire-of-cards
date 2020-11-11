@@ -7,15 +7,14 @@ const CardsContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  height: 240px;
-  min-width: 160px;
-  max-width: 50%;
   z-index: 1;
+  height: 150px;
 `
 const AllCards = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
+  align-items: center;
 `
 const CardInHandWrapper = styled.div`
   overflow: 'hidden';
@@ -26,7 +25,9 @@ const CardInHandWrapper = styled.div`
     overflow: visible;
   }
 `
-const Title = styled.h2``
+const Title = styled.h2`
+  margin: 0px;
+`
 
 export const PlayerHand = ({
   cards,
@@ -37,7 +38,7 @@ export const PlayerHand = ({
 }) => {
   return (
     <CardsContainer>
-      {faceUp && <Title>Your Hand</Title>}
+      <Title>Your Hand</Title>
       <AllCards>
         {cards && faceUp
           ? cards.map((card, index) => (

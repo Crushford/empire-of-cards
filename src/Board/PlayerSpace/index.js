@@ -23,13 +23,13 @@ const getMobilePositionCSS = (position, currentPlayer, numberOfPlayers) => {
 }
 
 const getPositionCSS = (position, currentPlayer, numberOfPlayers, height) => {
-  const width = position === currentPlayer ? 70 : 70
+  const width = position === currentPlayer ? 30 : 30
 
   switch (getRelativePosition(position, currentPlayer, numberOfPlayers)) {
     case 0:
       return `bottom:0; left: calc(50% - ${width / 2}vw); width: ${width}vw;`
     case 1:
-      return `left: calc((${width}vh - ${height}) * -0.5); transform: rotate(90deg); top: calc(${width}%  - ${
+      return `left: calc((${width}vh - ${height}) * -0.5); transform: rotate(90deg); top: calc(50%  - ${
         width / 2
       }vh); width: ${width}vh;`
     case 2:
@@ -37,7 +37,7 @@ const getPositionCSS = (position, currentPlayer, numberOfPlayers, height) => {
         width / 2
       }vw); width: ${width}vw;`
     case 3:
-      return `right: calc((${width}vh - ${height}) * -0.5); transform: rotate(270deg); top: calc(${width}%  - ${
+      return `right: calc((${width}vh - ${height}) * -0.5); transform: rotate(270deg); top: calc(50%  - ${
         width / 2
       }vh); width: ${width}vh;`
     default:
@@ -68,13 +68,9 @@ const Container = styled.div`
 `
 
 const AllCards = styled.div`
-  height: 250px;
   display: flex;
-  align-items: flex-end;
-  flex-direction: row;
-  margin-bottom: -20px;
+  flex-direction: column;
   justify-content: space-evenly;
-  width: 100%;
 `
 
 export const PlayerSpace = ({
@@ -93,22 +89,22 @@ export const PlayerSpace = ({
       position={position}
       currentPlayer={currentPlayer}
       numberOfPlayers={numberOfPlayers}
-      height={'260px'}
+      height={'350px'}
     >
       <AllCards>
-        <PlayerHand
-          cards={hand}
-          faceUp={currentPlayer === position}
-          selectCard={selectCard}
-          selectedCard={selectedCard}
-          retainingCardIds={retainingCardIds}
-        />
         <PlayerEmpire
           cards={empire}
           faceUp={true}
           handleEmpireClick={handleEmpireClick}
           handleCityClick={handleCityClick}
           targetId={targetId}
+        />
+        <PlayerHand
+          cards={hand}
+          faceUp={currentPlayer === position}
+          selectCard={selectCard}
+          selectedCard={selectedCard}
+          retainingCardIds={retainingCardIds}
         />
       </AllCards>
       <Banner color={color} />

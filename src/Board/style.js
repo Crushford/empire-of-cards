@@ -15,9 +15,10 @@ export const ActionSpace = styled.div`
   justify-content: space-around;
   flex-direction: row;
   position: fixed;
-  top: calc(50% - (250px / 2));
-  height: 250px;
-  z-index: 1;
+  top: calc(50% - (60% / 2));
+  height: 60%;
+  z-index: 0;
+  background-color: #f5f5f5;
 `
 export const NextTurn = styled.h1`
   position: absolute;
