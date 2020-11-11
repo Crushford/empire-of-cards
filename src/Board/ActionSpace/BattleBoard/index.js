@@ -9,8 +9,7 @@ const BonusInformation = styled.h4`
 `
 
 const Container = styled.div`
-  height: 220px;
-  width: 240px;
+  grid-area: battleSpace;
   border: black solid 1px;
   display: flex;
   align-items: center;

@@ -2,16 +2,16 @@ import React, { useEffect, useState } from 'react'
 import TagManager from 'react-gtm-module'
 
 import { PlayerSpace } from './PlayerSpace'
-import { BattleBoard } from './BattleBoard'
+import { BattleBoard } from './ActionSpace/BattleBoard'
 import { MessageBoard } from './MessageBoard'
 import { Deck } from './Deck'
-import { Pass } from './Pass'
+
 import { EndTurn } from './EndTurn'
 import { randomAiMove, checkIfPlayerHandIsAtCapacity } from '../utils'
 import { GTAG_MANAGER_ID } from '../constants'
 import {
   BoardContainer,
-  ActionSpace,
+  GameOver,
   NextTurn,
   AcceptTurn,
   ScreenCover
@@ -70,42 +70,52 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
   const isUnderAttack = G.battle?.attack?.title
 
   const handleDeckClick = () => {
-    isViewersTurn && moves.startRound()
+    if (!isViewersTurn) return
+
+    moves.startRound()
   }
   const handlePassClick = () => {
-    if (isViewersTurn) {
-      if (isUnderAttack) {
-        moves.doNotDefend()
-        setTimeout(() => moves.battleOutcome(), 3000)
-      } else {
-        moves.pass()
-      }
+    if (!isViewersTurn) return
+
+    if (ctx.phase === 'newRound') {
+      moves.endTurn()
+    }
+
+    if (isUnderAttack) {
+      moves.doNotDefend()
+      setTimeout(() => moves.battleOutcome(), 3000)
+    } else {
+      moves.pass()
     }
   }
   const handleCardClick = cardId => {
-    if (isViewersTurn) {
-      ctx.phase === 'play' && moves.selectCard(cardId)
-      ctx.phase === 'newRound' && moves.retainCard(cardId)
-    }
+    if (!isViewersTurn) return
+
+    ctx.phase === 'play' && moves.selectCard(cardId)
+    ctx.phase === 'newRound' && moves.retainCard(cardId)
   }
   const handleEmpireClick = () => {
-    isViewersTurn && moves.moveToEmpire()
+    if (!isViewersTurn) return
+
+    moves.moveToEmpire()
   }
   const handleCityClick = cityId => {
-    isViewersTurn && moves.attackCity(cityId)
+    if (!isViewersTurn) return
+
+    moves.attackCity(cityId)
   }
   const handleDefenceClick = () => {
-    if (isViewersTurn) {
-      moves.defendCity()
-      setTimeout(() => moves.battleOutcome(), 3000)
-    }
+    if (!isViewersTurn) return
+
+    moves.defendCity()
+    setTimeout(() => moves.battleOutcome(), 3000)
   }
   const handleAcceptTurn = () => {
-    isViewersTurn && setNewPlayer(false)
+    if (!isViewersTurn) return
+
+    setNewPlayer(false)
   }
-  const handleEndTurn = () => {
-    isViewersTurn && moves.endTurn()
-  }
+  const handleEndTurn = () => {}
   const newGame = () => document.location.reload()
 
   const showEndTurn = checkIfPlayerHandIsAtCapacity(G, ctx)
@@ -137,9 +147,8 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
         </ScreenCover>
       ) : (
         <>
-          {players}
-          {ctx.gameover ? (
-            <ActionSpace>
+          {ctx.gameover && (
+            <GameOver>
               <h1>
                 Game Over!
                 <br />
@@ -163,34 +172,29 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
                 </a>
               </p>
               <AcceptTurn onClick={newGame}>New Game</AcceptTurn>
-            </ActionSpace>
-          ) : (
-            <ActionSpace>
-              <Deck onClick={handleDeckClick} cardsInDeck={G.deck.length} />
-              <MessageBoard
-                G={G}
-                ctx={ctx}
-                isActive={isActive}
-                isMultiplayer={isMultiplayer}
-              />
-              {!G.battle.waitingOnBattleResult && isViewersTurn && (
-                <>
-                  {ctx.phase === 'newRound' ? (
-                    showEndTurn && <EndTurn onClick={handleEndTurn} />
-                  ) : (
-                    <Pass
-                      onClick={handlePassClick}
-                      isUnderAttack={isUnderAttack}
-                    />
-                  )}
-                </>
-              )}
-              <BattleBoard
-                battleDetails={G.battle}
-                handleDefenceClick={handleDefenceClick}
-              />
-            </ActionSpace>
+            </GameOver>
           )}
+          {players}
+
+          <Deck onClick={handleDeckClick} cardsInDeck={G.deck.length} />
+          <MessageBoard
+            G={G}
+            ctx={ctx}
+            isActive={isActive}
+            isMultiplayer={isMultiplayer}
+          />
+          {!G.battle.waitingOnBattleResult && isViewersTurn && (
+            <EndTurn
+              onClick={handlePassClick}
+              isUnderAttack={isUnderAttack}
+              showEndTurn={showEndTurn}
+              phase={ctx.phase}
+            />
+          )}
+          <BattleBoard
+            battleDetails={G.battle}
+            handleDefenceClick={handleDefenceClick}
+          />
         </>
       )}
     </BoardContainer>

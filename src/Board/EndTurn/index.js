@@ -5,7 +5,16 @@ const EndTurnButton = styled.button`
   padding: 40px;
   border: solid 3px black;
   background: lightblue;
+  grid-area: endTurnButton;
 `
-export const EndTurn = ({ onClick }) => {
-  return <EndTurnButton onClick={onClick}>End Turn</EndTurnButton>
+export const EndTurn = ({ onClick, showEndTurn, isUnderAttack, phase }) => {
+  const getMessage = phase => {
+    if (phase === 'newRound') {
+      return showEndTurn && 'End Turn'
+    } else {
+      return isUnderAttack ? 'Do Not Defend' : 'Pass'
+    }
+  }
+
+  return <EndTurnButton onClick={onClick}>{getMessage(phase)}</EndTurnButton>
 }

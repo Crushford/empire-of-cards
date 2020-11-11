@@ -1,43 +1,48 @@
 import styled from 'styled-components'
 
 export const BoardContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  height: 100vh;
-`
-export const ActionSpace = styled.div`
-  flex-grow: 1;
-  width: 60%;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  flex-direction: row;
+  display: grid;
+  background: #f5f5f5;
   position: fixed;
-  top: calc(50% - (60% / 2));
-  height: 60%;
-  z-index: 0;
-  background-color: #f5f5f5;
-`
-export const NextTurn = styled.h1`
-  position: absolute;
-  top: 30%;
+  top: calc(50% - (100vw * 0.5625) / 2);
   left: 0;
-  right: 0;
-  margin-left: auto;
-  margin-right: auto;
-  width: 300px; /* Need a specific value to work */
+  height: calc(100vw * 0.5625);
+  width: 100vw;
+  grid-template-columns: repeat(32, minmax(3.125%, 3.125%));
+  grid-template-rows: repeat(18, minmax(5.55%, 5.55%));
+  grid-template-areas:
+    '. . . . . . . . . . . . player2 player2 player2 player2 player2 player2 player2 player2 . . . . . . . . . . . .'
+    '. . . . . . . . . . . . player2 player2 player2 player2 player2 player2 player2 player2 . . . . . . . . . . . .'
+    '. . . . . . . . . . . . player2 player2 player2 player2 player2 player2 player2 player2 . . . . . . . . . . . .'
+    '. . . . . . . . . . . . player2 player2 player2 player2 player2 player2 player2 player2 . . . . . . . . . . . .'
+    '. . . . . . . . . . . . player2 player2 player2 player2 player2 player2 player2 player2 . . . . . . . . . . . .'
+    'player1 player1 player1 player1 player1 player1 . . . . . . player2 player2 player2 player2 player2 player2 player2 player2 . . . . . . player3 player3 player3 player3 player3 player3'
+    'player1 player1 player1 player1 player1 player1 . . . . . . . . . . . . . . . . . . . . player3 player3 player3 player3 player3 player3'
+    'player1 player1 player1 player1 player1 player1 . . . . . . . . battleSpace battleSpace battleSpace battleSpace . . endTurnButton endTurnButton endTurnButton . . . player3 player3 player3 player3 player3 player3'
+    'player1 player1 player1 player1 player1 player1 . . . . . . . . battleSpace battleSpace battleSpace battleSpace . . endTurnButton endTurnButton endTurnButton . . . player3 player3 player3 player3 player3 player3'
+    'player1 player1 player1 player1 player1 player1 . deck deck deck . . . . battleSpace battleSpace battleSpace battleSpace . . endTurnButton endTurnButton endTurnButton . . . player3 player3 player3 player3 player3 player3'
+    'player1 player1 player1 player1 player1 player1 . deck deck deck . . . . battleSpace battleSpace battleSpace battleSpace . . endTurnButton endTurnButton endTurnButton . . . player3 player3 player3 player3 player3 player3'
+    'player1 player1 player1 player1 player1 player1 . deck deck deck . . . . . . . . . . . . . . . . player3 player3 player3 player3 player3 player3'
+    'player1 player1 player1 player1 player1 player1 . deck deck deck . . player0 player0 player0 player0 player0 player0 player0 player0 . . . . . . player3 player3 player3 player3 player3 player3'
+    '. . . . . . . . . . . . player0 player0 player0 player0 player0 player0 player0 player0 . . . . . . . . . . . .'
+    '. . . . . messageBoard messageBoard messageBoard messageBoard messageBoard messageBoard . player0 player0 player0 player0 player0 player0 player0 player0 . . . . . . . . . . . .'
+    '. . . . . messageBoard messageBoard messageBoard messageBoard messageBoard messageBoard . player0 player0 player0 player0 player0 player0 player0 player0 . . . . . . . . . . . .'
+    '. . . . . messageBoard messageBoard messageBoard messageBoard messageBoard messageBoard . player0 player0 player0 player0 player0 player0 player0 player0 . . . . . . . . . . . .'
+    '. . . . . messageBoard messageBoard messageBoard messageBoard messageBoard messageBoard . player0 player0 player0 player0 player0 player0 player0 player0 . . . . . . . . . . . .';
 `
+
+export const GameOver = styled.div`
+  height: 30%;
+  width: 30%;
+  background-color: 'black';
+  position: fixed;
+  top: calc(100% - (30% / 2));
+  left: calc(100% - (30% / 2));
+  z-index: 2;
+`
+export const NextTurn = styled.h1``
 export const AcceptTurn = styled.button`
-  position: absolute;
-  top: 60%;
-  padding: 20px 0px 20px 0px;
-  left: 0;
-  right: 0;
-  margin-left: auto;
-  margin-right: auto;
-  width: 300px; /* Need a specific value to work */
+  padding: 15px;
 `
 
 export const ScreenCover = styled.div`

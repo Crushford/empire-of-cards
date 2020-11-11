@@ -15,6 +15,7 @@ const MessageContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 30px;
+  grid-area: messageBoard;
 `
 
 export const MessageBoard = ({ G, ctx, isMultiplayer, isActive }) => {
