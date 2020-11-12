@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Card } from '../../ActionSpace/Card'
+import { Card } from '../../Card'
 
 import { CITY_COLORS } from './../../../constants'
 

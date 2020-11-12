@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Card } from '../ActionSpace/Card'
-import { CardEdge } from '../ActionSpace/Card/style'
+import { Card } from '../Card'
+import { CardEdge } from '../Card/style'
 
 const Title = styled.h2`
   margin: 2px;

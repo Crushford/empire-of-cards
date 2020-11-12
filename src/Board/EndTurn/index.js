@@ -15,6 +15,7 @@ export const EndTurn = ({ onClick, showEndTurn, isUnderAttack, phase }) => {
       return isUnderAttack ? 'Do Not Defend' : 'Pass'
     }
   }
+  const message = getMessage(phase)
 
-  return <EndTurnButton onClick={onClick}>{getMessage(phase)}</EndTurnButton>
+  return message && <EndTurnButton onClick={onClick}>{message}</EndTurnButton>
 }

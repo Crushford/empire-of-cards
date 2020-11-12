@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import TagManager from 'react-gtm-module'
 
 import { PlayerSpace } from './PlayerSpace'
-import { BattleBoard } from './ActionSpace/BattleBoard'
+import { BattleBoard } from './BattleBoard'
 import { MessageBoard } from './MessageBoard'
 import { PlayerInfo } from './PlayerInfo'
 import { GameOver } from './GameOver'
