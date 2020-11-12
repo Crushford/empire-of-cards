@@ -10,7 +10,6 @@ const BonusInformation = styled.h4`
 
 const Container = styled.div`
   grid-area: battleSpace;
-  border: black solid 1px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -24,7 +23,11 @@ const CardWithLabel = styled.div`
   align-items: center;
   justify-content: flex-start;
   flex-direction: column;
-  border: black solid 1px;
+`
+
+const Border = styled.div`
+  height: 100%;
+  border-right: 1px solid red;
 `
 
 export const BattleBoard = ({
@@ -48,6 +51,7 @@ export const BattleBoard = ({
           <BonusInformation>Bonus +1 Attack</BonusInformation>
         )}
       </CardWithLabel>
+      <Border />
       <CardWithLabel onClick={handleDefenceClick}>
         <SectionTitle>Defend</SectionTitle>
         {defend.id && <Card value={defend} faceUp={true} />}
