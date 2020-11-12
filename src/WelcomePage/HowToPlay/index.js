@@ -8,6 +8,7 @@ export const HowToPlayContainer = styled.div`
   align-items: center;
   margin: auto;
   text-align: center;
+  background-color: grey;
 `
 
 export const HowToPlayTitle = styled.h1`

@@ -55,10 +55,7 @@ const LocalGame = ({ gameComplexity, numberOfPlayers, isPractice }) => {
 
 export const WelcomePage = () => {
   const [gameType, setGameType] = useState(null)
-  // simple game disabled by setting normal game as default
-  const [gameComplexity, setGameComplexity] = useState('normal')
   const [numberOfPlayers, setNumberOfPlayers] = useState(null)
-  const [isPractice, setIsPractice] = useState(null)
   const [showHowToPlay, setShowHowToPlay] = useState(false)
 
   const { protocol, hostname, port } = window.location
@@ -70,11 +67,11 @@ export const WelcomePage = () => {
 
   return (
     <WelcomeContainer>
-      {!(gameType || isPractice) && (
+      {!gameType && (
         <>
           <Title>Empire Of Cards</Title>
           <GameOptions>
-            <GameOption onClick={() => setIsPractice(true)}>
+            <GameOption onClick={() => setGameType('single')}>
               Single Player
             </GameOption>
             <GameOption onClick={() => setGameType('local')}>
@@ -90,54 +87,24 @@ export const WelcomePage = () => {
           {showHowToPlay && <HowToPlay />}
         </>
       )}
-      {isPractice && !gameComplexity && (
-        <>
-          <div>
-            <p>Select Game Complexity</p>
-            <GameOption onClick={() => setGameComplexity('simple')}>
-              simple
-            </GameOption>
-            <GameOption onClick={() => setGameComplexity('normal')}>
-              normal
-            </GameOption>
-          </div>
-        </>
-      )}
-      {gameType === 'local' && !gameComplexity && (
+      {gameType && gameType !== 'online' && !numberOfPlayers && (
         <div>
-          <p>Select Game Complexity</p>
-          <GameOption onClick={() => setGameComplexity('simple')}>
-            simple
-          </GameOption>
-          <GameOption onClick={() => setGameComplexity('normal')}>
-            normal
-          </GameOption>
+          <Title>
+            How many {gameType === 'single' ? 'opponents' : 'players'}?
+          </Title>
+          <select onChange={setNumPlayers}>
+            <option selected disabled></option>
+            <option value={2}>{gameType === 'single' ? 1 : 2}</option>
+            <option value={3}>{gameType === 'single' ? 2 : 3}</option>
+            <option value={4}>{gameType === 'single' ? 3 : 4}</option>
+          </select>
         </div>
       )}
-      {(gameType === 'local' || isPractice) &&
-        gameComplexity &&
-        !numberOfPlayers && (
-          <div>
-            <p>How many {isPractice ? 'opponents' : 'players'}?</p>
-            <select onChange={setNumPlayers}>
-              <option selected disabled></option>
-              <option value={2}>{isPractice ? 1 : 2}</option>
-              <option value={3}>{isPractice ? 2 : 3}</option>
-              <option value={4}>{isPractice ? 3 : 4}</option>
-            </select>
-          </div>
-        )}
-      {isPractice && gameComplexity && numberOfPlayers && (
+      {gameType && gameType !== 'online' && numberOfPlayers && (
         <LocalGame
-          gameComplexity={gameComplexity}
+          gameComplexity={'normal'}
           numberOfPlayers={numberOfPlayers}
-          isPractice={true}
-        />
-      )}
-      {gameType === 'local' && gameComplexity && numberOfPlayers && (
-        <LocalGame
-          gameComplexity={gameComplexity}
-          numberOfPlayers={numberOfPlayers}
+          isPractice={gameType === 'single'}
         />
       )}
       {gameType === 'online' && (
