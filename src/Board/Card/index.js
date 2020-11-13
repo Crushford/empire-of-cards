@@ -40,7 +40,8 @@ export const Card = ({
   selectedCard,
   handleCityClick,
   targetId,
-  isOnRetainedList
+  isOnRetainedList,
+  rotation
 }) => {
   const handleClick = () => {
     faceUp && value?.id && handleCityClick && handleCityClick(value.id)
@@ -55,6 +56,7 @@ export const Card = ({
       isOnRetainedList={isOnRetainedList}
       isSelected={faceUp && selectedCard === value?.id}
       targetedCard={targetId && targetId === value?.id}
+      rotation={rotation}
     >
       {faceUp && (
         <>

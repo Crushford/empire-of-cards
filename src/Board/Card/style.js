@@ -18,6 +18,10 @@ export const Container = styled.div`
   ${({ targetedCard }) => targetedCard && 'box-shadow: 1px 1px 1px 5px red'}
   ${({ isOnRetainedList }) =>
     isOnRetainedList && 'box-shadow: 1px 1px 1px 5px green'}
+    ${({ rotation }) =>
+    `transform: rotate(${rotation}deg) translateY(${
+      -12 + Math.abs(rotation)
+    }px );`}
 `
 
 export const Title = styled.p`

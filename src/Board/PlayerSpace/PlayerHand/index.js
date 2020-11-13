@@ -6,7 +6,7 @@ import { CardEdge } from '../../Card/style'
 const CardsContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: space-between;
   height: 50%;
 `
 const AllCards = styled.div`
@@ -27,6 +27,14 @@ const CardInHandWrapper = styled.div`
 const Title = styled.h2`
   margin: 0px;
 `
+const getRotationValue = index => {
+  const isOdd = index % 2 === 1
+
+  // make 0 = 0, 1 & 2 = 3. 3 & 4 = 6 ...
+  const value = parseInt((index + 1) / 2) * 3
+
+  return isOdd ? -value : value
+}
 
 export const PlayerHand = ({
   cards,
@@ -35,12 +43,19 @@ export const PlayerHand = ({
   selectedCard,
   retainingCardIds
 }) => {
+  const sortedCardWithRotation = cards
+    .map((card, index) => ({
+      ...card,
+      rotation: getRotationValue(index)
+    }))
+    .sort((a, b) => (a.rotation < b.rotation ? -1 : 1))
+
   return (
     <CardsContainer>
       <Title>Your Hand</Title>
       <AllCards>
-        {cards && faceUp
-          ? cards.map((card, index) => (
+        {sortedCardWithRotation && faceUp
+          ? sortedCardWithRotation.map((card, index) => (
               <CardInHandWrapper>
                 <Card
                   key={card.id ? card.id : index}
@@ -49,6 +64,7 @@ export const PlayerHand = ({
                   selectCard={selectCard}
                   selectedCard={selectedCard}
                   isOnRetainedList={retainingCardIds.includes(card.id)}
+                  rotation={card.rotation}
                 />
               </CardInHandWrapper>
             ))
