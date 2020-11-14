@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 const LatestMessages = styled.h5`
-  color: purple;
-  margin: 3px;
+  ${({ theme }) => theme.headingsTypography}
+  color:${({ theme }) => theme.primaryTextColor};
 `
 
 const Logs = styled.div`

@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Card } from '../../Card'
+import { Card } from '../../common/Card'
+import { HorizontalBorder } from '../../common'
 
 import { CITY_COLORS } from './../../../constants'
 
@@ -9,15 +10,17 @@ const CitiesContainer = styled.div`
   flex-direction: row;
   align-items: flex-end;
   height: 160px;
-  border: solid black 1px;
-  border-radius: 10px;
+  background: linear-gradient(
+    269.93deg,
+    rgba(255, 255, 255, 0) 0.04%,
+    rgba(251, 251, 251, 0.39) 38.14%,
+    rgba(252, 252, 252, 0.280564) 63.25%,
+    rgba(255, 255, 255, 0) 99.93%
+  );
 `
 const Title = styled.h2`
-  margin: auto;
-  margin-bottom: -13px;
-  background: white;
-  z-index: 1;
-  width: fit-content;
+  ${({ theme }) => theme.headingsTypography}
+  color:${({ theme }) => theme.primaryTextColor};
 `
 const City = styled.div`
   display: flex;
@@ -77,6 +80,7 @@ export const PlayerEmpire = ({
   return (
     <Empire onClick={handleEmpireClick}>
       <Title>Empire</Title>
+      <HorizontalBorder />
       <CitiesContainer>{cities}</CitiesContainer>
     </Empire>
   )

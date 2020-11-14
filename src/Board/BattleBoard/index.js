@@ -1,8 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Card } from '../Card'
+import { Card } from '../common/Card'
+import { VerticalBorder } from '../common'
 
-const SectionTitle = styled.h2``
+const SectionTitle = styled.h2`
+  ${({ theme }) => theme.headingsTypography}
+  color:${({ theme }) => theme.primaryTextColor};
+`
 
 const BonusInformation = styled.h4`
   color: 'red';
@@ -23,11 +27,6 @@ const CardWithLabel = styled.div`
   align-items: center;
   justify-content: flex-start;
   flex-direction: column;
-`
-
-const Border = styled.div`
-  height: 100%;
-  border-right: 1px solid red;
 `
 
 export const BattleBoard = ({
@@ -51,7 +50,7 @@ export const BattleBoard = ({
           <BonusInformation>Bonus +1 Attack</BonusInformation>
         )}
       </CardWithLabel>
-      <Border />
+      <VerticalBorder />
       <CardWithLabel onClick={handleDefenceClick}>
         <SectionTitle>Defend</SectionTitle>
         {defend.id && <Card value={defend} faceUp={true} />}

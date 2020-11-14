@@ -3,8 +3,8 @@ import styled from 'styled-components'
 import { PopUpContent, Shade } from '../../common'
 
 const Message = styled.h5`
-  color: white;
-  margin-top: 30%;
+  ${({ theme }) => theme.headingsTypography}
+  color:${({ theme }) => theme.primaryTextColor};
 `
 
 export const SpecialMessage = ({ message }) => {

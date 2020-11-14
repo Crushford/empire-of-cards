@@ -12,7 +12,8 @@ export const HowToPlayContainer = styled.div`
 `
 
 export const HowToPlayTitle = styled.h1`
-  align-self: 'center';
+  ${({ theme }) => theme.headingsTypography}
+  color:${({ theme }) => theme.primaryTextColor};
 `
 
 export const HowToPlay = () => {

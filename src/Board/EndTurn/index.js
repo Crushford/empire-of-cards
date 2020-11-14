@@ -3,7 +3,6 @@ import styled from 'styled-components'
 
 const EndTurnButton = styled.button`
   padding: 40px;
-  border: solid 3px black;
   background: lightblue;
   grid-area: endTurnButton;
 `

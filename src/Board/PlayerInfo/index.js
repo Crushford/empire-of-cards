@@ -9,6 +9,11 @@ const Container = styled.div`
   grid-area: ${({ gridAreaName }) => gridAreaName};
 `
 
+const PlayerName = styled.h2`
+  ${({ theme }) => theme.headingsTypography}
+  color: ${({ theme }) => theme.primaryTextColor};
+`
+
 export const PlayerInfo = ({
   playerName,
   player: { position },
@@ -25,7 +30,7 @@ export const PlayerInfo = ({
 
   return (
     <Container gridAreaName={gridAreaName}>
-      <h1>{playerName}</h1>
+      <PlayerName>{playerName}</PlayerName>
     </Container>
   )
 }

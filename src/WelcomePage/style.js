@@ -23,5 +23,6 @@ export const GameOptions = styled.div`
 `
 
 export const Title = styled.h1`
-  color: white;
+  ${({ theme }) => theme.headingsTypography}
+  color:${({ theme }) => theme.primaryTextColor};
 `

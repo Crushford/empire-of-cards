@@ -1,7 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Card } from '../../Card'
-import { CardEdge } from '../../Card/style'
+import { Card } from '../../common/Card'
+import { CardEdge } from '../../common/Card/style'
+import { HorizontalBorder } from '../../common'
 
 const CardsContainer = styled.div`
   display: flex;
@@ -25,7 +26,8 @@ const CardInHandWrapper = styled.div`
   }
 `
 const Title = styled.h2`
-  margin: 0px;
+  ${({ theme }) => theme.headingsTypography}
+  color:${({ theme }) => theme.primaryTextColor};
 `
 const getRotationValue = index => {
   const isOdd = index % 2 === 1
@@ -53,6 +55,7 @@ export const PlayerHand = ({
   return (
     <CardsContainer>
       <Title>Your Hand</Title>
+      <HorizontalBorder />
       <AllCards>
         {sortedCardWithRotation && faceUp
           ? sortedCardWithRotation.map((card, index) => (

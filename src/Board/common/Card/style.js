@@ -7,7 +7,6 @@ export const Container = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   margin-right: 1px;
-  border: solid 1px black;
   background: ${({ faceUp }) =>
     faceUp
       ? 'white'
@@ -52,12 +51,10 @@ export const Banner = styled.div`
 `
 
 export const CardText = styled.h5`
+  ${({ theme }) => theme.cardTypography}
   height: 50%;
   max-width: 100%;
   object-fit: contain;
-  font-size: 8px;
-  padding: 7px;
-  box-sizing: border-box;
 `
 
 export const CardEdge = styled.div`

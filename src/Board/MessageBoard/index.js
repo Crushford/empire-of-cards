@@ -6,10 +6,14 @@ import { ShowAllLogs } from './ShowAllLogs'
 import { SpecialMessage } from './SpecialMessage'
 
 const Turn = styled.h5`
-  color: ${({ isActive }) => (isActive ? 'green' : 'red')};
+  ${({ theme }) => theme.headingsTypography}
+  color:${({ theme }) => theme.primaryTextColor}
   flex-grow: 1;
 `
-const Hint = styled.h5``
+const Hint = styled.h5`
+  ${({ theme }) => theme.headingsTypography}
+  color:${({ theme }) => theme.primaryTextColor};
+`
 
 const InstructionContainer = styled.div`
   flex-grow: 1;
