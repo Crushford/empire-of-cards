@@ -7,7 +7,7 @@ import { SpecialMessage } from './SpecialMessage'
 
 const Turn = styled.h5`
   ${({ theme }) => theme.headingsTypography}
-  color:${({ theme }) => theme.primaryTextColor}
+  color:${({ theme }) => theme.primaryTextColor};
   flex-grow: 1;
 `
 const Hint = styled.h5`
@@ -27,12 +27,18 @@ const MessageContainer = styled.div`
   height: 100%;
 `
 
-export const MessageBoard = ({ G, ctx, isMultiplayer, isActive }) => {
+export const MessageBoard = ({
+  G,
+  ctx,
+  isMultiplayer,
+  isActive,
+  matchData
+}) => {
   const [messages, setMessages] = useState({ hint: '', specialMessage: '' })
 
   useEffect(() => {
-    setMessages(getMessages(G, ctx))
-  }, [G, ctx, isActive])
+    setMessages(getMessages({ G, ctx, isMultiplayer, matchData }))
+  }, [G, ctx, isActive, isMultiplayer, matchData])
 
   return (
     <MessageContainer>

@@ -4,13 +4,6 @@ import { PlayerEmpire } from './PlayerEmpire'
 import { PlayerHand } from './PlayerHand'
 import { getRelativePosition } from '../../utils'
 
-const Banner = styled.div`
-  height: 20px;
-  width: 100%;
-  background: ${({ color }) => color};
-  z-index: -1;
-`
-
 const Container = styled.div`
   height: 100%;
   flex-direction: column;
@@ -87,7 +80,6 @@ export const PlayerSpace = ({
             retainingCardIds={retainingCardIds}
           />
         </AllCards>
-        <Banner color={color} />
       </Container>
     </Wrapper>
   )

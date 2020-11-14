@@ -1,14 +1,10 @@
-import { checkIfPlayerHandIsAtCapacity } from '../../utils'
+import { checkIfPlayerHandIsAtCapacity, getPlayerName } from '../../utils'
 
-export const getMessages = (G, ctx) => {
+export const getMessages = ({ G, ctx, isMultiplayer, matchData }) => {
   if (G.battle.waitingOnBattleResult) return ''
 
   const currentPlayer = G.players[ctx.currentPlayer]
   const getHint = () => {
-    if (ctx.winner) {
-      return `Winner is player ${G.players[ctx.winner].color}`
-    }
-
     if (ctx.phase === 'newRound') {
       const retentionCapacity = G.players[ctx.currentPlayer].empire.filter(
         cardInEmpire => cardInEmpire.benefit === 'retentionCapacity'

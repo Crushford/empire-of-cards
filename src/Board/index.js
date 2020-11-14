@@ -9,11 +9,23 @@ import { GameOver } from './GameOver'
 import { Deck } from './Deck'
 
 import { EndTurn } from './EndTurn'
-import { randomAiMove, checkIfPlayerHandIsAtCapacity } from '../utils'
+import {
+  randomAiMove,
+  checkIfPlayerHandIsAtCapacity,
+  getPlayerName
+} from '../utils'
 import { GTAG_MANAGER_ID } from '../constants'
 import { BoardContainer, NextTurn, AcceptTurn, ScreenCover } from './style'
 
-export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
+export const Board = ({
+  G,
+  ctx,
+  moves,
+  isMultiplayer,
+  isActive,
+  playerID,
+  matchData
+}) => {
   const [newPlayer, setNewPlayer] = useState(false)
 
   const currentPlayerId = parseInt(ctx.currentPlayer)
@@ -40,24 +52,24 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
   useEffect(() => {
     if (
       G.isPractice &&
-      ctx.currentPlayer > 0 &&
+      ctx.currentPlayer >= 0 &&
       !G.battle.waitingOnBattleResult
     ) {
-      const randomMove = randomAiMove(G, ctx)
+      const randomMove = randomAiMove({ G, ctx, isMultiplayer, matchData })
       setNewPlayer(false)
 
       // delay battle outcome to show attack  er and defender
       if (randomMove.move === 'doNotDefend') {
         moves.doNotDefend()
-        setTimeout(() => moves.battleOutcome(), 3000)
+        setTimeout(() => moves.battleOutcome({ isMultiplayer, matchData }), 1)
       } else {
         moves[randomMove.move](...randomMove.args)
         if (randomMove.move === 'defendCity') {
-          setTimeout(() => moves.battleOutcome(), 3000)
+          setTimeout(() => moves.battleOutcome({ isMultiplayer, matchData }), 1)
         }
       }
     }
-  }, [currentPlayerId, G, ctx, moves])
+  }, [currentPlayerId, G, ctx, moves, isMultiplayer, matchData])
 
   useEffect(() => {
     !G.isPractice && setNewPlayer(true)
@@ -68,20 +80,20 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
   const handleDeckClick = () => {
     if (!isViewersTurn) return
 
-    moves.startRound()
+    moves.drawFromDeck()
   }
   const handlePassClick = () => {
     if (!isViewersTurn) return
 
     if (ctx.phase === 'newRound') {
-      moves.endTurn()
+      moves.startRound()
     }
 
     if (isUnderAttack) {
       moves.doNotDefend()
-      setTimeout(() => moves.battleOutcome(), 3000)
+      setTimeout(() => moves.battleOutcome({ isMultiplayer, matchData }), 1)
     } else {
-      moves.pass()
+      moves.pass({ isMultiplayer, matchData })
     }
   }
   const handleCardClick = cardId => {
@@ -93,18 +105,18 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
   const handleEmpireClick = () => {
     if (!isViewersTurn) return
 
-    moves.moveToEmpire()
+    moves.moveToEmpire({ isMultiplayer, matchData })
   }
   const handleCityClick = cityId => {
     if (!isViewersTurn) return
 
-    moves.attackCity(cityId)
+    moves.attackCity({ attackedCityId: cityId, isMultiplayer, matchData })
   }
   const handleDefenceClick = () => {
     if (!isViewersTurn) return
 
     moves.defendCity()
-    setTimeout(() => moves.battleOutcome(), 3000)
+    setTimeout(() => moves.battleOutcome({ isMultiplayer, matchData }), 1)
   }
   const handleAcceptTurn = () => {
     if (!isViewersTurn) return
@@ -128,16 +140,23 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
     />
   ))
 
-  const playerInfoSections = G.players.map((player, index) => (
-    <PlayerInfo
-      key={index}
-      player={player}
-      playerName={'player' + index}
-      playerDetails={player}
-      currentPlayer={viewingPlayer}
-      numberOfPlayers={G.players.length}
-    />
-  ))
+  const playerInfoSections = G.players.map((player, index) => {
+    return (
+      <PlayerInfo
+        key={index}
+        player={player}
+        playerName={getPlayerName({
+          index,
+          isPractice: G.isPractice,
+          isMultiplayer,
+          matchData
+        })}
+        playerDetails={player}
+        currentPlayer={viewingPlayer}
+        numberOfPlayers={G.players.length}
+      />
+    )
+  })
 
   return (
     <BoardContainer>
@@ -151,7 +170,14 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
         </ScreenCover>
       ) : (
         <>
-          {ctx.gameover && <GameOver G={G} ctx={ctx} />}
+          {ctx.gameover && (
+            <GameOver
+              G={G}
+              ctx={ctx}
+              isMultiplayer={isMultiplayer}
+              matchData={matchData}
+            />
+          )}
           {players}
           {playerInfoSections}
           <Deck onClick={handleDeckClick} cardsInDeck={G.deck.length} />
@@ -160,6 +186,7 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
             ctx={ctx}
             isActive={isActive}
             isMultiplayer={isMultiplayer}
+            matchData={matchData}
           />
           {!G.battle.waitingOnBattleResult && isViewersTurn && (
             <EndTurn

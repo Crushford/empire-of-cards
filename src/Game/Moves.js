@@ -6,7 +6,8 @@ import {
   discardBattleCards,
   moveCityAfterBattle,
   getTargetedDetailsFromId,
-  checkIfPlayerHandIsAtCapacity
+  checkIfPlayerHandIsAtCapacity,
+  getPlayerName
 } from '../utils'
 
 export const IsVictory = G => {
@@ -39,7 +40,7 @@ export const IsVictory = G => {
   return winner
 }
 
-export const startRound = (G, ctx) => {
+export const drawFromDeck = (G, ctx) => {
   if (G.playerHasDrawn) {
     return INVALID_MOVE
   }
@@ -76,8 +77,9 @@ export const startRound = (G, ctx) => {
   G.playerHasDrawn = true
 }
 
-export const endTurn = (G, ctx) => {
+export const startRound = (G, ctx) => {
   if (!checkIfPlayerHandIsAtCapacity(G, ctx) || !G.playerHasDrawn) {
+    debugger
     return INVALID_MOVE
   }
 
@@ -127,7 +129,11 @@ export const selectCard = (G, ctx, cardId) => {
   })
 }
 
-export const moveToEmpire = (G, ctx, _cardMoving = '') => {
+export const moveToEmpire = (
+  G,
+  ctx,
+  { _cardMoving = '', isMultiplayer, matchData }
+) => {
   const isUnderAttack = G.battle && G.battle.attack && G.battle.attack.title
   const currentPlayer = G.players[ctx.currentPlayer]
   const cardMoving = _cardMoving || G.selectedCard
@@ -144,7 +150,12 @@ export const moveToEmpire = (G, ctx, _cardMoving = '') => {
       currentPlayer.empire.push(card)
       G.selectedCard = ''
       G.log.push(
-        `${currentPlayer.color} places ${card.color} ${card.title} into their empire`
+        `${getPlayerName({
+          index: ctx.currentPlayer,
+          isPractice: G.isPractice,
+          isMultiplayer,
+          matchData
+        })} places ${card.color} ${card.title} into their empire`
       )
       return false
     } else return true
@@ -157,8 +168,7 @@ export const moveToEmpire = (G, ctx, _cardMoving = '') => {
 export const attackCity = (
   G,
   ctx,
-  attackedCityId,
-  attackingArmyIndexFromBot = ''
+  { attackedCityId, attackingArmyIndexFromBot = '', isMultiplayer, matchData }
 ) => {
   const isUnderAttack = G.battle && G.battle.attack && G.battle.attack.title
 
@@ -202,9 +212,17 @@ export const attackCity = (
   G.timesPassed = 0
 
   G.log.push(
-    `${G.players[G.target.attacker].color} attacks ${
-      G.players[G.target.defender].color
-    }'s ${G.target.card.color} ${targetedCard.title}`
+    `${getPlayerName({
+      index: G.target.attacker,
+      isPractice: G.isPractice,
+      isMultiplayer,
+      matchData
+    })} attacks ${getPlayerName({
+      index: G.target.defender,
+      isPractice: G.isPractice,
+      isMultiplayer,
+      matchData
+    })}'s ${G.target.card.color} ${targetedCard.title}`
   )
 
   ctx.events.endTurn({ next: `${targetedPlayerIndex}` })
@@ -244,57 +262,78 @@ export const doNotDefend = (G, ctx) => {
   G.battle.waitingOnBattleResult = true
 }
 
-export const battleOutcome = (G, ctx) => {
-  if (!G.battle.waitingOnBattleResult) {
-    return INVALID_MOVE
+export const battleOutcome = (G, ctx, { isMultiplayer, matchData }) => {
+  try {
+    if (!G.battle.waitingOnBattleResult) {
+      return INVALID_MOVE
+    }
+    const attackValue = G.battle.attack.attack + G.battle.attackBonus
+    const defenceValue = G.battle.defend
+      ? G.battle.defend.defence + G.battle.defenceBonus
+      : 0
+
+    if (attackValue > defenceValue) {
+      moveCityAfterBattle(G)
+    }
+    const defenderName = getPlayerName({
+      index: G.target.defender,
+      isPractice: G.isPractice,
+      isMultiplayer,
+      matchData
+    })
+    const battleOutcome =
+      attackValue > defenceValue ? 'unsuccessfully' : 'successfully'
+    const targetedColor = G.target.card.color
+    const targetedCardTitle = G.target.card.title
+    const attackingName = getPlayerName({
+      index: G.target.attacker,
+      isPractice: G.isPractice,
+      isMultiplayer,
+      matchData
+    })
+    const attackingCardTitle = G.battle.attack.title
+
+    if (G.battle.defend) {
+      const defendingCardTitle = G.battle.defend.title
+      G.log.push(
+        `${defenderName} ${battleOutcome} defends ${targetedColor} ${targetedCardTitle} with ${defendingCardTitle} against ${attackingName}'s ${attackingCardTitle}. 
+        ${G.battle.attackBonus > 0 ? 'An Attack bonus of 1 was applied.' : ''} 
+        ${G.battle.defenceBonus > 0 ? 'A Defence bonus of 1 was applied.' : ''}`
+      )
+    } else {
+      G.log
+        .push(`${defenderName} does not defend ${targetedColor} ${targetedCardTitle} 
+        against ${attackingName}'s ${attackingCardTitle}`)
+    }
+
+    discardBattleCards(G)
+    G.selectedCard = ''
+    G.battle.defenceBonus = 0
+    G.battle.attackBonus = 0
+
+    const playerAfterAttacker = (G.target.attacker + 1) % ctx.playOrder.length
+
+    G.battle.waitingOnBattleResult = false
+    ctx.events.endTurn({ next: playerAfterAttacker })
+    G.target = {}
+  } catch (e) {
+    console.log(e)
+    debugger
   }
-  const attackValue = G.battle.attack.attack + G.battle.attackBonus
-  const defenceValue = G.battle.defend
-    ? G.battle.defend.defence + G.battle.defenceBonus
-    : 0
-
-  if (attackValue > defenceValue) {
-    moveCityAfterBattle(G)
-  }
-
-  const defenderColor = G.players[G.target.defender].color
-  const battleOutcome =
-    attackValue > defenceValue ? 'unsuccessfully' : 'successfully'
-  const targetedColor = G.target.card.color
-  const targetedCardTitle = G.target.card.title
-  const attackingColor = G.players[G.target.attacker].color
-  const attackingCardTitle = G.battle.attack.title
-
-  if (G.battle.defend) {
-    const defendingCardTitle = G.battle.defend.title
-    G.log.push(
-      `${defenderColor} ${battleOutcome} defends ${targetedColor} ${targetedCardTitle} with ${defendingCardTitle} against ${attackingColor}'s ${attackingCardTitle}. 
-    ${G.battle.attackBonus > 0 ? 'An Attack bonus of 1 was applied.' : ''} 
-    ${G.battle.defenceBonus > 0 ? 'A Defence bonus of 1 was applied.' : ''}`
-    )
-  } else {
-    G.log
-      .push(`${defenderColor} does not defend ${targetedColor} ${targetedCardTitle} 
-   against ${attackingColor}'s ${attackingCardTitle}`)
-  }
-
-  discardBattleCards(G)
-  G.selectedCard = ''
-  G.battle.defenceBonus = 0
-  G.battle.attackBonus = 0
-
-  const playerAfterAttacker = (G.target.attacker + 1) % ctx.playOrder.length
-
-  G.battle.waitingOnBattleResult = false
-  ctx.events.endTurn({ next: playerAfterAttacker })
-  G.target = {}
 }
 
-export const pass = (G, ctx) => {
+export const pass = (G, ctx, { isMultiplayer, matchData }) => {
   G.timesPassed += 1
   G.selectedCard = ''
 
-  G.log.push(`${G.players[ctx.currentPlayer].color} passes`)
+  G.log.push(
+    `${getPlayerName({
+      index: ctx.currentPlayer,
+      isPractice: G.isPractice,
+      isMultiplayer,
+      matchData
+    })} passes`
+  )
 
   if (G.timesPassed >= ctx.numPlayers) {
     ctx.events.endPhase()

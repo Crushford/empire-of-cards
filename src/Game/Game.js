@@ -1,6 +1,6 @@
 import { TurnOrder } from 'boardgame.io/core'
 import { getDeck, PLAYER_COLORS } from '../constants'
-import { shuffleArray, getAllPossibleMoves } from '../utils'
+import { shuffleArray } from '../utils'
 
 import {
   doNotDefend,
@@ -8,10 +8,10 @@ import {
   defendCity,
   attackCity,
   IsVictory,
-  startRound,
+  drawFromDeck,
   selectCard,
   moveToEmpire,
-  endTurn,
+  startRound,
   retainCard,
   battleOutcome
 } from './Moves'
@@ -66,7 +66,7 @@ export const empireOfCards = (deckType, name, isPractice) => ({
 
   phases: {
     newRound: {
-      moves: { startRound, endTurn, retainCard },
+      moves: { drawFromDeck, startRound, retainCard },
       next: 'play',
       start: true,
       turn: { order: TurnOrder.CUSTOM_FROM('firstToAct') }
@@ -103,8 +103,5 @@ export const empireOfCards = (deckType, name, isPractice) => ({
     if (winner !== null) {
       return { winner }
     }
-  },
-  ai: {
-    enumerate: (G, ctx) => getAllPossibleMoves(G, ctx)
   }
 })

@@ -64,14 +64,14 @@ export const checkIfPlayerHandIsAtCapacity = (G, ctx) => {
   )
 }
 
-export const getAllPossibleMoves = (G, ctx) => {
+export const getAllPossibleMoves = ({ G, ctx, isMultiplayer, matchData }) => {
   let moves = []
 
   if (ctx.phase === 'newRound') {
     if (checkIfPlayerHandIsAtCapacity(G, ctx)) {
-      moves.push({ move: 'endTurn', args: [] })
-    } else {
       moves.push({ move: 'startRound', args: [] })
+    } else {
+      moves.push({ move: 'drawFromDeck', args: [] })
     }
   } else {
     const isUnderAttack = G.battle && G.battle.attack && G.battle.attack.title
@@ -83,26 +83,37 @@ export const getAllPossibleMoves = (G, ctx) => {
         }
       })
     } else {
-      moves.push({ move: 'pass', args: [] })
+      moves.push({ move: 'pass', args: [{ isMultiplayer, matchData }] })
       G.players[ctx.currentPlayer].hand.forEach(actionCard => {
         if (actionCard.id && actionCard.id[0] === 'c') {
-          // Ai Random attacks way more because way more moves are generated for each possibility fo this should even it out
-          moves.push({ move: 'moveToEmpire', args: [actionCard.id] })
+          // Ai Random attacks way more because way more moves are generated for each possibility so this should even it out
+          moves.push({
+            move: 'moveToEmpire',
+            args: [{ _cardMoving: actionCard.id, isMultiplayer, matchData }]
+          })
+          // add moves more times
           G.players.forEach(player => {
             player.empire.forEach(city => {
               moves.push({
                 move: 'moveToEmpire',
-                args: [actionCard.id]
+                args: [{ _cardMoving: actionCard.id, isMultiplayer, matchData }]
               })
             })
           })
         } else {
-          G.players.forEach((player, index) => {
-            if (index !== +ctx.currentPlayer) {
+          G.players.forEach((player, playerIndex) => {
+            if (playerIndex !== parseInt(ctx.currentPlayer)) {
               player.empire.forEach(city => {
                 moves.push({
                   move: 'attackCity',
-                  args: [city.id, actionCard.id]
+                  args: [
+                    {
+                      attackedCityId: city.id,
+                      attackingArmyIndexFromBot: actionCard.id,
+                      isMultiplayer,
+                      matchData
+                    }
+                  ]
                 })
               })
             }
@@ -115,8 +126,8 @@ export const getAllPossibleMoves = (G, ctx) => {
   return moves
 }
 
-export const randomAiMove = (G, ctx) => {
-  const moves = getAllPossibleMoves(G, ctx)
+export const randomAiMove = ({ G, ctx, isMultiplayer, matchData }) => {
+  const moves = getAllPossibleMoves({ G, ctx, isMultiplayer, matchData })
   if (moves.length === 1) {
     return moves[0]
   }
@@ -145,11 +156,11 @@ export const randomAiMove = (G, ctx) => {
 
     const preferredMove = moves
       .filter(move => move.move === 'attackCity')
-      .find(move => move.args[0].match(biggestCollection))
+      .find(move => move.args[0].attackedCityId.match(biggestCollection))
 
     const secondPreferredMove = moves
       .filter(move => move.move === 'attackCity')
-      .find(move => move.args[0].match(secondBiggestCollection))
+      .find(move => move.args[0].attackedCityId.match(secondBiggestCollection))
 
     if (preferredMove) {
       for (let i = 0; i < 5; i++) {
@@ -185,4 +196,20 @@ export const getRelativePosition = (
   return newPosition >= 0
     ? possiblePositions[newPosition]
     : possiblePositions[possiblePositions.length + newPosition]
+}
+
+export const getPlayerName = ({
+  index,
+  isPractice,
+  isMultiplayer,
+  matchData
+}) => {
+  if (isPractice) {
+    return index === 0 ? 'You' : 'Computer ' + index
+  }
+
+  if (isMultiplayer) {
+    return matchData[index].name
+  }
+  return 'Player ' + index
 }
