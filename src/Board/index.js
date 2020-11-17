@@ -7,14 +7,13 @@ import { MessageBoard } from './MessageBoard'
 import { PlayerInfo } from './PlayerInfo'
 import { GameOver } from './GameOver'
 import { Deck } from './Deck'
-
-import { EndTurn } from './EndTurn'
+import { Pass } from './Pass'
 import {
   randomAiMove,
   checkIfPlayerHandIsAtCapacity,
   getPlayerName
 } from '../utils'
-import { GTAG_MANAGER_ID } from '../constants'
+import { GTAG_MANAGER_ID, DEFAULT_TIMEOUT } from '../constants'
 import { BoardContainer, NextTurn, AcceptTurn, ScreenCover } from './style'
 
 export const Board = ({
@@ -52,7 +51,7 @@ export const Board = ({
   useEffect(() => {
     if (
       G.isPractice &&
-      ctx.currentPlayer >= 0 &&
+      ctx.currentPlayer > 0 &&
       !G.battle.waitingOnBattleResult
     ) {
       const randomMove = randomAiMove({ G, ctx, isMultiplayer, matchData })
@@ -61,11 +60,17 @@ export const Board = ({
       // delay battle outcome to show attack  er and defender
       if (randomMove.move === 'doNotDefend') {
         moves.doNotDefend()
-        setTimeout(() => moves.battleOutcome({ isMultiplayer, matchData }), 1)
+        setTimeout(
+          () => moves.battleOutcome({ isMultiplayer, matchData }),
+          DEFAULT_TIMEOUT
+        )
       } else {
         moves[randomMove.move](...randomMove.args)
         if (randomMove.move === 'defendCity') {
-          setTimeout(() => moves.battleOutcome({ isMultiplayer, matchData }), 1)
+          setTimeout(
+            () => moves.battleOutcome({ isMultiplayer, matchData }),
+            DEFAULT_TIMEOUT
+          )
         }
       }
     }
@@ -81,6 +86,8 @@ export const Board = ({
     if (!isViewersTurn) return
 
     moves.drawFromDeck()
+
+    setTimeout(() => moves.startRound(), DEFAULT_TIMEOUT)
   }
   const handlePassClick = () => {
     if (!isViewersTurn) return
@@ -91,7 +98,10 @@ export const Board = ({
 
     if (isUnderAttack) {
       moves.doNotDefend()
-      setTimeout(() => moves.battleOutcome({ isMultiplayer, matchData }), 1)
+      setTimeout(
+        () => moves.battleOutcome({ isMultiplayer, matchData }),
+        DEFAULT_TIMEOUT
+      )
     } else {
       moves.pass({ isMultiplayer, matchData })
     }
@@ -116,14 +126,17 @@ export const Board = ({
     if (!isViewersTurn) return
 
     moves.defendCity()
-    setTimeout(() => moves.battleOutcome({ isMultiplayer, matchData }), 1)
+    setTimeout(
+      () => moves.battleOutcome({ isMultiplayer, matchData }),
+      DEFAULT_TIMEOUT
+    )
   }
   const handleAcceptTurn = () => {
     if (!isViewersTurn) return
 
     setNewPlayer(false)
   }
-  const showEndTurn = checkIfPlayerHandIsAtCapacity(G, ctx)
+  const showPass = checkIfPlayerHandIsAtCapacity(G, ctx)
 
   const players = G.players.map((player, index) => (
     <PlayerSpace
@@ -189,10 +202,9 @@ export const Board = ({
             matchData={matchData}
           />
           {!G.battle.waitingOnBattleResult && isViewersTurn && (
-            <EndTurn
+            <Pass
               onClick={handlePassClick}
               isUnderAttack={isUnderAttack}
-              showEndTurn={showEndTurn}
               phase={ctx.phase}
             />
           )}

@@ -8,6 +8,8 @@ export const CITY_COLORS = [
   'hotpink'
 ]
 
+export const DEFAULT_TIMEOUT = 3000
+
 export const PLAYER_COLORS = ['blue', 'red', 'brown', 'green']
 
 export const GTAG_MANAGER_ID = 'GTM-NWG52D6'
