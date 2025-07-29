@@ -39,7 +39,7 @@ export const IsVictory = G => {
   return winner
 }
 
-export const startRound = (G, ctx) => {
+export const startRound = ({ G, ctx }) => {
   if (G.playerHasDrawn) {
     return INVALID_MOVE
   }
@@ -76,8 +76,8 @@ export const startRound = (G, ctx) => {
   G.playerHasDrawn = true
 }
 
-export const endTurn = (G, ctx) => {
-  if (!checkIfPlayerHandIsAtCapacity(G, ctx) || !G.playerHasDrawn) {
+export const endTurn = ({ G, ctx }) => {
+  if (!checkIfPlayerHandIsAtCapacity({ G, ctx }) || !G.playerHasDrawn) {
     return INVALID_MOVE
   }
 
@@ -103,7 +103,7 @@ export const endTurn = (G, ctx) => {
   G.playerHasDrawn = false
 }
 
-export const selectCard = (G, ctx, cardId) => {
+export const selectCard = ({ G, ctx }, cardId) => {
   const currentPlayer = G.players[ctx.currentPlayer]
 
   // Cannot select card within current player's own empire
@@ -116,7 +116,7 @@ export const selectCard = (G, ctx, cardId) => {
     currentPlayer: 'action',
     // Calls endStage automatically after the player
     // has made the specified number of moves.
-    moveLimit: 1,
+    maxMoves: 1,
 
     // This takes the stage configuration to the
     // value prior to this setActivePlayers call
@@ -127,7 +127,7 @@ export const selectCard = (G, ctx, cardId) => {
   })
 }
 
-export const moveToEmpire = (G, ctx, _cardMoving = '') => {
+export const moveToEmpire = ({ G, ctx }, _cardMoving = '') => {
   const isUnderAttack = G.battle && G.battle.attack && G.battle.attack.title
   const currentPlayer = G.players[ctx.currentPlayer]
   const cardMoving = _cardMoving || G.selectedCard
@@ -155,8 +155,7 @@ export const moveToEmpire = (G, ctx, _cardMoving = '') => {
 }
 
 export const attackCity = (
-  G,
-  ctx,
+  { G, ctx },
   attackedCityId,
   attackingArmyIndexFromBot = ''
 ) => {
@@ -210,7 +209,7 @@ export const attackCity = (
   ctx.events.endTurn({ next: `${targetedPlayerIndex}` })
 }
 
-export const defendCity = (G, ctx, defendingCardIndexFromBot = '') => {
+export const defendCity = ({ G, ctx }, defendingCardIndexFromBot = '') => {
   const defendingCardIndex = defendingCardIndexFromBot || G.selectedCard
   const isArmySelected = defendingCardIndex.indexOf('a') >= 0
   if (!isArmySelected) {
@@ -240,11 +239,11 @@ export const defendCity = (G, ctx, defendingCardIndexFromBot = '') => {
   G.battle.waitingOnBattleResult = true
 }
 
-export const doNotDefend = (G, ctx) => {
+export const doNotDefend = ({ G, ctx }) => {
   G.battle.waitingOnBattleResult = true
 }
 
-export const battleOutcome = (G, ctx) => {
+export const battleOutcome = ({ G, ctx }) => {
   if (!G.battle.waitingOnBattleResult) {
     return INVALID_MOVE
   }
@@ -290,7 +289,7 @@ export const battleOutcome = (G, ctx) => {
   G.target = {}
 }
 
-export const pass = (G, ctx) => {
+export const pass = ({ G, ctx }) => {
   G.timesPassed += 1
   G.selectedCard = ''
 
@@ -303,8 +302,8 @@ export const pass = (G, ctx) => {
   ctx.events.endTurn()
 }
 
-export const retainCard = (G, ctx, cardId) => {
-  if (checkIfPlayerHandIsAtCapacity(G, ctx)) {
+export const retainCard = ({ G, ctx }, cardId) => {
+  if (checkIfPlayerHandIsAtCapacity({ G, ctx })) {
     return INVALID_MOVE
   }
 

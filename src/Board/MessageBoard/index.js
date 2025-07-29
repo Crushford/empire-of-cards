@@ -21,7 +21,7 @@ export const MessageBoard = ({ G, ctx, isMultiplayer, isActive }) => {
   const [messages, setMessages] = useState({ hint: '', specialMessage: '' })
 
   useEffect(() => {
-    setMessages(getMessages(G, ctx))
+    setMessages(getMessages({ G, ctx }))
   }, [G, ctx, isActive])
 
   return (

@@ -49,7 +49,7 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
       ctx.currentPlayer > 0 &&
       !G.battle.waitingOnBattleResult
     ) {
-      const randomMove = randomAiMove(G, ctx)
+      const randomMove = randomAiMove({ G, ctx })
       setNewPlayer(false)
 
       // delay battle outcome to show attack  er and defender
@@ -110,7 +110,7 @@ export const Board = ({ G, ctx, moves, isMultiplayer, isActive, playerID }) => {
   }
   const newGame = () => document.location.reload()
 
-  const showEndTurn = checkIfPlayerHandIsAtCapacity(G, ctx)
+  const showEndTurn = checkIfPlayerHandIsAtCapacity({ G, ctx })
 
   const players = G.players.map((player, index) => (
     <PlayerSpace

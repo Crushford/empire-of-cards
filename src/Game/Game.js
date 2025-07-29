@@ -19,13 +19,13 @@ import {
 export const empireOfCards = (deckType, name, isPractice) => ({
   name: name,
   minPlayers: 2,
-  setup: (G, ctx) => ({
-    deck: shuffleArray(getDeck(deckType, G.numPlayers)),
+  setup: ({ ctx }) => ({
+    deck: shuffleArray(getDeck(deckType, ctx.numPlayers)),
     gameComplexity: deckType,
     players: PLAYER_COLORS.map(
       (color, index) =>
         // times index by 2 for 2 players, so there are just players indexes of 0 and 2 for board posistioning
-        index < G.numPlayers && {
+        index < ctx.numPlayers && {
           color: color,
           position: index,
           hand: [],
@@ -38,7 +38,7 @@ export const empireOfCards = (deckType, name, isPractice) => ({
     selectedCard: '',
     discardPile: [],
     completeSetsNeededToWin: 2,
-    firstToAct: Array.from(Array(G.numPlayers).keys()),
+    firstToAct: Array.from(Array(ctx.numPlayers).keys()),
     isPractice: isPractice,
     log: ['Game Started'],
     retainingCardIds: [],
@@ -57,7 +57,7 @@ export const empireOfCards = (deckType, name, isPractice) => ({
           battleOutcome,
           moveToEmpire
         },
-        onEnd: (G, ctx) => {
+        onEnd: ({ G, ctx }) => {
           G.timesPassed = 0
         }
       }
@@ -81,7 +81,7 @@ export const empireOfCards = (deckType, name, isPractice) => ({
         battleOutcome,
         moveToEmpire
       },
-      endIf: (G, ctx) => {
+      endIf: ({ G, ctx }) => {
         const noCardLeftInAnyHand =
           G.players.filter(player => player.hand.length === 0).length ===
           ctx.numPlayers
@@ -92,19 +92,19 @@ export const empireOfCards = (deckType, name, isPractice) => ({
       },
       next: 'newRound',
       turn: { order: TurnOrder.CUSTOM_FROM('firstToAct') },
-      onEnd: (G, ctx) => {
+      onEnd: ({ G, ctx }) => {
         G.timesPassed = 0
         G.firstToAct.push(G.firstToAct.shift())
       }
     }
   },
-  endIf: (G, ctx) => {
+  endIf: ({ G, ctx }) => {
     const winner = IsVictory(G)
     if (winner !== null) {
       return { winner }
     }
   },
   ai: {
-    enumerate: (G, ctx) => getAllPossibleMoves(G, ctx)
+    enumerate: ({ G, ctx }) => getAllPossibleMoves({ G, ctx })
   }
 })
