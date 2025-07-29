@@ -3,7 +3,10 @@ import { SimpleDeck, NormalDeck } from './src/Game/GameTypes'
 import path from 'path'
 import serve from 'koa-static'
 
-const server = Server({ games: [SimpleDeck, NormalDeck] })
+const server = Server({
+  games: [SimpleDeck, NormalDeck],
+  origins: ['http://localhost:3000', 'https://empireofcards.com']
+})
 const PORT = process.env.PORT || 8000
 
 // Build path relative to the server.js file

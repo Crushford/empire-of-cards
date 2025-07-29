@@ -1,6 +1,6 @@
 import { checkIfPlayerHandIsAtCapacity } from '../../utils'
 
-export const getMessages = (G, ctx) => {
+export const getMessages = ({ G, ctx }) => {
   if (G.battle.waitingOnBattleResult) return ''
 
   const currentPlayer = G.players[ctx.currentPlayer]
@@ -17,7 +17,7 @@ export const getMessages = (G, ctx) => {
         return `you may retain ${retentionCapacity} cards, click cards in your hand to select,  click the deck when you are finished to draw cards`
       }
 
-      if (checkIfPlayerHandIsAtCapacity(G, ctx)) {
+      if (checkIfPlayerHandIsAtCapacity({ G, ctx })) {
         return 'End your turn when you are ready'
       } else return 'click the deck to draw cards'
     }
